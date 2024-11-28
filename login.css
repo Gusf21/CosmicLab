@@ -1,0 +1,154 @@
+:root {
+    --black: #071013;
+    --grey: #646881;
+    --white: #FFFFFF;
+    --purple: #8A00FF;
+}
+
+.form-container h1 {
+    position: relative;
+    display: inline;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    width: fit-content;
+    color: var(--white);
+    cursor: pointer;
+    opacity: 0.2;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.window-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 2%;
+    width: 40%;
+    margin: auto;
+    height: 40rem;
+    padding-top: 5rem;
+    gap: 3%;
+}
+
+form {
+    display: block;
+    position: relative;
+    margin-top: 3rem;
+}
+
+.form-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+    border: solid var(--purple) 2px;
+    overflow: hidden;
+}
+
+.login-form {
+    display: none;
+    position: absolute;
+    width: 40%;
+    height: 57%;
+    border-radius: 20px;
+}
+
+.external-options {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.external-options .option {
+    position: relative;
+    width: calc((100% / 2) - 12px);
+    margin-top: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.option a {
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--black);
+    border: 0.2rem solid var(--purple);
+    border-radius: 1rem;
+    text-decoration: none;
+    color: var(--white);
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.option a:hover {
+    background: var(--purple);
+    border-color: var(--black);
+}
+
+.input-box {
+    position: relative;
+    width: 60%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.input-box label {
+    display: block;
+    width: fit-content;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    color: var(--white);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.input-box input {
+    position: relative;
+    width: 100%;
+    height: 57px;
+    border-radius: 5px;
+    border: solid 2px var(--purple);
+    outline: none;
+    background: #F8F8FB;
+    font-size: 15px;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    transition: 0.2s ease;
+}
+
+form button {
+    position: relative;
+    width: 60%;
+    height: 56px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: 5px;
+    background: var(--purple);
+    color: #fff;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    transition: 0.3s ease;
+    border: solid white 0px;
+    transition: 0.2s linear;
+}
+
+form button:hover {
+    border: solid white 4px;
+}
+
+.sign-up, .sign-up a {
+    text-align: center;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+    color: var(--white);
+}
+
+.sign-up a {
+    color: var(--purple);
+    cursor: pointer;
+}
