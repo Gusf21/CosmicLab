@@ -52,6 +52,7 @@ h1.title {
   background-image: url("../images/WEB1-edited.png");
   background-position: 50% 50%;
   background-size: 125%;
+  cursor: pointer;
   
   background-clip: text;
   -webkit-background-clip: text;

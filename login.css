@@ -5,6 +5,13 @@
     --purple: #8A00FF;
 }
 
+.toggle-container {
+    position: relative;
+    width: fit-content;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
 .form-container h1 {
     position: relative;
     display: inline;

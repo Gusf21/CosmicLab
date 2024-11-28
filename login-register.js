@@ -44,8 +44,7 @@ function LoginClicked() {
 
 // Helper function to reduce repeated lines 
 function FetchChildren() {
-    const container = document.getElementById("fetchable-1");
+    const container = document.getElementById("toggle-container");
     const labels = container.querySelectorAll("*");
-    console.log(labels);
     return labels;
 }
