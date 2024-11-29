@@ -4,7 +4,31 @@ let state = 1;
 // Waits until content is loaded, then simulates selecting the login option
 document.addEventListener("DOMContentLoaded", () => {
     LoginClicked();
+    document.getElementById("submit-button").addEventListener("click", e => {
+        SubmitData(e);
+    });
 });
+
+function sanitizeInput(input) {
+    // Allow only alphanumeric characters, underscores, and dashes
+    return input.replace(/[^\w\-]/g, '');
+}
+
+function SubmitData(e) {
+    e.preventDefault();
+    const form = document.getElementById("form")
+    const inputs = form.querySelectorAll("input");
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return
+    }
+
+    let username = inputs[0].value;
+    let password = inputs[1].value;
+
+    console.log(inputs);
+}
 
 function RegisterClicked() {
     // Checks that Register is not already selected (avoid unnecessary processing)

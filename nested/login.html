@@ -23,19 +23,19 @@
                 <h1 onclick="RegisterClicked()">Register</h1>
             </div>
             <div class="login-form" id="login-form">
-                <form action="#">
+                <form action="#" id="form">
 
                     <div class="input-box">
                         <label for="username"><b>Username</b></label>
-                        <input type="text"  placeholder="    username" id="username" required>
+                        <input type="text"  placeholder="username" id="username" required>
                     </div>  
 
                     <div class="input-box">
                         <label for="password"><b>Password</b></label>
-                        <input type="password"  placeholder="    password" id="password" required>
+                        <input type="password"  placeholder="password" id="password" pattern="^(?=.*\d)[A-Za-z\d]{8,}$" title="Password must be at least 8 characters long and include at least one number." required>
                     </div>
 
-                    <button type="submit">Log In</button>
+                    <button type="submit" id="submit-button">Log In</button>
 
                     <div class="external-options">
                         <div class="option">

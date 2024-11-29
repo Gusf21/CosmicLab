@@ -120,7 +120,8 @@ form {
     border: solid 2px var(--purple);
     outline: none;
     background: #F8F8FB;
-    font-size: 15px;
+    font-size: 1.2rem;
+    text-indent: 20px;
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
     transition: 0.2s ease;
 }
