@@ -10,13 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("register-submit-button").addEventListener("click", e => {
         Register(e);
-    })
+    });
 });
-
-function SanitizeInput(input) {
-    // Allow only alphanumeric characters, underscores, and dashes
-    return input.replace(/[^\w\-]/g, '');
-}
 
 function Register(e) {
     e.preventDefault();
