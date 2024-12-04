@@ -130,7 +130,7 @@ h1.title:hover {
 
 .option-box:hover::before,
 .option-box:hover::after {
-  animation-duration: 1s;
+  animation-duration: 2s;
 }
 
 .option-box::before,

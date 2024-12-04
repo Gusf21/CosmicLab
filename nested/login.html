@@ -16,26 +16,26 @@
             Cosmic Lab
         </h1>
     </div>
-    <div class="window-container">
+    <div class="window-container" id="window-container">
         <div class="form-container" id="fetchable-1">
             <div class="toggle-container" id="toggle-container">
                 <h1 onclick="LoginClicked()">Login</h1>
                 <h1 onclick="RegisterClicked()">Register</h1>
             </div>
-            <div class="login-form" id="login-form">
-                <form action="#" id="form">
+            <div class="login-window" id="login-window">
+                <form action="#" id="login-form">
 
                     <div class="input-box">
                         <label for="username"><b>Username</b></label>
-                        <input type="text"  placeholder="username" id="username" required>
+                        <input type="text"  placeholder="Username" id="username" required>
                     </div>  
 
                     <div class="input-box">
                         <label for="password"><b>Password</b></label>
-                        <input type="password"  placeholder="password" id="password" pattern="^(?=.*\d)[A-Za-z\d]{8,}$" title="Password must be at least 8 characters long and include at least one number." required>
+                        <input type="password"  placeholder="Password" id="password" required>
                     </div>
 
-                    <button type="submit" id="submit-button">Log In</button>
+                    <button type="submit" id="login-submit-button">Log In</button>
 
                     <div class="external-options">
                         <div class="option">
@@ -44,13 +44,40 @@
                                 <span>oogle</span>
                             </a>
                         </div>
-                    </div>
+                    </div>  
 
                     <p class="sign-up">Don't have an account? <a onclick="RegisterClicked()">Sign up</a></p>
                 </form>
             </div>
-            <div class="register-form" id="register-form">
+            <div class="register-window" id="register-window">
+                <form action="#" id="register-form">
 
+                    <div class="input-box">
+                        <label for="username"><b>Username</b></label>
+                        <input type="text"  placeholder="Username" id="username" required>
+                    </div>  
+
+                    <div class="input-box">
+                        <label for="password"><b>Password</b></label>
+                        <input type="password"  placeholder="Password" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?!=.*\W)[A-Za-z\d]{8,32}$" title="Password must be between 8 and 32 characters long, include at least one number, and have no special characters." required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="password-confirmation"><b>Confirm Password</b></label>
+                        <input type="password"  placeholder="Password" id="password-confirmation" pattern="^(?=.*[A-Za-z])(?!=.*\W)(?=.*\d)[A-Za-z\d]{8,32}$" title="Password must be between 8 and 32 characters long, include at least one number, and have no special characters." required>
+                    </div>
+
+                    <button type="submit" id="register-submit-button">Register</button>
+
+                    <div class="external-options">
+                        <div class="option">
+                            <a href="#" id="google-button">
+                                <img src="../images/google.png" alt="Google">
+                                <span>oogle</span>
+                            </a>
+                        </div>
+                    </div>  
+                </form>
             </div>
         </div>
     </div>

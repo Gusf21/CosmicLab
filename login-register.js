@@ -4,19 +4,49 @@ let state = 1;
 // Waits until content is loaded, then simulates selecting the login option
 document.addEventListener("DOMContentLoaded", () => {
     LoginClicked();
-    document.getElementById("submit-button").addEventListener("click", e => {
-        SubmitData(e);
+    document.getElementById("login-submit-button").addEventListener("click", e => {
+        CheckLogin(e);
     });
+
+    document.getElementById("register-submit-button").addEventListener("click", e => {
+        Register(e);
+    })
 });
 
-function sanitizeInput(input) {
+function SanitizeInput(input) {
     // Allow only alphanumeric characters, underscores, and dashes
     return input.replace(/[^\w\-]/g, '');
 }
 
-function SubmitData(e) {
+function Register(e) {
     e.preventDefault();
-    const form = document.getElementById("form")
+    const form = document.getElementById("register-form")
+    const inputs = form.querySelectorAll("input");
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return
+    }
+
+    let username = inputs[0].value;
+    let password_0 = inputs[1].value;
+    let password_1 = inputs[2].value;
+
+    console.log(password_0)
+    console.log(password_1)
+
+    if (password_0 != password_1) {
+        inputs[2].setCustomValidity("Please ensure both passwords are the same")
+        form.reportValidity();
+    }
+    else {
+        inputs[2].setCustomValidity("");
+    }
+}
+
+function CheckLogin(e) {
+    e.preventDefault();
+    const form = document.getElementById("login-form")
     const inputs = form.querySelectorAll("input");
 
     if (!form.checkValidity()) {
@@ -43,8 +73,9 @@ function RegisterClicked() {
         //Sets buttons to correct opacity
         labels[0].style.opacity = 0.2;
         labels[1].style.opacity = 1;
-        document.getElementById("login-form").style.display = "none";
-        document.getElementById("register-form").style.display = "block";
+        document.getElementById("login-window").style.display = "none";
+        document.getElementById("register-window").style.display = "block";
+        document.getElementById("window-container").style.height = "45rem"
     }
 }
 
@@ -61,8 +92,9 @@ function LoginClicked() {
         //Sets buttons to correct opacity
         labels[0].style.opacity = 1;
         labels[1].style.opacity = 0.2;
-        document.getElementById("register-form").style.display = "none";
-        document.getElementById("login-form").style.display = "block";
+        document.getElementById("register-window").style.display = "none";
+        document.getElementById("login-window").style.display = "block";
+        document.getElementById("window-container").style.height = "42rem"
     }
 }
 
