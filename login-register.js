@@ -13,10 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-function Register(e) {
+async function Register(e) {
     e.preventDefault();
     const form = document.getElementById("register-form")
     const inputs = form.querySelectorAll("input");
+
+    inputs[0].setCustomValidity("");
 
     if (!form.checkValidity()) {
         form.reportValidity();
@@ -36,6 +38,26 @@ function Register(e) {
     }
     else {
         inputs[2].setCustomValidity("");
+    }
+
+    const response = await fetch("https://localhost:7168/api/LoginDetails/AddUser", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "username": username,
+            "password": password_0,
+        })
+    });
+
+    if (response.ok) {
+        window.location.href = "index.html";
+        localStorage.setItem("username", username);
+    }
+    else {
+        inputs[0].setCustomValidity("Username Already In Use");
+        form.reportValidity();
     }
 }
 

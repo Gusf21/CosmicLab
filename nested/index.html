@@ -4,9 +4,11 @@
 <title>Cosmic Lab</title>
 <link rel="stylesheet" type="text/css" href="../style.css">
 <script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
+<script src="../index.js"></script>
 </head>
 <body>
     <div class="login-button" onclick="window.location.href='login.html'">
+        <a id="username-box"></a>
         <i class="fa-regular fa-user fa-lg" style="color: #FFFFFF;"></i>
     </div>
     <div class="title-containe">
@@ -15,17 +17,17 @@
         </h1>
     </div>
     <div class="options-container">
-        <div class="option-box option-1" onclick="window.location.href='planet-designer.html'">
+        <div class="option-box option-1" senderurl="planet-designer.html" onclick="OptionClicked(this)">
             <a class="option-box-text">
                 Universe Designer
             </a>
         </div>
-        <div class="option-box option-2" onclick="window.location.href='render.html'">
+        <div class="option-box option-2" senderurl="render.html" onclick="OptionClicked(this)">
             <a class="option-box-text">
                 Our Solar System
             </a>
         </div>
-        <div class="option-box option-3" onclick="window.location.href='login.html'">
+        <div class="option-box option-3" senderurl="login.html" onclick="OptionClicked(this)">
             <a class="option-box-text">
                 Simulation Designer
             </a>
