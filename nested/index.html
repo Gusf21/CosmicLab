@@ -2,14 +2,17 @@
 <html>
 <head>
 <title>Cosmic Lab</title>
-<link rel="stylesheet" type="text/css" href="../style.css">
+<link rel="stylesheet" type="text/css" href="../css/style.css">
 <script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
-<script src="../index.js"></script>
+<script src="../js/index.js"></script>
+<script src="../js/cookies.js"></script>
 </head>
 <body>
-    <div class="login-button" onclick="window.location.href='login.html'">
-        <a id="username-box"></a>
-        <i class="fa-regular fa-user fa-lg" style="color: #FFFFFF;"></i>
+    <div class="login-display">
+        <a class="username-box" id="username-box"></a>
+        <div class="login-button" onclick="LoginButton()">
+            <i class="fa-regular fa-user fa-lg" style="color: #FFFFFF;"></i>
+        </div>
     </div>
     <div class="title-containe">
         <h1 class="title">
@@ -17,17 +20,17 @@
         </h1>
     </div>
     <div class="options-container">
-        <div class="option-box option-1" senderurl="planet-designer.html" onclick="OptionClicked(this)">
+        <div class="option-box option-1" onclick="OptionClicked('planet-designer.html')">
             <a class="option-box-text">
                 Universe Designer
             </a>
         </div>
-        <div class="option-box option-2" senderurl="render.html" onclick="OptionClicked(this)">
+        <div class="option-box option-2" onclick="OptionClicked('render.html')">
             <a class="option-box-text">
                 Our Solar System
             </a>
         </div>
-        <div class="option-box option-3" senderurl="login.html" onclick="OptionClicked(this)">
+        <div class="option-box option-3" onclick="OptionClicked('login.html')">
             <a class="option-box-text">
                 Simulation Designer
             </a>

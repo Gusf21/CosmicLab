@@ -52,8 +52,8 @@ async function Register(e) {
     });
 
     if (response.ok) {
+        document.cookie = `session_id=${(await response.text())}`;
         window.location.href = "index.html";
-        localStorage.setItem("username", username);
     }
     else {
         inputs[0].setCustomValidity("Username Already In Use");
@@ -61,10 +61,12 @@ async function Register(e) {
     }
 }
 
-function CheckLogin(e) {
+async function CheckLogin(e) {
     e.preventDefault();
     const form = document.getElementById("login-form")
     const inputs = form.querySelectorAll("input");
+
+    inputs[0].setCustomValidity("");
 
     if (!form.checkValidity()) {
         form.reportValidity();
@@ -74,7 +76,24 @@ function CheckLogin(e) {
     let username = inputs[0].value;
     let password = inputs[1].value;
 
-    console.log(inputs);
+    const response = await fetch("https://localhost:7168/api/LoginDetails/CheckLoginDetails", {
+        method: "POST",
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "body": JSON.stringify({
+           "username": username,
+           "password": password 
+        })
+    });
+
+    if (response.ok) {
+        document.cookie = `session_id=${(await response.text())}`;
+        window.location.href = "index.html";
+    }
+    else {
+        inputs[0].setCustomValidity("Password or username is incorrect");
+    }
 }
 
 function RegisterClicked() {
