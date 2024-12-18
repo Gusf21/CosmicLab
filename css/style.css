@@ -172,17 +172,17 @@ h1.title:hover {
 }
 
 .option-box.option-1 {
-  background-image: url(images/jupiter.webp);
+  background-image: url(../images/jupiter.webp);
   background-position: 95%;
 }
 
 .option-box.option-2 {
-  background-image: url(images/WEB2.png);
+  background-image: url(../images/WEB2.png);
   background-position: 50% 50%;
 }
 
 .option-box.option-3 {
-  background-image: url(images/WEB1-edited.png);
+  background-image: url(../images/WEB1-edited.png);
   background-position: 50% 50%;
 }
 

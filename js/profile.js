@@ -7,7 +7,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("username-display").innerText = await response.text();
 })
 
-function LogOut() {
+async function LogOut() {
+
+    await fetch(`https://localhost:7168/api/LoginDetails/LogOut?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {method: "POST"});
     document.cookie = "session_id=";
     window.location.href = "index.html"
 }
