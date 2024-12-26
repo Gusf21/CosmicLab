@@ -15,17 +15,23 @@
             <div class="objects option" id="objects" onclick="SelectObjects()">Objects</div>
             <div class="orbits option" id="orbits" onclick="SelectOrbits()">Orbits</div>
         </div>
-    <div class="tile-container" id="tile-container">
-
-    </div>
+    <div class="tile-container" id="tile-container"></div>
         <template class="tile-template" id="template">
-            <div class="tile">
+            <div class="tile" data-id="" onclick="TileClicked(this)">
                 <img class="img" src="../images/planets/planet1.gif" width="100" height="100">
                 <a class="label" id="text">Earth</a>
             </div>
         </template>
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            <input type="text" class="searchbar" placeholder="Search" oninput="UpdateDisplay(this)">
+        </div>
     </div>
     <div class="design-panel">
+        <div class="name-container">
+            <a class="name">Earth</a>
+            <i class="fa-regular fa-pen-to-square fa-2xl icon"></i>
+        </div>
     </div>
 </div>
 </body>
