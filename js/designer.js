@@ -106,18 +106,21 @@ async function TileClicked(element) {
 async function UpdateDisplay(element) {
     let filter = element.value;
     let remove = []
-    items.forEach(element => {
-        if (state == 0) {
+
+    if (state == 0) {
+        objects.forEach(element => {
             if (!element.nickname.toLowerCase().includes(filter.toLowerCase())) {
                 remove.push(element.objectId);
             }
-        }
-        else {
+        });
+    }
+    else {
+        orbits.forEach(element => {
             if (!element.name.toLowerCase().includes(filter.toLowerCase())) {
                 remove.push(element.orbitId);
             }
-        }
-    });
+        });
+    }
 
     console.log(remove);
 
@@ -133,4 +136,4 @@ async function UpdateDisplay(element) {
             children[i].style.display = "flex";
         }
     }
-}
+} 
