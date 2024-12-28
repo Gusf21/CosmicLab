@@ -1,9 +1,9 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-    set_random_planet();
+    SetPlanet();
 })
 
-function set_random_planet() {
+function SetPlanet() {
     let elements = document.getElementsByClassName("img");
 
     for (let tile of elements) {

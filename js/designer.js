@@ -6,11 +6,16 @@ let orbits = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
     LoadData();
+    Stars();
 });
 
-function set_random_planet(element) {
+function SetPlanet(element, id) {
 
-    let file = "../images/planets/planet" + Math.round((Math.random() * 19) + 1) + ".gif";
+    let img = ChaoticFunction(parseInt(id));
+
+    console.log(img);
+
+    let file = `../images/planets/planet${img}.gif`;
 
     element.setAttribute("src", file);
 }
@@ -44,7 +49,7 @@ async function SelectObjects() {
         const clone = template.content.cloneNode(true);
         clone.querySelector("a").innerText = element.nickname.charAt(0).toUpperCase() + element.nickname.substring(1);
         clone.querySelector("div").dataset.id = element.objectId;
-        set_random_planet(clone.querySelector("img"));
+        SetPlanet(clone.querySelector("img"), element.objectId);
         container.appendChild(clone);
     });
 
@@ -69,7 +74,7 @@ async function SelectOrbits() {
         const clone = template.content.cloneNode(true);
         clone.querySelector("a").innerText = element.name.charAt(0).toUpperCase() + element.name.substring(1);
         clone.querySelector("div").dataset.id = element.orbitId;
-        set_random_planet(clone.querySelector("img"));
+        SetPlanet(clone.querySelector("img"), element.orbitId);
         container.appendChild(clone);
     });
 
@@ -101,6 +106,12 @@ async function TileClicked(element) {
     }
 
     console.log(data);
+}
+
+function ChaoticFunction(x, a = 7.5, b = 5, m = 600, k = 19) {
+
+    const result = Math.round((Math.pow(Math.sin(a * x + b), 2) * m) % k) + 1;
+    return result;
 }
 
 async function UpdateDisplay(element) {
@@ -137,3 +148,22 @@ async function UpdateDisplay(element) {
         }
     }
 } 
+
+function Stars() {
+    const container = document.getElementById("star-container");
+
+    for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        // Random positions within the container
+        const x = Math.random() * 100; // Percentage of width
+        const y = Math.random() * 100; // Percentage of height
+        
+        // Set random position
+        star.style.left = `${x}%`;
+        star.style.top = `${y}%`;
+        
+        container.appendChild(star);
+    }
+}

@@ -155,3 +155,24 @@
     text-indent: 3rem;
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
 }
+
+.display-window {
+    position: relative;
+    margin-left: 10%;
+    width: 80%;
+    aspect-ratio: 3 / 2;
+    border-radius: 1rem;
+    background-color: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border-radius: 50%;
+}

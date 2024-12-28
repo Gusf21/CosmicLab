@@ -88,7 +88,7 @@ async function CheckLogin(e) {
     });
 
     if (response.ok) {
-        document.cookie = `session_id=${(await response.text())}`;
+        document.cookie = `session_id=${(await response.text())}; max-age=${24 * 60 * 60}`;
         window.location.href = "index.html";
     }
     else {
