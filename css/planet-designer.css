@@ -26,6 +26,10 @@
     background-color: var(--white);
   }
 
+  .design-panel.black {
+    background-color: var(--black);
+  }
+
 .tile-container {
     display: flex;
     justify-content: center;
@@ -108,12 +112,14 @@
 }
 
 .name-container .icon {
+    color: var(--white);
     position: absolute;
     left: 95%;
     top: 20%;
 }
 
 .name {
+    color: var(--white);
     position: absolute;
     user-select: none;
     left: 50%;
@@ -156,17 +162,12 @@
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
 }
 
-.display-window {
-    position: relative;
-    margin-left: 10%;
-    width: 80%;
-    aspect-ratio: 3 / 2;
-    border-radius: 1rem;
-    background-color: var(--black);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+.display-img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
 }
 
 .star {

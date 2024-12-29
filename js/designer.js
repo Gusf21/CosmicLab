@@ -152,7 +152,7 @@ async function UpdateDisplay(element) {
 function Stars() {
     const container = document.getElementById("star-container");
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
         const star = document.createElement('div');
         star.classList.add('star');
         
