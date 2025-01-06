@@ -13,8 +13,6 @@ function SetPlanet(element, id) {
 
     let img = ChaoticFunction(parseInt(id));
 
-    console.log(img);
-
     let file = `../images/planets/planet${img}.gif`;
 
     element.setAttribute("src", file);
@@ -38,16 +36,20 @@ async function SelectObjects() {
     object_button.style.boxShadow = shadow;
     orbit_button.style.boxShadow = "";
 
-    const template = document.getElementById("template");
+    const template = document.getElementById("tile-template");
     const container = document.getElementById("tile-container");
 
-    while (container.firstChild) {
+    let empty = false;
+    while (!empty) {
+        if (container.childElementCount == 1) {
+            empty = true;
+        }
         container.removeChild(container.lastChild);
     }
 
     objects.forEach(element => {
         const clone = template.content.cloneNode(true);
-        clone.querySelector("a").innerText = element.nickname.charAt(0).toUpperCase() + element.nickname.substring(1);
+        clone.querySelector("a").innerText = element.name.charAt(0).toUpperCase() + element.name.substring(1);
         clone.querySelector("div").dataset.id = element.objectId;
         SetPlanet(clone.querySelector("img"), element.objectId);
         container.appendChild(clone);
@@ -63,10 +65,14 @@ async function SelectOrbits() {
     object_button.style.boxShadow = "";
     orbit_button.style.boxShadow = shadow;
 
-    const template = document.getElementById("template");
+    const template = document.getElementById("tile-template");
     const container = document.getElementById("tile-container");
 
-    while (container.firstChild) {
+    let empty = false;
+    while (!empty) {
+        if (container.childElementCount == 1) {
+            empty = true;
+        }
         container.removeChild(container.lastChild);
     }
 
@@ -81,34 +87,74 @@ async function SelectOrbits() {
     state = 1;
 }
 
-async function TileClicked(element) {
+function GetData(element) {
 
     let id = element.dataset.id;
-
+    
     let data;
-
     let index = 0;
-    while (!data) {
-        if (state == 0) {
-            if (items[index].objectId == id) {
-                data = items[index]
+    
+    if (state == 0) {
+        while (!data) {
+            if (objects[index].objectId == id) {
+                data = objects[index];
             }
-        }
-        else if (state == 1) {
-            if (items[index].orbitId == id) {
-                data = items[index];
+            if (index == objects.length) {
+                return;
             }
+            index++;
         }
-        index++;
-        if (index == items.length && !data) {
-            return;
+    }
+    else {
+        while (!data) {
+            if (orbits[index].orbitId == id) {
+                data = orbits[index];
+            }
+            if (index == orbits.length) {
+                return;
+            }
+            index++;
         }
     }
 
-    console.log(data);
+    return data;
 }
 
-function ChaoticFunction(x, a = 7.5, b = 5, m = 600, k = 19) {
+async function TileClicked(element) {
+
+    const data = GetData(element);
+
+    const title = document.getElementById("name-display");
+    const img = document.getElementById("img-display");
+    const edit_button = document.getElementById("edit-button");
+
+    img.style.visibility = "visible";
+    edit_button.style.visibility = "visible";
+
+    title.innerText = data.name;
+    SetPlanet(img, data.objectId);
+
+    const left_container = document.getElementById("left-data");
+    const left_template = document.getElementById("left-data-template");
+
+    while (left_container.firstChild) {
+        left_container.removeChild(left_container.lastChild);
+    }
+
+    const mass = left_template.content.cloneNode(true);
+    const mass_labels = mass.querySelectorAll("a");
+    mass_labels[0].innerText = "Mass";
+    mass_labels[1].innerText = data.mass;
+    left_container.appendChild(mass);
+
+    const radius = left_template.content.cloneNode(true);
+    const radius_labels = radius.querySelectorAll("a");
+    radius_labels[0].innerText = "Radius";
+    radius_labels[1].innerText = data.radius;
+    left_container.appendChild(radius);
+}
+
+function ChaoticFunction(x, a = 7.5, b = 5, m = 600, k = 18) {
 
     const result = Math.round((Math.pow(Math.sin(a * x + b), 2) * m) % k) + 1;
     return result;
@@ -120,7 +166,7 @@ async function UpdateDisplay(element) {
 
     if (state == 0) {
         objects.forEach(element => {
-            if (!element.nickname.toLowerCase().includes(filter.toLowerCase())) {
+            if (!element.name.toLowerCase().includes(filter.toLowerCase())) {
                 remove.push(element.objectId);
             }
         });
