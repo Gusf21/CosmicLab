@@ -9,13 +9,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     Stars();
 });
 
-function SetPlanet(element, id) {
+function DisplayAddUI() {
+    if (state == 0) {
 
-    let img = ChaoticFunction(parseInt(id));
 
-    let file = `../images/planets/planet${img}.gif`;
+
+    }
+    else if (state == 1) {
+        // Add New Orbit Here
+    }
+}
+
+function SetPlanet(element, id, type) {
+
+    let file;
+
+    if (type == "planet") {
+        let img = ChaoticFunction(parseInt(id), k=18);
+        file = `../images/planets/planet${img}.gif`;
+    }
+    else if (type == "star") {
+        let img = ChaoticFunction(parseInt(id), k=1);
+        file = `../images/stars/star${img}.gif`;
+    }
+    else {
+        return;
+    }
 
     element.setAttribute("src", file);
+}
+
+function Edit(element) {
+
+    const container = document.getElementById("left-data");
+
+    const displays = container.getElementsByClassName("numerical-data");
+
+    for (let item of displays) {
+        item.contentEditable = "true";
+    }
+
+    element.style.visibility = "hidden";
 }
 
 async function LoadData() {
@@ -51,7 +85,7 @@ async function SelectObjects() {
         const clone = template.content.cloneNode(true);
         clone.querySelector("a").innerText = element.name.charAt(0).toUpperCase() + element.name.substring(1);
         clone.querySelector("div").dataset.id = element.objectId;
-        SetPlanet(clone.querySelector("img"), element.objectId);
+        SetPlanet(clone.querySelector("img"), element.objectId, element.type);
         container.appendChild(clone);
     });
 
@@ -80,7 +114,7 @@ async function SelectOrbits() {
         const clone = template.content.cloneNode(true);
         clone.querySelector("a").innerText = element.name.charAt(0).toUpperCase() + element.name.substring(1);
         clone.querySelector("div").dataset.id = element.orbitId;
-        SetPlanet(clone.querySelector("img"), element.orbitId);
+        SetPlanet(clone.querySelector("img"), element.orbitId, "orbit");
         container.appendChild(clone);
     });
 
@@ -132,7 +166,7 @@ async function TileClicked(element) {
     edit_button.style.visibility = "visible";
 
     title.innerText = data.name;
-    SetPlanet(img, data.objectId);
+    SetPlanet(img, data.objectId, data.type);
 
     const left_container = document.getElementById("left-data");
     const left_template = document.getElementById("left-data-template");
@@ -141,20 +175,46 @@ async function TileClicked(element) {
         left_container.removeChild(left_container.lastChild);
     }
 
+    const type = left_template.content.cloneNode(true);
+    const type_labels = type.querySelectorAll("span");
+    type_labels[0].innerText = "Type";
+    type_labels[1].innerText = data.type.charAt(0).toUpperCase() + data.type.slice(1).toLowerCase();
+    type.querySelector("i").style.visibility = "hidden";
+    left_container.appendChild(type);
+    
     const mass = left_template.content.cloneNode(true);
-    const mass_labels = mass.querySelectorAll("a");
+    const mass_labels = mass.querySelectorAll("span");
     mass_labels[0].innerText = "Mass";
     mass_labels[1].innerText = data.mass;
+    mass_labels[1].classList.add("numerical-data")
+    if (data.type == "planet") {
+        mass_labels[2].innerText = "EM";
+        mass_labels[3] = "1 EM is equal to the mass of Earth"
+    }
+    else {
+        mass_labels[2].innerText = "SM";
+        mass_labels[3].innerText = "1 SM is equal to the mass of The Sun"
+    }
     left_container.appendChild(mass);
 
     const radius = left_template.content.cloneNode(true);
-    const radius_labels = radius.querySelectorAll("a");
+    const radius_labels = radius.querySelectorAll("span");
     radius_labels[0].innerText = "Radius";
     radius_labels[1].innerText = data.radius;
+    radius_labels[1].classList.add("numerical-data")
+    if (data.type == "planet") {
+        radius_labels[2].innerText = "ER";
+        radius_labels[3].innerText = "1 ER is equal to the radius of Earth"
+    }
+    else {
+        radius_labels[2].innerText = "SR";
+        radius_labels[3].innerText = "1 SR is equal to the radius of The Sun"
+    }
     left_container.appendChild(radius);
+
 }
 
-function ChaoticFunction(x, a = 7.5, b = 5, m = 600, k = 18) {
+function ChaoticFunction(x, a = 7.5, b = 5, m = 600) {
 
     const result = Math.round((Math.pow(Math.sin(a * x + b), 2) * m) % k) + 1;
     return result;
