@@ -39,11 +39,10 @@
             </div>
 
         </div>
-
         <div class="design-panel black" id="star-container">
 
             <div class="name-container">
-                <a class="name" id="name-display"></a>
+                <a class="name" id="name-display" data-id=""></a>
                 <i class="fa-regular fa-pen-to-square fa-2xl icon" id="edit-button" onclick="Edit(this)"></i>
             </div>
 
@@ -51,16 +50,26 @@
             
             <template class="data-template" id="left-data-template">
                 <div class="data-container">
+
                     <span class="data-title"></span>
                     <div class="underline"></div>
+
                     <div class="data">
-                        <span class="data-display"></span>
+                        
+                        <div class="data-display-container">
+
+                            <span class="data-display"></span>
+                            
+                        </div>
                         <span class="unit"></span>
+
                         <div class="tooltip-container">
                             <i class="fa-regular fa-circle-question tooltip" style="color: #ffffff;"></i>
                             <span class="tooltip-text"></span>
                         </div>
+
                     </div>
+
                 </div>
             </template>
             
@@ -69,6 +78,12 @@
 
             <div class="right-data" id="right-data">
             </div>
+
+            <div class="button-container" id="button-container">
+                <button class="save-button green">Save</button>
+                <button class="discard-button red" onclick="CheckDiscardIntent(this)">Cancel</button>
+            </div>
+
         </div>
     </div>
 </body>
