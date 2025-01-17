@@ -1,5 +1,7 @@
 let state = 1;
 let shadow = "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset";
+let editing = false;
+let adding = false;
 
 let objects = [];
 let orbits = [];
@@ -10,10 +12,53 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function DisplayAddUI() {
+    Discard();
+    editing = true;
+    adding = true;
     if (state == 0) {
+        const title = document.getElementById("name-display");
+        const img = document.getElementById("img-display");
+        const edit_button = document.getElementById("edit-button");
 
+        img.style.visibility = "visible";
+        edit_button.style.visibility = "visible";
 
+        title.innerText = "";
+        title.dataset.id = Math.round(Math.random() * 10000);
+        SetPlanet(img, title.dataset.id, "planet");
 
+        const left_container = document.getElementById("left-data");
+        const left_template = document.getElementById("left-data-template");
+
+        while (left_container.firstChild) {
+            left_container.removeChild(left_container.lastChild);
+        }
+
+        const type = left_template.content.cloneNode(true);
+        const type_labels = type.querySelectorAll("span");
+        type_labels[0].innerText = "Type";
+        type_labels[1].innerText = "Planet";
+        type_labels[1].classList.add("text-data")
+        type.querySelectorAll("div")[4].style.visibility = "hidden";
+        left_container.appendChild(type);
+
+        const mass = left_template.content.cloneNode(true);
+        const mass_labels = mass.querySelectorAll("span");
+        mass_labels[0].innerText = "Mass";
+        mass_labels[1].classList.add("numerical-data")
+        mass_labels[2].innerText = "EM";
+        mass_labels[3].innerText = "1 EM is equal to the mass of Earth"
+        left_container.appendChild(mass);
+
+        const radius = left_template.content.cloneNode(true);
+        const radius_labels = radius.querySelectorAll("span");
+        radius_labels[0].innerText = "Radius";
+        radius_labels[1].classList.add("numerical-data")
+        radius_labels[2].innerText = "ER";
+        radius_labels[3].innerText = "1 ER is equal to the radius of Earth"
+        left_container.appendChild(radius);
+
+        Edit();
     }
     else if (state == 1) {
         // Add New Orbit Here
@@ -39,56 +84,181 @@ function SetPlanet(element, id, type) {
     element.setAttribute("src", file);
 }
 
-function Discard(element) {
+function Discard() {
 
-    const discard = element.parentElement.parentElement;
-    const button = document.createElement("button");
-    button.classList.add("discard-button");
-    button.classList.add("red");
-    button.innerText = "Discard";
-    button.setAttribute("onclick", "CheckDiscardIntent(this)");
-    discard.replaceWith(button);
+    if (editing) {
 
-    const id = document.getElementById("name-display").dataset.id;
-    const data = GetData(id);
+        const discard = document.getElementsByClassName("check-discard-container")[0];
+        if (discard != undefined) {
+            const button = document.createElement("button");
+            button.classList.add("discard-button");
+            button.classList.add("red");
+            button.innerText = "Discard";
+            button.setAttribute("onclick", "CheckDiscardIntent(this)");
+            discard.replaceWith(button);
+        }
 
-    const container = document.getElementById("left-data");
-    const displays = container.getElementsByClassName("data-input");
+        if (!adding) {
 
-    for (let i = 0; i <= 1; i++) {
-        let data_label = document.createElement("span");
-        data_label.classList.add("numerical-data");
-        data_label.classList.add("data-display");
-        
-        if (i == 0) {
-            data_label.innerText = data.mass;
+            const name_input = document.getElementById("title-input");
+            const data = GetData(name_input.dataset.id);
+
+            const img = document.getElementById("img-display");
+            SetPlanet(img, data.objectId, data.type);
+
+            const name = document.createElement("a");
+            name.classList.add("name");
+            name.id = "name-display";
+            name.dataset.id = data.objectId;
+            name.innerText = data.name;
+
+            name_input.replaceWith(name);
+
+            const container = document.getElementById("left-data");
+            const displays = container.getElementsByClassName("data-input");
+
+            for (let i = 0; i <= 1; i++) {
+                let data_label = document.createElement("span");
+                data_label.classList.add("numerical-data");
+                data_label.classList.add("data-display");
+
+                if (i == 0) {
+                    data_label.innerText = data.mass;
+                }
+                else {
+                    data_label.innerText = data.radius;
+                }
+
+                displays[0].replaceWith(data_label);
+            }
+
+            const type_container = container.getElementsByClassName("data-display-container")[0];
+            const type_labels = type_container.querySelectorAll("span");
+
+            type_container.classList.remove("activate-border");
+
+            type_labels[0].classList.remove("type-selected");
+            type_labels[0].classList.remove("not-selected");
+
+            type_labels[1].remove();
+
+            document.getElementById("edit-button").style.visibility = "visible";
         }
         else {
-            data_label.innerText = data.radius;
+            const name_input = document.getElementById("title-input");
+            const img = document.getElementById("img-display");
+            const edit_button = document.getElementById("edit-button");
+
+            const left_container = document.getElementById("left-data");
+
+            while (left_container.firstChild) {
+                left_container.removeChild(left_container.lastChild);
+            }
+
+            const name = document.createElement("a");
+            name.classList.add("name");
+            name.id = "name-display";
+            name_input.replaceWith(name);
+
+            img.style.visibility = "hidden";
+            edit_button.style.visibility = "hidden";
+            adding = false;
         }
 
-        displays[0].replaceWith(data_label);
+        editing = false;
+        document.getElementById("button-container").style.visibility = "hidden";
+    }
+}
+
+
+async function Save() {
+
+    const container = document.getElementById("left-data");
+    const title_input = document.getElementById("title-input")
+    const selected_type = document.getElementsByClassName("type-selected")[0];
+    const displays = container.getElementsByClassName("data-input");
+
+    const name = title_input.value;
+    const mass = parseFloat(displays[0].value);
+    const radius = parseFloat(displays[1].value);
+    const type = selected_type.innerText.toLowerCase();
+
+    let valid = true;
+
+    if (name == "") {
+        title_input.classList.add("invalid")
+        valid = false;
+    }
+    else {
+        title_input.classList.remove("invalid")
     }
 
-    const type_container = container.getElementsByClassName("data-display-container")[0];
-    const type_labels = type_container.querySelectorAll("span");
+    if (mass <= 0 || isNaN(mass)) {
+        displays[0].classList.add("invalid")
+        valid = false;
+    }
+    else {
+        displays[0].classList.remove("invalid")
+    }
 
-    type_container.classList.remove("activate-border");
+    if (radius <= 0 || isNaN(radius)) {
+        displays[1].classList.add("invalid")
+        valid = false;
+    }
+    else {
+        displays[1].classList.remove("invalid")
+    }
 
-    type_labels[0].classList.remove("type-selected");
-    type_labels[0].classList.remove("not-selected");
+    let updated_data;
 
-    type_labels[1].remove();
+    if (valid) {
+        if (!adding) {
+            const data = GetData(title_input.dataset.id);
 
-    document.getElementById("button-container").style.visibility = "hidden";
-    document.getElementById("edit-button").style.visibility = "visible";    
+            updated_data = data;
+            updated_data.name = name;
+            updated_data.type = type;
+            updated_data.mass = mass;
+            updated_data.radius = radius;
+
+            await fetch(`https://localhost:7168/api/Data/EditObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "objectId": updated_data.objectId,
+                    "username": updated_data.username,
+                    "orbitId": updated_data.orbitId,
+                    "type": updated_data.type,
+                    "name": updated_data.name,
+                    "mass": updated_data.mass,
+                    "radius": updated_data.radius
+                })
+            });
+            Discard();
+            LoadData();
+        }
+        else {
+
+            await fetch(`https://localhost:7168/api/Data/CreateObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "name": name,
+                    "type": type,
+                    "mass": mass,
+                    "radius": radius
+                })
+            });
+            Discard();
+            LoadData();
+        }
+    }
 }
 
-function Save() {
-    const container = document.getElementById("left-data");
-
-    const displays = container.getElementsByClassName("numerical-data");
-}
 
 function SwitchType() {
     const inactive = document.getElementsByClassName("not-selected")[0];
@@ -105,7 +275,7 @@ function SwitchType() {
     const units = document.getElementsByClassName("unit");
     const tooltips = document.getElementsByClassName("tooltip-text")
     const img = document.getElementById("img-display");
-    const id = document.getElementById("name-display").dataset.id;
+    const id = document.getElementById("title-input").dataset.id;
 
     if (inactive.innerText == "Planet") {
         units[1].innerText = "EM";
@@ -144,9 +314,9 @@ function CheckDiscardIntent(element) {
 
     yes_button.classList.add("yes");
     no_button.classList.add("no");
-    yes_button.setAttribute("onclick", "Discard(this)");
+    yes_button.setAttribute("onclick", "Discard()");
     no_button.setAttribute("onclick", "NoDiscardIntent(this)");
-    
+
     container.classList.add("check-discard-container");
 
     container.appendChild(check_text);
@@ -163,9 +333,19 @@ function CheckDiscardIntent(element) {
 
 function Edit(element) {
 
+    editing = true;
+
     const container = document.getElementById("left-data");
 
     const numerical_displays = container.getElementsByClassName("numerical-data");
+    const title = document.getElementById("name-display");
+
+    const title_input = document.createElement("input");
+    title_input.classList.add("data-input-title");
+    title_input.value = title.innerText;
+    title_input.id = "title-input";
+    title_input.dataset.id = title.dataset.id;
+    title.replaceWith(title_input);
 
     const type = container.getElementsByClassName("text-data")[0];
 
@@ -207,13 +387,13 @@ async function LoadData() {
 
     const data = await response.json();
 
-    objects = data.objects;
+    objects = data.objects.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : 0 ));
     orbits = data.orbits;
 
     SelectObjects();
 }
 
-async function SelectObjects() {
+function SelectObjects() {
     const object_button = document.getElementById("objects");
     const orbit_button = document.getElementById("orbits");
 
@@ -242,7 +422,7 @@ async function SelectObjects() {
     state = 0;
 }
 
-async function SelectOrbits() {
+function SelectOrbits() {
     const object_button = document.getElementById("objects");
     const orbit_button = document.getElementById("orbits");
 
@@ -302,6 +482,8 @@ function GetData(id) {
 }
 
 function TileClicked(element) {
+
+    Discard();
 
     const data = GetData(element.dataset.id);
 
@@ -373,7 +555,7 @@ function ChaoticFunction(x, a = 7.5, b = 6, m = 600) {
     return result;
 }
 
-async function UpdateDisplay(element) {
+function UpdateDisplay(element) {
     let filter = element.value;
     let remove = []
 
@@ -392,14 +574,12 @@ async function UpdateDisplay(element) {
         });
     }
 
-    console.log(remove);
 
     const container = document.getElementById("tile-container");
     const children = container.children;
 
     for (var i = 0; i < children.length; i++) {
         if (remove.includes(parseInt(children[i].dataset.id))) {
-            console.log(children[i].dataset.id);
             children[i].style.display = "none";
         }
         else {

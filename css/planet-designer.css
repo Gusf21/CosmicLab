@@ -122,6 +122,10 @@
 .tile a {
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
     font-size: 1.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .name-container {
@@ -332,6 +336,27 @@
     transition: border-width ease-in 100ms;
 }
 
+.data-input.invalid,
+.data-input-title.invalid {
+    border-color: var(--red);
+}
+
+.data-input-title {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 40%;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    font-size: 3rem;
+    text-align: center;
+    outline: none;
+    background: var(--black);
+    border: var(--purple) solid 2px;
+    border-radius: 0.5rem;
+    color: var(--white);
+    transition: border-width ease-in 100ms;
+}
+
 .data-input::-webkit-outer-spin-button,
 .data-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -397,6 +422,11 @@
     height: 100%;
     border-top: 2px var(--red) solid;
     border-bottom: 0;
+    transition: background 100ms ease-in;
+}
+
+.check-discard-container div button:hover {
+    background-color: var(--red);
 }
 
 .check-discard-container div button.yes {
