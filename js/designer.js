@@ -20,7 +20,7 @@ function DisplayAddUI() {
         const img = document.getElementById("img-display");
         const edit_button = document.getElementById("edit-button");
 
-        img.style.visibility = "visible";
+        img.style.display = "block";
         edit_button.style.visibility = "visible";
 
         title.innerText = "";
@@ -28,10 +28,15 @@ function DisplayAddUI() {
         SetPlanet(img, title.dataset.id, "planet");
 
         const left_container = document.getElementById("left-data");
+        const right_container = document.getElementById("right-data");
         const left_template = document.getElementById("left-data-template");
 
         while (left_container.firstChild) {
             left_container.removeChild(left_container.lastChild);
+        }
+
+        while (right_container.firstChild) {
+            right_container.removeChild(right_container.lastChild);
         }
 
         const type = left_template.content.cloneNode(true);
@@ -70,11 +75,11 @@ function SetPlanet(element, id, type) {
     let file;
 
     if (type == "planet") {
-        let img = ChaoticFunction(parseInt(id), k = 18);
+        let img = ChaoticFunction(parseInt(id), 18);
         file = `../images/planets/planet${img}.gif`;
     }
     else if (type == "star") {
-        let img = ChaoticFunction(parseInt(id), k = 1);
+        let img = ChaoticFunction(parseInt(id), 1);
         file = `../images/stars/star${img}.gif`;
     }
     else {
@@ -160,7 +165,7 @@ function Discard() {
             name.id = "name-display";
             name_input.replaceWith(name);
 
-            img.style.visibility = "hidden";
+            img.style.display = "none";
             edit_button.style.visibility = "hidden";
             adding = false;
         }
@@ -387,7 +392,7 @@ async function LoadData() {
 
     const data = await response.json();
 
-    objects = data.objects.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : 0 ));
+    objects = data.objects.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : 0));
     orbits = data.orbits;
 
     SelectObjects();
@@ -495,61 +500,102 @@ function TileClicked(element) {
     // Needed as user could select different object during editing
     document.getElementById("button-container").style.visibility = "hidden";
 
-    img.style.visibility = "visible";
+    img.style.display = "block";
     edit_button.style.visibility = "visible";
 
     title.innerText = data.name;
     title.dataset.id = element.dataset.id;
-    SetPlanet(img, element.dataset.id, data.type);
+    state == 0 ? SetPlanet(img, element.dataset.id, data.type) : img.style.display = "none";
 
     const left_container = document.getElementById("left-data");
     const left_template = document.getElementById("left-data-template");
+
+    const right_container = document.getElementById("right-data");
 
     while (left_container.firstChild) {
         left_container.removeChild(left_container.lastChild);
     }
 
-    const type = left_template.content.cloneNode(true);
-    const type_labels = type.querySelectorAll("span");
-    type_labels[0].innerText = "Type";
-    type_labels[1].innerText = data.type.charAt(0).toUpperCase() + data.type.slice(1).toLowerCase();
-    type_labels[1].classList.add("text-data")
-    type.querySelectorAll("div")[4].style.visibility = "hidden";
-    left_container.appendChild(type);
+    while (right_container.firstChild) {
+        right_container.removeChild(right_container.lastChild);
+    }
 
-    const mass = left_template.content.cloneNode(true);
-    const mass_labels = mass.querySelectorAll("span");
-    mass_labels[0].innerText = "Mass";
-    mass_labels[1].innerText = data.mass;
-    mass_labels[1].classList.add("numerical-data")
-    if (data.type == "planet") {
-        mass_labels[2].innerText = "EM";
-        mass_labels[3].innerText = "1 EM is equal to the mass of Earth"
-    }
-    else {
-        mass_labels[2].innerText = "SM";
-        mass_labels[3].innerText = "1 SM is equal to the mass of The Sun"
-    }
-    left_container.appendChild(mass);
+    if (state == 0) {
 
-    const radius = left_template.content.cloneNode(true);
-    const radius_labels = radius.querySelectorAll("span");
-    radius_labels[0].innerText = "Radius";
-    radius_labels[1].innerText = data.radius;
-    radius_labels[1].classList.add("numerical-data")
-    if (data.type == "planet") {
-        radius_labels[2].innerText = "ER";
-        radius_labels[3].innerText = "1 ER is equal to the radius of Earth"
+        const type = left_template.content.cloneNode(true);
+        const type_labels = type.querySelectorAll("span");
+        type_labels[0].innerText = "Type";
+        type_labels[1].innerText = data.type.charAt(0).toUpperCase() + data.type.slice(1).toLowerCase();
+        type_labels[1].classList.add("text-data")
+        type.querySelectorAll("div")[4].style.visibility = "hidden";
+        left_container.appendChild(type);
+
+        const mass = left_template.content.cloneNode(true);
+        const mass_labels = mass.querySelectorAll("span");
+        mass_labels[0].innerText = "Mass";
+        mass_labels[1].innerText = data.mass;
+        mass_labels[1].classList.add("numerical-data")
+        if (data.type == "planet") {
+            mass_labels[2].innerText = "EM";
+            mass_labels[3].innerText = "1 EM is equal to the mass of Earth"
+        }
+        else {
+            mass_labels[2].innerText = "SM";
+            mass_labels[3].innerText = "1 SM is equal to the mass of The Sun"
+        }
+        left_container.appendChild(mass);
+
+        const radius = left_template.content.cloneNode(true);
+        const radius_labels = radius.querySelectorAll("span");
+        radius_labels[0].innerText = "Radius";
+        radius_labels[1].innerText = data.radius;
+        radius_labels[1].classList.add("numerical-data")
+        if (data.type == "planet") {
+            radius_labels[2].innerText = "ER";
+            radius_labels[3].innerText = "1 ER is equal to the radius of Earth"
+        }
+        else {
+            radius_labels[2].innerText = "SR";
+            radius_labels[3].innerText = "1 SR is equal to the radius of The Sun"
+        }
+        left_container.appendChild(radius);
     }
-    else {
-        radius_labels[2].innerText = "SR";
-        radius_labels[3].innerText = "1 SR is equal to the radius of The Sun"
+    else if (state == 1) {
+        console.log(data);
+
+        const displays = [];
+        displays.push(["\nSemi-Major Axis", data.smAxis, "AU", "One AU is one astronomical unit, which is the distance from The Sun to the Earth, and is approximately 150,000,000 km"]);
+        displays.push(["\nEccentricity", data.eccentricity, "", "Eccentricity is a 0 - 1 value that controls how close to a circle the ellipitical path is. Values closer to 0 are more circular"]);
+        displays.push(["\nIncinlation", data.inclination, "Degree", "The inclination is how far above the horizontal plane the orbit is rotated"]);
+        displays.push(["Longitude Of\nAscending Node", data.longOfAscNode, "Degree", ""]);
+        displays.push(["Argument Of\nPeriapsis", data.argOfPeri, "Degree", ""]);
+
+        for (let i = 0; i < (Math.ceil(displays.length / 2)); i++) {
+            let element = left_template.content.cloneNode(true);
+            let element_labels = element.querySelectorAll("span");
+            element_labels[0].innerText = displays[i][0];
+            element_labels[1].innerText = displays[i][1];
+            element_labels[2].innerText = displays[i][2];
+            element_labels[3].innerText = displays[i][3];
+            left_container.appendChild(element);
+        }
+
+        for (let i = Math.ceil(displays.length / 2); i < displays.length; i++) {
+            let element = left_template.content.cloneNode(true);
+            let element_labels = element.querySelectorAll("span");
+            element_labels[0].innerText = displays[i][0];
+            element_labels[1].innerText = displays[i][1];
+            element_labels[2].innerText = displays[i][2];
+            element_labels[3].innerText = displays[i][3];
+            right_container.appendChild(element);
+        }
+
+        document.getElementById("render-window").style.visibility = "visible";
     }
-    left_container.appendChild(radius);
 
 }
 
-function ChaoticFunction(x, a = 7.5, b = 6, m = 600) {
+function ChaoticFunction(x, k, a = 7.5, b = 6, m = 600) {
 
     const result = Math.round((Math.pow(Math.sin(a * x + b), 2) * m) % k) + 1;
     return result;

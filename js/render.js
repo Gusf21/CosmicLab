@@ -55,13 +55,16 @@ function addPlanets() {
     const center_object = new THREE.Mesh(SphereMesh, SphereMaterial);
     scene.add(center_object);
     items.push(center_object);
+
+    const axes = new THREE.AxesHelper(10000);
+    scene.add(axes);
 }
 
 function createControls(camera) {
 
     controls = new TrackballControls(camera, renderer.domElement);
 
-    controls.rotateSpeed = 1.0;
+    controls.rotateSpeed = 0;
     controls.zoomSpeed = 1.2;
     controls.panSpeed = 0.8;
 

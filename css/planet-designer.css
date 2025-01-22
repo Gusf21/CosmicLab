@@ -1,4 +1,5 @@
 :root {
+
     --black: #071013;
     --grey: #818589;
     --white: #FFFFFF;
@@ -191,7 +192,7 @@
 }
 
 .display-img {
-    visibility: hidden;
+    display: none;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -207,15 +208,23 @@
     z-index: -1;
 }
 
+.all-data {
+    display: inline-flex;
+    width: 100%;
+    height: fit-content;
+}
+
 .right-data {
     width: 50%;
+    text-align: right;
 }
 
 .left-data {
     width: 50%;
+    text-align: left;
 }
 
-.left-data .data-title {
+.all-data .data-title {
     color: var(--white);
     font-size: 2rem;
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
@@ -223,7 +232,7 @@
 }
 
 
-.left-data span.data-display {
+.all-data span.data-display {
     color: var(--grey);
     font-size: 1.5rem;
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
@@ -232,11 +241,11 @@
     transition: background 50ms ease-in-out;
 }
 
-.left-data div.data {
+.all-data div.data {
     position: relative;
 }
 
-.left-data .unit {
+.all-data .unit {
     color: var(--grey);
     font-size: 1.5rem;
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
@@ -250,6 +259,14 @@
     cursor: pointer;
 }
 
+.right-data .tooltip-container {
+    position: absolute;
+    top: 50%;
+    right: 45%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+
 .left-data .tooltip-text {
     position: absolute;
     left: 120%;
@@ -259,25 +276,44 @@
     padding: 5px 5px;
     background-color: white;
     border-radius: 6px;
-    width: 5rem;
+    width: 7rem;
     opacity: 0.8;
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
     visibility: hidden;
 }
 
-.left-data .tooltip-container:hover .tooltip-text {
+.right-data .tooltip-text {
+    position: absolute;
+    right: 120%;
+    font-size: 0.8rem;
+    color: var(--black);
+    text-align: center;
+    padding: 5px 5px;
+    background-color: white;
+    border-radius: 6px;
+    width: 7rem;
+    opacity: 0.8;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    visibility: hidden;
+}
+
+.all-data .tooltip-container:hover .tooltip-text {
     visibility: visible;
 }
 
-.left-data .data-container {
+.all-data .data-container {
     margin-bottom: 2rem;
 }
 
-.left-data .underline {
+.all-data .underline {
     background-color: var(--white);
     width: 50%;
     height: 3px;
     margin-bottom: 0.5rem;
+}
+
+.right-data .underline{
+    margin-left: 50%;
 }
 
 .button-container {
