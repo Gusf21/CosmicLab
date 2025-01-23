@@ -86,8 +86,8 @@
 
             <div class="button-container" id="button-container">
                 <button class="save-button green" onclick="Save()">Save</button>
-                <button class="discard-button orange" onclick="CheckDiscardIntent(this)">Cancel</button>
-                <button class="delete-button red" onclick="CheckDeleteIntent()">Delete</button>
+                <button class="cancel-button orange" data-function="Cancel()" onclick="CheckButtonIntent(this)">Cancel</button>
+                <button class="delete-button red" data-function="Delete()" onclick="CheckButtonIntent(this)">Delete</button>
             </div>
 
         </div>

@@ -6,13 +6,15 @@ let adding = false;
 let objects = [];
 let orbits = [];
 
+// Loads all data and adds stars to viewing/edit/add window
 document.addEventListener("DOMContentLoaded", async () => {
     LoadData();
     Stars();
 });
 
+// Displays window to add a new object
 function DisplayAddUI() {
-    Discard();
+    Cancel();
     editing = true;
     adding = true;
     if (state == 0) {
@@ -68,6 +70,7 @@ function DisplayAddUI() {
     }
 }
 
+// Sets the object display gif based on whether the object is a star or planet. Gif is chosen based on objectID
 function SetPlanet(element, id, type) {
 
     let file;
@@ -87,18 +90,20 @@ function SetPlanet(element, id, type) {
     element.setAttribute("src", file);
 }
 
-function Discard() {
+// When editing or adding, cancels the edit/add and either returns to the viewing window if editing, or removes the viewing window if adding
+function Cancel() {
 
     if (editing) {
 
-        const discard = document.getElementsByClassName("check-discard-container")[0];
-        if (discard != undefined) {
+        const cancel = document.getElementsByClassName("check-intent-container")[0];
+        if (cancel != undefined) {
             const button = document.createElement("button");
-            button.classList.add("discard-button");
+            button.classList.add("cancel-button");
             button.classList.add("orange");
-            button.innerText = "Discard";
-            button.setAttribute("onclick", "CheckDiscardIntent(this)");
-            discard.replaceWith(button);
+            button.innerText = "Cancel";
+            button.dataset.function="Cancel()";
+            button.setAttribute("onclick", "CheckButtonIntent(this)");
+            cancel.replaceWith(button);
         }
 
         if (!adding) {
@@ -173,6 +178,7 @@ function Discard() {
     }
 }
 
+// If adding, saves the new object to the user's profile. If editing, saves the changes.
 async function Save() {
 
     const container = document.getElementById("left-data");
@@ -238,7 +244,7 @@ async function Save() {
                     "radius": updated_data.radius
                 })
             });
-            Discard();
+            Cancel();
             LoadData();
         }
         else {
@@ -255,12 +261,13 @@ async function Save() {
                     "radius": radius
                 })
             });
-            Discard();
+            Cancel();
             LoadData();
         }
     }
 }
 
+// When editing or adding, switches object being edited/added from planet to star or vice versa
 function SwitchType() {
     const inactive = document.getElementsByClassName("not-selected")[0];
     const activate = document.getElementsByClassName("type-selected")[0];
@@ -296,17 +303,19 @@ function SwitchType() {
     }
 }
 
-function NoDiscardIntent(element) {
-    const discard = element.parentElement.parentElement;
+// Called if user selects no when asked if they meant to press a button, returns button to previous state
+function NoButtonIntent(element) {
+    const cancel = element.parentElement.parentElement;
     const button = document.createElement("button");
-    button.classList.add("discard-button");
-    button.classList.add("orange");
-    button.innerText = "Discard";
-    button.setAttribute("onclick", "CheckDiscardIntent(this)");
-    discard.replaceWith(button);
+    button.classList = element.dataset.classes;
+    button.innerText = element.dataset.text;
+    button.dataset.function = element.dataset.function;
+    button.setAttribute("onclick", "CheckButtonIntent(this)");
+    cancel.replaceWith(button);
 }
 
-function CheckDiscardIntent(element) {
+// Changes button clicked into a check to ensure user meant to press the button
+function CheckButtonIntent(element) {
     const container = document.createElement("div");
     const check_text = document.createElement("span");
     const button_container = document.createElement("div");
@@ -315,10 +324,14 @@ function CheckDiscardIntent(element) {
 
     yes_button.classList.add("yes");
     no_button.classList.add("no");
-    yes_button.setAttribute("onclick", "Discard()");
-    no_button.setAttribute("onclick", "NoDiscardIntent(this)");
+    yes_button.setAttribute("onclick", element.dataset.function);
 
-    container.classList.add("check-discard-container");
+    no_button.setAttribute("onclick", "NoButtonIntent(this)");
+    no_button.dataset.text = element.innerText;
+    no_button.dataset.classes = element.classList;
+    no_button.dataset.function = element.dataset.function;
+
+    container.classList.add("check-intent-container");
 
     container.appendChild(check_text);
     button_container.appendChild(yes_button);
@@ -332,6 +345,7 @@ function CheckDiscardIntent(element) {
     element.replaceWith(container);
 }
 
+// Changes viewing window into edit window to allow user to change properties, or delete the object
 function Edit(element) {
 
     editing = true;
@@ -383,8 +397,9 @@ function Edit(element) {
     document.getElementById("edit-button").style.visibility = "hidden";
 }
 
+// Deletes Object or Orbit(TODO) from the users profile and reloads the data
 async function Delete(element) {
-    const id = document.getElementById("name-display").dataset.id;
+    const id = document.getElementById("title-input").dataset.id;
 
     const response = await fetch(`https://localhost:7168/api/Data/DeleteObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}&object_id=${id}`, {
         method: "POST"
@@ -396,6 +411,10 @@ async function Delete(element) {
     const img = document.getElementById("img-display");
     const edit_button = document.getElementById("edit-button");
 
+    adding = true;
+    Cancel();
+
+    /*
     title.style.visibility = "hidden";
     img.style.display = "none";
     edit_button.style.visibility = "hidden";
@@ -407,10 +426,12 @@ async function Delete(element) {
     while (right_container.firstChild) {
         right_container.removeChild(right_container.lastChild);
     }
+    */
 
     LoadData();
 }
 
+// Fetches data for Objects and Orbits from the backend
 async function LoadData() {
     const response = await fetch(`https://localhost:7168/api/Data/GetUserCreations?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`);
 
@@ -423,6 +444,7 @@ async function LoadData() {
     SelectObjects();
 }
 
+// Loads Objects (Planets and Stars) into the tile window
 function SelectObjects() {
     const object_button = document.getElementById("objects");
     const orbit_button = document.getElementById("orbits");
@@ -452,6 +474,7 @@ function SelectObjects() {
     state = 0;
 }
 
+// Loads Orbits into the tile window
 function SelectOrbits() {
     const object_button = document.getElementById("objects");
     const orbit_button = document.getElementById("orbits");
@@ -481,6 +504,7 @@ function SelectOrbits() {
     state = 1;
 }
 
+// Fetches the data for the object or orbit (depending on state defined as a constant) with the corresponding ID
 function GetData(id) {
     let data;
     let index = 0;
@@ -511,9 +535,10 @@ function GetData(id) {
     return data;
 }
 
+// Load the data corresonding to the tile clicked into the viewing window
 function TileClicked(element) {
 
-    Discard();
+    Cancel();
 
     const data = GetData(element.dataset.id);
 
@@ -631,12 +656,14 @@ function TileClicked(element) {
 
 }
 
+// Used to assign an icon to planets and stars based on their unchanging ID
 function ChaoticFunction(x, k, a = 7.5, b = 6, m = 600) {
 
     const result = Math.round((Math.pow(Math.sin(a * x + b), 2) * m) % k) + 1;
     return result;
 }
 
+// Filters tile window into only tiles with substrings of the string in the search bar
 function UpdateDisplay(element) {
     let filter = element.value;
     let remove = []
@@ -670,6 +697,7 @@ function UpdateDisplay(element) {
     }
 }
 
+// Places stars in the viewing/add/edit window
 function Stars() {
     const container = document.getElementById("star-container");
 
