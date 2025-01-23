@@ -18,10 +18,8 @@ function DisplayAddUI() {
     if (state == 0) {
         const title = document.getElementById("name-display");
         const img = document.getElementById("img-display");
-        const edit_button = document.getElementById("edit-button");
-
+        
         img.style.display = "block";
-        edit_button.style.visibility = "visible";
 
         title.innerText = "";
         title.dataset.id = Math.round(Math.random() * 10000);
@@ -97,7 +95,7 @@ function Discard() {
         if (discard != undefined) {
             const button = document.createElement("button");
             button.classList.add("discard-button");
-            button.classList.add("red");
+            button.classList.add("orange");
             button.innerText = "Discard";
             button.setAttribute("onclick", "CheckDiscardIntent(this)");
             discard.replaceWith(button);
@@ -174,7 +172,6 @@ function Discard() {
         document.getElementById("button-container").style.visibility = "hidden";
     }
 }
-
 
 async function Save() {
 
@@ -264,7 +261,6 @@ async function Save() {
     }
 }
 
-
 function SwitchType() {
     const inactive = document.getElementsByClassName("not-selected")[0];
     const activate = document.getElementsByClassName("type-selected")[0];
@@ -304,7 +300,7 @@ function NoDiscardIntent(element) {
     const discard = element.parentElement.parentElement;
     const button = document.createElement("button");
     button.classList.add("discard-button");
-    button.classList.add("red");
+    button.classList.add("orange");
     button.innerText = "Discard";
     button.setAttribute("onclick", "CheckDiscardIntent(this)");
     discard.replaceWith(button);
@@ -387,10 +383,39 @@ function Edit(element) {
     document.getElementById("edit-button").style.visibility = "hidden";
 }
 
+async function Delete(element) {
+    const id = document.getElementById("name-display").dataset.id;
+
+    const response = await fetch(`https://localhost:7168/api/Data/DeleteObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}&object_id=${id}`, {
+        method: "POST"
+    });
+
+    const left_container = document.getElementById("left-data");
+    const right_container = document.getElementById("right-data");
+    const title = document.getElementById("name-display");
+    const img = document.getElementById("img-display");
+    const edit_button = document.getElementById("edit-button");
+
+    title.style.visibility = "hidden";
+    img.style.display = "none";
+    edit_button.style.visibility = "hidden";
+
+    while (left_container.firstChild) {
+        left_container.removeChild(left_container.lastChild);
+    }
+
+    while (right_container.firstChild) {
+        right_container.removeChild(right_container.lastChild);
+    }
+
+    LoadData();
+}
+
 async function LoadData() {
     const response = await fetch(`https://localhost:7168/api/Data/GetUserCreations?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`);
 
     const data = await response.json();
+
 
     objects = data.objects.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : 0));
     orbits = data.orbits;
@@ -512,6 +537,8 @@ function TileClicked(element) {
 
     const right_container = document.getElementById("right-data");
 
+    document.getElementById("render-window").style.visibility = "hidden";
+
     while (left_container.firstChild) {
         left_container.removeChild(left_container.lastChild);
     }
@@ -561,7 +588,6 @@ function TileClicked(element) {
         left_container.appendChild(radius);
     }
     else if (state == 1) {
-        console.log(data);
 
         const displays = [];
         displays.push(["\nSemi-Major Axis", data.smAxis, "AU", "One AU is one astronomical unit, which is the distance from The Sun to the Earth, and is approximately 150,000,000 km"]);
@@ -577,6 +603,11 @@ function TileClicked(element) {
             element_labels[1].innerText = displays[i][1];
             element_labels[2].innerText = displays[i][2];
             element_labels[3].innerText = displays[i][3];
+
+            if (i == 1) {
+                element_labels[1].id = "eccentricity";
+            }
+
             left_container.appendChild(element);
         }
 
@@ -591,6 +622,11 @@ function TileClicked(element) {
         }
 
         document.getElementById("render-window").style.visibility = "visible";
+
+        // Triggers event listener to make render update live
+        const trigger = document.getElementById("event-trigger")
+        trigger.click();
+
     }
 
 }
