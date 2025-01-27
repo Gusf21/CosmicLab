@@ -95,15 +95,16 @@ function Cancel() {
 
     if (editing) {
 
-        const cancel = document.getElementsByClassName("check-intent-container")[0];
-        if (cancel != undefined) {
+        const intent_container = document.getElementsByClassName("check-intent-container")[0];
+        if (intent_container != undefined) {
             const button = document.createElement("button");
             button.classList.add("cancel-button");
             button.classList.add("orange");
             button.innerText = "Cancel";
             button.dataset.function="Cancel()";
             button.setAttribute("onclick", "CheckButtonIntent(this)");
-            cancel.replaceWith(button);
+            intent_container.replaceWith(button);
+            console.log("Undefined edge-case");
         }
 
         if (!adding) {
@@ -111,44 +112,88 @@ function Cancel() {
             const name_input = document.getElementById("title-input");
             const data = GetData(name_input.dataset.id);
 
-            const img = document.getElementById("img-display");
-            SetPlanet(img, data.objectId, data.type);
+            if (state == 0) {
+                const img = document.getElementById("img-display");
+                SetPlanet(img, data.objectId, data.type);
+            }
 
             const name = document.createElement("a");
             name.classList.add("name");
             name.id = "name-display";
-            name.dataset.id = data.objectId;
+            name.dataset.id = state == 0 ? data.objectId : data.orbitId;
             name.innerText = data.name;
 
             name_input.replaceWith(name);
 
-            const container = document.getElementById("left-data");
-            const displays = container.getElementsByClassName("data-input");
+            const left_container = document.getElementById("left-data");
+            const right_container = document.getElementById("right-data");
+            const left_displays = left_container.getElementsByClassName("data-input");
+            const right_displays = right_container.getElementsByClassName("data-input");
 
-            for (let i = 0; i <= 1; i++) {
-                let data_label = document.createElement("span");
-                data_label.classList.add("numerical-data");
-                data_label.classList.add("data-display");
-
-                if (i == 0) {
-                    data_label.innerText = data.mass;
+            if (state == 0) {
+                for (let i = 0; i <= 1; i++) {
+                    let data_label = document.createElement("span");
+                    data_label.classList.add("numerical-data");
+                    data_label.classList.add("data-display");
+    
+                    if (i == 0) {
+                        data_label.innerText = data.mass;
+                    }
+                    else {
+                        data_label.innerText = data.radius;
+                    }
+                    left_displays[0].replaceWith(data_label);
                 }
-                else {
-                    data_label.innerText = data.radius;
-                }
-
-                displays[0].replaceWith(data_label);
+    
+                const type_container = document.getElementsByClassName("data-display-container")[0];
+                const type_labels = type_container.querySelectorAll("span");
+    
+                type_container.classList.remove("activate-border");
+                type_labels[0].classList.remove("type-selected");
+                type_labels[0].classList.remove("not-selected");
+    
+                type_labels[1].remove();
             }
+            else if (state == 1) {
 
-            const type_container = container.getElementsByClassName("data-display-container")[0];
-            const type_labels = type_container.querySelectorAll("span");
+                for (let i = 0; i <= 2; i++) {
+                    let data_label = document.createElement("span");
+                    data_label.classList.add("numerical-data");
+                    data_label.classList.add("data-display");
 
-            type_container.classList.remove("activate-border");
+                    console.log(i);
 
-            type_labels[0].classList.remove("type-selected");
-            type_labels[0].classList.remove("not-selected");
+                    switch (i) {
+                        case 0: 
+                            data_label.innerText = data.smAxis;
+                            break
+                        case 1: 
+                            data_label.innerText = data.eccentricity;
+                            data_label.id = "eccentricity";
+                            break
+                        case 2:
+                            data_label.innerText = data.inclination;
+                            data_label.id = "inclination";
+                    }
+                    left_displays[0].replaceWith(data_label);
+                }
 
-            type_labels[1].remove();
+                for (let i = 0; i <= 1; i++) {
+                    let data_label = document.createElement("span");
+                    data_label.classList.add("numerical-data");
+                    data_label.classList.add("data-display");
+
+                    switch (i) {
+                        case 0: 
+                            data_label.innerText = data.longOfAscNode;
+                            break
+                        case 1: 
+                            data_label.innerText = data.argOfPeri;
+                    }
+                    right_displays[0].replaceWith(data_label);
+                }
+
+            }
 
             document.getElementById("edit-button").style.visibility = "visible";
         }
@@ -158,9 +203,14 @@ function Cancel() {
             const edit_button = document.getElementById("edit-button");
 
             const left_container = document.getElementById("left-data");
+            const right_container = document.getElementById("right-data");
 
             while (left_container.firstChild) {
                 left_container.removeChild(left_container.lastChild);
+            }
+
+            while (right_container.firstChild) {
+                right_container.removeChild(right_container.lastChild);
             }
 
             const name = document.createElement("a");
@@ -350,10 +400,13 @@ function Edit(element) {
 
     editing = true;
 
-    const container = document.getElementById("left-data");
+    const left_data = document.getElementById("left-data");
+    const right_data = document.getElementById("right-data");
 
-    const numerical_displays = container.getElementsByClassName("numerical-data");
+    const numerical_displays = document.getElementsByClassName("numerical-data");
     const title = document.getElementById("name-display");
+
+    console.log(numerical_displays);
 
     const title_input = document.createElement("input");
     title_input.classList.add("data-input-title");
@@ -362,35 +415,71 @@ function Edit(element) {
     title_input.dataset.id = title.dataset.id;
     title.replaceWith(title_input);
 
-    const type = container.getElementsByClassName("text-data")[0];
+    if (state == 0) {
+        const type = left_data.getElementsByClassName("text-data")[0];
+        type.parentElement.classList.add("activate-border")
+        type.classList.add("type-selected");
 
-    for (let i = 0; i <= numerical_displays.length; i++) {
+        if (type.innerText == "Star") {
+            const planet_label = document.createElement("span");
+            planet_label.classList.add("data-display");
+            planet_label.classList.add("not-selected");
+            planet_label.onclick = SwitchType;
+            planet_label.innerText = "Planet";
+            type.insertAdjacentElement("afterend", planet_label);
+        }
+        else if (type.innerText == "Planet") {
+            const planet_label = document.createElement("span");
+            planet_label.classList.add("data-display");
+            planet_label.classList.add("not-selected");
+            planet_label.onclick = SwitchType;
+            planet_label.innerText = "Star";
+            type.insertAdjacentElement("afterend", planet_label);
+        }
+    
+    }
+
+    const repeats = numerical_displays.length;
+
+    for (let i = 0; i < repeats; i++) {
         let input_box = document.createElement("input");
         input_box.classList.add("data-input");
         input_box.type = "number";
         input_box.min = "0";
-        input_box.value = numerical_displays[1 - i].textContent;
-        numerical_displays[1 - i].replaceWith(input_box);
+        input_box.value = numerical_displays[0].textContent;
+        input_box.id = numerical_displays[0].id;
+        numerical_displays[0].replaceWith(input_box);
     }
 
-    type.parentElement.classList.add("activate-border")
-    type.classList.add("type-selected");
+    if (state == 1) {
 
-    if (type.innerText == "Star") {
-        const planet_label = document.createElement("span");
-        planet_label.classList.add("data-display");
-        planet_label.classList.add("not-selected");
-        planet_label.onclick = SwitchType;
-        planet_label.innerText = "Planet";
-        type.insertAdjacentElement("afterend", planet_label);
-    }
-    else if (type.innerText == "Planet") {
-        const planet_label = document.createElement("span");
-        planet_label.classList.add("data-display");
-        planet_label.classList.add("not-selected");
-        planet_label.onclick = SwitchType;
-        planet_label.innerText = "Star";
-        type.insertAdjacentElement("afterend", planet_label);
+        document.getElementById("eccentricity").addEventListener("input", (event) => {
+            const value = event.target.value;
+    
+            if (value >= 0 && value < 1 && value != "") {
+                event.target.style.borderColor = "#8A00FF";
+                const trigger = document.getElementById("eccentricity-trigger");
+                trigger.dataset.val = value;
+                trigger.click();
+            }
+            else {
+                event.target.style.borderColor = "#FF2400";
+            }
+        });
+    
+        document.getElementById("inclination").addEventListener("input", (event) => {
+            const value = event.target.value;
+    
+            if (value >= 0 && value <= 90 && value != "") {
+                event.target.style.borderColor = "#8A00FF";
+                const trigger = document.getElementById("inclination-trigger");
+                trigger.dataset.val = value;
+                trigger.click();
+            }
+            else {
+                event.target.style.borderColor = "#FF2400";
+            }
+        });
     }
 
     document.getElementById("button-container").style.visibility = "visible";
@@ -618,19 +707,25 @@ function TileClicked(element) {
         displays.push(["\nSemi-Major Axis", data.smAxis, "AU", "One AU is one astronomical unit, which is the distance from The Sun to the Earth, and is approximately 150,000,000 km"]);
         displays.push(["\nEccentricity", data.eccentricity, "", "Eccentricity is a 0 - 1 value that controls how close to a circle the ellipitical path is. Values closer to 0 are more circular"]);
         displays.push(["\nIncinlation", data.inclination, "Degree", "The inclination is how far above the horizontal plane the orbit is rotated"]);
-        displays.push(["Longitude Of\nAscending Node", data.longOfAscNode, "Degree", ""]);
-        displays.push(["Argument Of\nPeriapsis", data.argOfPeri, "Degree", ""]);
+        displays.push(["Longitude Of\nAscending Node", data.longOfAscNode, "Degree", "The longitude of the ascending node is how far around the y-axis the whole orbit is rotated"]);
+        displays.push(["Argument Of\nPeriapsis", data.argOfPeri, "Degree", "The arguement of periapsis is the angle around the orbit that the furthest point from the center object is located"]);
 
         for (let i = 0; i < (Math.ceil(displays.length / 2)); i++) {
             let element = left_template.content.cloneNode(true);
             let element_labels = element.querySelectorAll("span");
             element_labels[0].innerText = displays[i][0];
+
             element_labels[1].innerText = displays[i][1];
+            element_labels[1].classList.add("numerical-data");
+
             element_labels[2].innerText = displays[i][2];
             element_labels[3].innerText = displays[i][3];
 
             if (i == 1) {
                 element_labels[1].id = "eccentricity";
+            }
+            if (i == 2) {
+                element_labels[1].id = "inclination";
             }
 
             left_container.appendChild(element);
@@ -640,7 +735,10 @@ function TileClicked(element) {
             let element = left_template.content.cloneNode(true);
             let element_labels = element.querySelectorAll("span");
             element_labels[0].innerText = displays[i][0];
+
             element_labels[1].innerText = displays[i][1];
+            element_labels[1].classList.add("numerical-data");
+
             element_labels[2].innerText = displays[i][2];
             element_labels[3].innerText = displays[i][3];
             right_container.appendChild(element);
@@ -649,11 +747,15 @@ function TileClicked(element) {
         document.getElementById("render-window").style.visibility = "visible";
 
         // Triggers event listener to make render update live
-        const trigger = document.getElementById("event-trigger")
-        trigger.click();
+        const eccentricity_trigger = document.getElementById("eccentricity-trigger");
+        eccentricity_trigger.dataset.val = document.getElementById("eccentricity").innerText;
 
+        const inclination_trigger = document.getElementById("inclination-trigger");
+        inclination_trigger.dataset.val = document.getElementById("inclination").innerText;
+
+        eccentricity_trigger.click();
+        inclination_trigger.click();
     }
-
 }
 
 // Used to assign an icon to planets and stars based on their unchanging ID
