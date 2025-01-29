@@ -8,7 +8,7 @@ let orbits = [];
 
 // Loads all data and adds stars to viewing/edit/add window
 document.addEventListener("DOMContentLoaded", async () => {
-    LoadData();
+    LoadData("objects");
     Stars();
 });
 
@@ -20,7 +20,7 @@ function DisplayAddUI() {
     if (state == 0) {
         const title = document.getElementById("name-display");
         const img = document.getElementById("img-display");
-        
+
         img.style.display = "block";
 
         title.innerText = "";
@@ -101,7 +101,7 @@ function Cancel() {
             button.classList.add("cancel-button");
             button.classList.add("orange");
             button.innerText = "Cancel";
-            button.dataset.function="Cancel()";
+            button.dataset.function = "Cancel()";
             button.setAttribute("onclick", "CheckButtonIntent(this)");
             intent_container.replaceWith(button);
             console.log("Undefined edge-case");
@@ -135,23 +135,25 @@ function Cancel() {
                     let data_label = document.createElement("span");
                     data_label.classList.add("numerical-data");
                     data_label.classList.add("data-display");
-    
+
                     if (i == 0) {
                         data_label.innerText = data.mass;
+                        data_label.id = "mass";
                     }
                     else {
                         data_label.innerText = data.radius;
+                        data_label.id = "radius";
                     }
                     left_displays[0].replaceWith(data_label);
                 }
-    
+
                 const type_container = document.getElementsByClassName("data-display-container")[0];
                 const type_labels = type_container.querySelectorAll("span");
-    
+
                 type_container.classList.remove("activate-border");
                 type_labels[0].classList.remove("type-selected");
                 type_labels[0].classList.remove("not-selected");
-    
+
                 type_labels[1].remove();
             }
             else if (state == 1) {
@@ -161,13 +163,12 @@ function Cancel() {
                     data_label.classList.add("numerical-data");
                     data_label.classList.add("data-display");
 
-                    console.log(i);
-
                     switch (i) {
-                        case 0: 
+                        case 0:
                             data_label.innerText = data.smAxis;
+                            data_label.id = "semi-major-axis";
                             break
-                        case 1: 
+                        case 1:
                             data_label.innerText = data.eccentricity;
                             data_label.id = "eccentricity";
                             break
@@ -184,15 +185,24 @@ function Cancel() {
                     data_label.classList.add("data-display");
 
                     switch (i) {
-                        case 0: 
+                        case 0:
                             data_label.innerText = data.longOfAscNode;
+                            data_label.id = "long-of-asc-node";
                             break
-                        case 1: 
+                        case 1:
                             data_label.innerText = data.argOfPeri;
+                            data_label.id = "arg-of-peri";
                     }
                     right_displays[0].replaceWith(data_label);
                 }
 
+                const eccentricity_trigger = document.getElementById("eccentricity-trigger");
+                eccentricity_trigger.dataset.val = data.eccentricity;
+                eccentricity_trigger.click();
+
+                const inclination_trigger = document.getElementById("inclination-trigger");
+                inclination_trigger.dataset.val = data.inclination;
+                inclination_trigger.click();
             }
 
             document.getElementById("edit-button").style.visibility = "visible";
@@ -231,88 +241,134 @@ function Cancel() {
 // If adding, saves the new object to the user's profile. If editing, saves the changes.
 async function Save() {
 
-    const container = document.getElementById("left-data");
+    const left_container = document.getElementById("left-data");
+    const right_container = document.getElementById("right-data");
+
     const title_input = document.getElementById("title-input")
-    const selected_type = document.getElementsByClassName("type-selected")[0];
-    const displays = container.getElementsByClassName("data-input");
+
+    let type;
+    if (state == 0) {
+        const selected_type = document.getElementsByClassName("type-selected")[0];
+        type = selected_type.innerText.toLowerCase();
+    }
+
+    const left_displays = left_container.getElementsByClassName("data-input");
+    const right_displays = right_container.getElementsByClassName("data-input");
 
     const name = title_input.value;
-    const mass = parseFloat(displays[0].value);
-    const radius = parseFloat(displays[1].value);
-    const type = selected_type.innerText.toLowerCase();
 
     let valid = true;
 
-    if (name == "") {
-        title_input.classList.add("invalid")
+    if (title_input.classList.contains("invalid")) {
         valid = false;
-    }
-    else {
-        title_input.classList.remove("invalid")
     }
 
-    if (mass <= 0 || isNaN(mass)) {
-        displays[0].classList.add("invalid")
-        valid = false;
-    }
-    else {
-        displays[0].classList.remove("invalid")
+    for (let element of left_displays) {
+        if (element.classList.contains("invalid")) {
+            valid = false;
+        }
     }
 
-    if (radius <= 0 || isNaN(radius)) {
-        displays[1].classList.add("invalid")
-        valid = false;
-    }
-    else {
-        displays[1].classList.remove("invalid")
+    for (let element of right_displays) {
+        if (element.classList.contains("invalid")) {
+            valid = false;
+        }
     }
 
     let updated_data;
 
     if (valid) {
-        if (!adding) {
-            const data = GetData(title_input.dataset.id);
+        if (state == 0) {
 
-            updated_data = data;
-            updated_data.name = name;
-            updated_data.type = type;
-            updated_data.mass = mass;
-            updated_data.radius = radius;
-
-            await fetch(`https://localhost:7168/api/Data/EditObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "objectId": updated_data.objectId,
-                    "username": updated_data.username,
-                    "orbitId": updated_data.orbitId,
-                    "type": updated_data.type,
-                    "name": updated_data.name,
-                    "mass": updated_data.mass,
-                    "radius": updated_data.radius
-                })
-            });
+            if (!adding) {
+                const data = GetData(title_input.dataset.id);
+    
+                updated_data = data;
+                updated_data.name = name;
+                updated_data.type = type;
+                updated_data.mass = left_displays[0].value;
+                updated_data.radius = left_displays[1].value;
+    
+                await fetch(`https://localhost:7168/api/Data/EditObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "objectId": updated_data.objectId,
+                        "username": updated_data.username,
+                        "orbitId": updated_data.orbitId,
+                        "type": updated_data.type,
+                        "name": updated_data.name,
+                        "mass": updated_data.mass,
+                        "radius": updated_data.radius
+                    })
+                });
+            }
+            else {
+    
+                await fetch(`https://localhost:7168/api/Data/CreateObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "name": name,
+                        "type": type,
+                        "mass": mass,
+                        "radius": radius
+                    })
+                });
+            }
             Cancel();
-            LoadData();
+            LoadData("objects");
         }
-        else {
-
-            await fetch(`https://localhost:7168/api/Data/CreateObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "name": name,
-                    "type": type,
-                    "mass": mass,
-                    "radius": radius
-                })
-            });
+        else if (state == 1) {
+            if (!adding) {
+                const data = GetData(title_input.dataset.id);
+    
+                updated_data = data;
+                updated_data.name = name;
+                updated_data.smAxis = left_displays[0].value;
+                updated_data.eccentricity = left_displays[1].value;
+                updated_data.inclination = left_displays[2].value;
+                updated_data.longOfAscNode = right_displays[0].value;
+                updated_data.argOfPeri = right_displays[1].value;
+    
+                await fetch(`https://localhost:7168/api/Data/EditOrbit?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "orbitId": updated_data.orbitId,
+                        "username": updated_data.username,
+                        "name": updated_data.name,
+                        "smAxis": updated_data.smAxis,
+                        "eccentricity": updated_data.eccentricity,
+                        "inclination": updated_data.inclination,
+                        "longOfAscNode": updated_data.longOfAscNode,
+                        "argOfPeri": updated_data.argOfPeri
+                    })
+                });
+            }
+            else {
+    
+                await fetch(`https://localhost:7168/api/Data/CreateObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "name": name,
+                        "type": type,
+                        "mass": mass,
+                        "radius": radius
+                    })
+                });
+            }
             Cancel();
-            LoadData();
+            LoadData("orbits");
         }
     }
 }
@@ -406,7 +462,6 @@ function Edit(element) {
     const numerical_displays = document.getElementsByClassName("numerical-data");
     const title = document.getElementById("name-display");
 
-    console.log(numerical_displays);
 
     const title_input = document.createElement("input");
     title_input.classList.add("data-input-title");
@@ -414,6 +469,17 @@ function Edit(element) {
     title_input.id = "title-input";
     title_input.dataset.id = title.dataset.id;
     title.replaceWith(title_input);
+
+    title_input.addEventListener("input", (event) => {
+        const value = event.target.value;
+
+        if (value != "") {
+            event.target.classList.remove("invalid");
+        }
+        else {
+            event.target.classList.add("invalid");
+        }
+    });
 
     if (state == 0) {
         const type = left_data.getElementsByClassName("text-data")[0];
@@ -436,7 +502,7 @@ function Edit(element) {
             planet_label.innerText = "Star";
             type.insertAdjacentElement("afterend", planet_label);
         }
-    
+
     }
 
     const repeats = numerical_displays.length;
@@ -451,35 +517,93 @@ function Edit(element) {
         numerical_displays[0].replaceWith(input_box);
     }
 
-    if (state == 1) {
+    if (state == 0) {
+
+        document.getElementById("mass").addEventListener("input", (event) => {
+            const value = event.target.value;
+
+            if (value > 0 && value != "") {
+                event.target.classList.remove("invalid");
+            }
+            else {
+                event.target.classList.add("invalid");
+            }
+        });
+
+        document.getElementById("radius").addEventListener("input", (event) => {
+            const value = event.target.value;
+
+            if (value >= 0 && value != "") {
+                event.target.classList.remove("invalid");
+            }
+            else {
+                event.target.classList.add("invalid");
+            }
+        });
+    }
+    else if (state == 1) {
+
+        document.getElementById("semi-major-axis").addEventListener("input", (event) => {
+            const value = event.target.value;
+
+            if (value >= 0 && value != "") {
+                event.target.classList.remove("invalid");
+            }
+            else {
+                event.target.classList.add("invalid");
+            }
+        });
 
         document.getElementById("eccentricity").addEventListener("input", (event) => {
             const value = event.target.value;
-    
+
             if (value >= 0 && value < 1 && value != "") {
-                event.target.style.borderColor = "#8A00FF";
+                event.target.classList.remove("invalid");
                 const trigger = document.getElementById("eccentricity-trigger");
                 trigger.dataset.val = value;
                 trigger.click();
             }
             else {
-                event.target.style.borderColor = "#FF2400";
+                event.target.classList.add("invalid");
             }
         });
-    
+
         document.getElementById("inclination").addEventListener("input", (event) => {
             const value = event.target.value;
-    
+
             if (value >= 0 && value <= 90 && value != "") {
-                event.target.style.borderColor = "#8A00FF";
+                event.target.classList.remove("invalid");
                 const trigger = document.getElementById("inclination-trigger");
                 trigger.dataset.val = value;
                 trigger.click();
             }
             else {
-                event.target.style.borderColor = "#FF2400";
+                event.target.classList.add("invalid");
             }
         });
+
+        document.getElementById("long-of-asc-node").addEventListener("input", (event) => {
+            const value = event.target.value;
+
+            if (value != "") {
+                event.target.classList.remove("invalid");
+            }
+            else {
+                event.target.classList.add("invalid");
+            }
+        });
+
+        document.getElementById("arg-of-peri").addEventListener("input", (event) => {
+            const value = event.target.value;
+
+            if (value != "") {
+                event.target.classList.remove("invalid");
+            }
+            else {
+                event.target.classList.add("invalid");
+            }
+        });
+
     }
 
     document.getElementById("button-container").style.visibility = "visible";
@@ -517,20 +641,24 @@ async function Delete(element) {
     }
     */
 
-    LoadData();
+    LoadData("objects");
 }
 
 // Fetches data for Objects and Orbits from the backend
-async function LoadData() {
+async function LoadData(type) {
     const response = await fetch(`https://localhost:7168/api/Data/GetUserCreations?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`);
 
     const data = await response.json();
 
-
     objects = data.objects.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : 0));
     orbits = data.orbits;
 
-    SelectObjects();
+    if (type == "objects") {
+        SelectObjects();
+    }
+    else if (type == "orbits") {
+        SelectOrbits();
+    }
 }
 
 // Loads Objects (Planets and Stars) into the tile window
@@ -675,6 +803,7 @@ function TileClicked(element) {
         const mass_labels = mass.querySelectorAll("span");
         mass_labels[0].innerText = "Mass";
         mass_labels[1].innerText = data.mass;
+        mass_labels[1].id = "mass";
         mass_labels[1].classList.add("numerical-data")
         if (data.type == "planet") {
             mass_labels[2].innerText = "EM";
@@ -690,6 +819,7 @@ function TileClicked(element) {
         const radius_labels = radius.querySelectorAll("span");
         radius_labels[0].innerText = "Radius";
         radius_labels[1].innerText = data.radius;
+        radius_labels[1].id = "radius";
         radius_labels[1].classList.add("numerical-data")
         if (data.type == "planet") {
             radius_labels[2].innerText = "ER";
@@ -721,11 +851,15 @@ function TileClicked(element) {
             element_labels[2].innerText = displays[i][2];
             element_labels[3].innerText = displays[i][3];
 
-            if (i == 1) {
-                element_labels[1].id = "eccentricity";
-            }
-            if (i == 2) {
-                element_labels[1].id = "inclination";
+            switch (i) {
+                case 0:
+                    element_labels[1].id = "semi-major-axis";
+                    break
+                case 1:
+                    element_labels[1].id = "eccentricity";
+                    break
+                case 2:
+                    element_labels[1].id = "inclination";
             }
 
             left_container.appendChild(element);
@@ -742,6 +876,14 @@ function TileClicked(element) {
             element_labels[2].innerText = displays[i][2];
             element_labels[3].innerText = displays[i][3];
             right_container.appendChild(element);
+
+            switch (i) {
+                case Math.ceil(displays.length / 2):
+                    element_labels[1].id = "long-of-asc-node";
+                    break
+                case Math.ceil(displays.length / 2) + 1:
+                    element_labels[1].id = "arg-of-peri";
+            }
         }
 
         document.getElementById("render-window").style.visibility = "visible";

@@ -3,6 +3,7 @@
     --grey: #818589;
     --white: #FFFFFF;
     --purple: #8A00FF;
+    --red: #FF2400;
 }
 
 .toggle-container {
@@ -126,6 +127,10 @@ form {
     text-indent: 20px;
     font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
     transition: 0.2s ease;
+}
+
+.input-box input.invalid {
+    border-color: var(--red);
 }
 
 form button {

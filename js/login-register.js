@@ -93,6 +93,8 @@ async function CheckLogin(e) {
     }
     else {
         inputs[0].setCustomValidity("Password or username is incorrect");
+        inputs[0].classList.add("invalid");
+        inputs[1].classList.add("invalid");
     }
 }
 
@@ -139,4 +141,8 @@ function FetchChildren() {
     const container = document.getElementById("toggle-container");
     const labels = container.querySelectorAll("*");
     return labels;
+}
+
+function RemoveInvalid(element) {
+    element.classList.remove("invalid");
 }
