@@ -99,19 +99,7 @@ function SetPlanet(element, id, type) {
 // When editing or adding, cancels the edit/add and either returns to the viewing window if editing, or removes the viewing window if adding
 function Cancel() {
 
-    const intent_container = document.getElementsByClassName("check-intent-container")[0];
-
-    // Resets button to removes intent check
-    if (intent_container != undefined) {
-        const no_button = intent_container.getElementsByClassName("no")[0];
-
-        const button = document.createElement("button");
-        button.innerText = no_button.dataset.text;
-        button.dataset.function = no_button.dataset.function;
-        button.classList = no_button.dataset.classes;
-        button.setAttribute("onclick", "CheckButtonIntent(this)");
-        intent_container.replaceWith(button);
-    }
+    ResetIntentButtons();
 
     if (!adding) {
 
@@ -728,6 +716,8 @@ function GetData(id) {
 function Clear() {
     adding = false;
 
+    ResetIntentButtons();
+
     const left_container = document.getElementById("left-data");
     const right_container = document.getElementById("right-data");
 
@@ -754,6 +744,27 @@ function Clear() {
     document.getElementById("render-window").style.visibility = "hidden";
     document.getElementById("button-container").style.visibility = "hidden";
 
+}
+
+// Resets all buttons with intent chcker to normal state
+function ResetIntentButtons() {
+    const intent_containers = document.getElementsByClassName("check-intent-container");
+
+    console.log(intent_containers);
+
+    if (intent_containers.length != 0) {
+
+        for (let i = 0; i <= intent_containers.length; i++) {
+            const no_button = intent_containers[0].getElementsByClassName("no")[0];
+    
+            const button = document.createElement("button");
+            button.innerText = no_button.dataset.text;
+            button.dataset.function = no_button.dataset.function;
+            button.classList = no_button.dataset.classes;
+            button.setAttribute("onclick", "CheckButtonIntent(this)");
+            intent_containers[0].replaceWith(button);
+        }
+    }
 }
 
 // Load the data corresonding to the tile clicked into the viewing window
