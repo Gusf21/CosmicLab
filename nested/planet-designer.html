@@ -17,32 +17,43 @@
         <span id="inclination-trigger"></span>
     </div>
     <div class="design-container">
-        <div class="design-panel">
-
-            <div class="option-container">
-                <div class="objects option" id="objects" onclick="SelectObjects()">Objects</div>
-                <div class="orbits option" id="orbits" onclick="SelectOrbits()">Orbits</div>
-            </div>
-
-            <div class="tile-container" id="tile-container">
-                <div class="tile add-new" onclick="DisplayAddUI()">
-                    <i class="fa-solid fa-circle-plus fa-4x"></i>
-                    <a class="label" id="text">Add New</a>
+        <div class="left-container">
+            <div class="design-panel">
+    
+                <div class="option-container">
+                    <div class="objects option" id="objects" onclick="SelectObjects()">Objects</div>
+                    <div class="orbits option" id="orbits" onclick="SelectOrbits()">Orbits</div>
+                </div>
+    
+                <div class="tile-container" id="tile-container">
+                    <div class="tile add-new" onclick="DisplayAddUI()">
+                        <i class="fa-solid fa-circle-plus fa-4x"></i>
+                        <a class="label" id="text">Add New</a>
+                    </div>
+                </div>
+    
+                <template class="tile-template" id="tile-template">
+                    <div class="tile" data-id="" onclick="TileClicked(this)">
+                        <img class="img" src="../images/planets/planet1.gif" width="100" height="100">
+                        <a class="label" id="text">Earth</a>
+                    </div>
+                </template>
+    
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+                    <input type="text" class="searchbar" placeholder="Search" oninput="UpdateDisplay(this)">
                 </div>
             </div>
-
-            <template class="tile-template" id="tile-template">
-                <div class="tile" data-id="" onclick="TileClicked(this)">
-                    <img class="img" src="../images/planets/planet1.gif" width="100" height="100">
-                    <a class="label" id="text">Earth</a>
+            <div class="links-panel">
+                <div>
+                    <i class="fa-solid fa-circle-arrow-left fa-3x" style="margin-left: 5rem;" onclick="window.location.href='index.html'"></i>
+                    <span>Menu</span>
                 </div>
-            </template>
-
-            <div class="search-container">
-                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-                <input type="text" class="searchbar" placeholder="Search" oninput="UpdateDisplay(this)">
+                <div>
+                    <span>Simulation</span>
+                    <i class="fa-solid fa-circle-arrow-right fa-3x" style="margin-right: 5rem;"></i>
+                </div>
             </div>
-
         </div>
         <div class="design-panel black" id="star-container">
 
@@ -95,6 +106,6 @@
 
         </div>
     </div>
-</body>
+</body> 
 
 </html>

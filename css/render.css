@@ -1,0 +1,17 @@
+:root {
+    --black: #071013;
+    --grey: #818589;
+    --white: #FFFFFF;
+    --purple: #8A00FF;
+    --green: #00FF7F;
+    --orange: #FFA500;
+    --red: #FF2400;
+}
+
+.info-panel {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 20%;
+    border-left: solid var(--white) 2px;
+}

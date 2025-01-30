@@ -3,16 +3,10 @@ import * as THREE from 'three';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { randFloat } from 'three/src/math/MathUtils.js';
 
-let perspectiveCamera, orthographicCamera, controls, scene, renderer;
-
-const params = {
-    orthographicCamera: false
-};
-
-const frustumSize = 400;
-const size = 80;
+let perspectiveCamera, orbit, scene, renderer;
 
 let items = [];
 
@@ -20,24 +14,21 @@ init();
 
 function init() {
 
-    const aspect = window.innerWidth / window.innerHeight;
+    const aspect = window.innerWidth * 0.8 / window.innerHeight;
 
-    perspectiveCamera = new THREE.PerspectiveCamera(60, aspect, 1, 2000);
+    perspectiveCamera = new THREE.PerspectiveCamera(60, aspect, 1, 5000);
     perspectiveCamera.position.z = 500;
-
-    //orthographicCamera = new THREE.OrthographicCamera(frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 1000);
-    //orthographicCamera.position.z = 500;
 
     // world
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xcccccc);
+    scene.background = new THREE.Color(0x000000);
     // renderer
-    addPlanets();
+    AddItems();
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth * 0.75 , window.innerHeight * 0.75);
+    renderer.setSize(window.innerWidth * 0.8, window.innerHeight);
     renderer.setAnimationLoop(animate);
     document.body.appendChild(renderer.domElement);
 
@@ -46,54 +37,86 @@ function init() {
     createControls(perspectiveCamera);
 }
 
-function addPlanets() {
+function AddItems() {
 
-    
+    const starsGeometry = new THREE.BufferGeometry();
+    const starCount = 5000; // Number of stars
+    const positions = new Float32Array(starCount * 3); // x, y, z for each star
+
+
+    const minDistance = 1000; // Inner radius
+    const maxDistance = 1500; // Outer radius
+
+    for (let i = 0; i < starCount; i++) {
+        let r, theta, phi;
+
+        // Generate a uniform distribution in a spherical shell
+        r = Math.cbrt(Math.random() * (maxDistance ** 3 - minDistance ** 3) + minDistance ** 3);
+        theta = Math.random() * Math.PI * 2; // Full rotation around Y-axis
+        phi = Math.acos(2 * Math.random() - 1); // Proper latitudinal distribution
+
+        // Convert spherical coordinates to Cartesian
+        let x = r * Math.sin(phi) * Math.cos(theta);
+        let y = r * Math.sin(phi) * Math.sin(theta);
+        let z = r * Math.cos(phi);
+
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
+    }
+
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    // Create a basic material for the stars
+    const starsMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 1.5, // Adjust size for visibility
+        sizeAttenuation: true,
+        transparent: true,
+        opacity: 0.8
+    });
+
+    // Create the starfield and add to scene
+    const stars = new THREE.Points(starsGeometry, starsMaterial);
+    scene.add(stars);
+
 
     const SphereMesh = new THREE.SphereGeometry(10, 10, 10);
-    const SphereMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
+    const SphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const center_object = new THREE.Mesh(SphereMesh, SphereMaterial);
     scene.add(center_object);
     items.push(center_object);
-
-    const axes = new THREE.AxesHelper(10000);
-    scene.add(axes);
 }
 
 function createControls(camera) {
 
-    controls = new TrackballControls(camera, renderer.domElement);
-
-    controls.rotateSpeed = 0;
-    controls.zoomSpeed = 1.2;
-    controls.panSpeed = 0.8;
-
-    controls.keys = ['KeyA', 'KeyS', 'KeyD'];
+    orbit = new OrbitControls(camera, renderer.domElement);
+    orbit.target = new THREE.Vector3(0, 0, 0);
+    //orbit.minPolarAngle = Math.PI / 8;
+    //orbit.maxPolarAngle = Math.PI - Math.PI / 8;
+    orbit.minDistance = 100;
+    orbit.maxDistance = 1000;
+    orbit.zoomSpeed = 0.3;
+    orbit.rotateSpeed = 0.3;
+    orbit.enablePan = false;
 
 }
 
 function onWindowResize() {
 
-    const aspect = window.innerWidth / window.innerHeight;
+    const aspect = window.innerWidth * 0.8 / window.innerHeight;
 
     perspectiveCamera.aspect = aspect;
     perspectiveCamera.updateProjectionMatrix();
 
-    //orthographicCamera.left = - frustumSize * aspect / 2;
-    //orthographicCamera.right = frustumSize * aspect / 2;
-    //orthographicCamera.top = frustumSize / 2;
-    //orthographicCamera.bottom = - frustumSize / 2;
-    //orthographicCamera.updateProjectionMatrix();
-
-    renderer.setSize(window.innerWidth * 0.75 , window.innerHeight * 0.75);
-
-    controls.handleResize();
+    renderer.setSize(window.innerWidth * 0.8, window.innerHeight);
 
 }
 
+
 function animate() {
 
-    controls.update();
+    orbit.update();
 
     render();
 }

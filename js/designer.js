@@ -750,8 +750,6 @@ function Clear() {
 function ResetIntentButtons() {
     const intent_containers = document.getElementsByClassName("check-intent-container");
 
-    console.log(intent_containers);
-
     if (intent_containers.length != 0) {
 
         for (let i = 0; i <= intent_containers.length; i++) {

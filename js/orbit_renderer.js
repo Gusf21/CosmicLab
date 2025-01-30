@@ -93,8 +93,6 @@ function createControls(camera) {
     orbit.zoomSpeed = 0.3;
     orbit.rotateSpeed = 0.3;
     orbit.enablePan = false;
-
-    orbit._rotateStart
 }
 
 function animate() {
