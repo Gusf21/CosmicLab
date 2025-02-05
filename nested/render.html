@@ -5,11 +5,35 @@
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 <link rel="stylesheet" type="text/css" href="../css/render.css">
 <script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
-</head>
 <script src="../js/render.js" type="module" ></script>
+<script src="../js/render-setup.js" type="module"></script>
+</head>
 <body>
+    <div class="event-triggers" >
+        <div id="add-object" >
+
+        </div>
+    </div>
     <div class="info-panel">
 
+        <template id="info-card-template" >
+            <div class="info-card">
+                <i class="fa-solid fa-video fa-2x"></i>
+                <span class="name"></span>
+            </div>
+        </template>
+
+        <div class="card-container" id="card-container">
+
+        </div>
+        <div class="playback-options">
+            <div class="play-button">
+                <i class="fa-solid fa-play fa-2x"></i>
+            </div>
+        </div>
+        <div class="menu-button">
+            <span>Return To Menu</span>
+        </div>
     </div>
 </body>
 </html>
