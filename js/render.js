@@ -5,17 +5,23 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { randFloat, randInt } from 'three/src/math/MathUtils.js';
+//import { FetchFrames } from './render-setup';
 
-let perspectiveCamera, orbit, scene, renderer, stars;
+const AU = 149597870700;
+const distance_multiplier = 20;
 
-let items = [];
+let perspectiveCamera, orbit, scene, renderer, stars, axes;
+
+let items = {};
+let frames = [];
+let framenumber = 0;
+let paused = true;
 
 function Start() {
     init();
 }
 
 function init() {
-    console.log("Init");
     const aspect = window.innerWidth * 0.8 / window.innerHeight;
 
     perspectiveCamera = new THREE.PerspectiveCamera(60, aspect, 0.1, 5000);
@@ -49,12 +55,12 @@ function init() {
 function AddStars() {
 
     const starsGeometry = new THREE.BufferGeometry();
-    const starCount = 5000; // Number of stars
+    const starCount = 10000; // Number of stars
     const positions = new Float32Array(starCount * 3); // x, y, z for each star
     const sizes = new Float32Array(starCount); // Individual sizes for twinkling effect
 
-    const minDistance = 1000;
-    const maxDistance = 2000;
+    const minDistance = 3000;
+    const maxDistance = 4000;
 
     for (let i = 0; i < starCount; i++) {
         let r, theta, phi;
@@ -109,8 +115,8 @@ function AddStars() {
     stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
 
-    let axis = new THREE.AxesHelper(1000);
-    scene.add(axis);
+    axes = new THREE.AxesHelper(1000);
+    scene.add(axes);
 }
 
 function createControls(camera) {
@@ -120,8 +126,8 @@ function createControls(camera) {
     //orbit.minPolarAngle = Math.PI / 8;
     //orbit.maxPolarAngle = Math.PI - Math.PI / 8;
     orbit.minDistance = 0.01;
-    orbit.maxDistance = 500;
-    orbit.zoomSpeed = 1;
+    orbit.maxDistance = 2000;
+    orbit.zoomSpeed = 2;
     orbit.rotateSpeed = 0.3;
     orbit.enablePan = false;
 
@@ -138,14 +144,26 @@ function onWindowResize() {
 
 }
 
-function AddObject(x, y, z, element_id) {
+function AddObject(x, y, z, radius, element_id, name) {
 
     //console.log(`${x}, ${y}, ${z}`);
+    const types = ["Volcanic","Oceanic","Tropical","Gas Giant","Venusian","Ice","Swamp"];
+    const type = types[Math.floor(Math.random() * types.length)];
+    const num = randInt(1, 10);
+    const SphereMesh = new THREE.SphereGeometry(0.2 * radius, 32, 32);
 
-    const SphereMesh = new THREE.SphereGeometry(0.1, 10, 10);
-    const SphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    let texture;
+    if (name == null) {
+        texture = new THREE.TextureLoader().load(`../images/Textures/${type}/${type}-EQUIRECTANGULAR-${num}-1024x512.png`);
+    }
+    else {
+        console.log(name);
+        texture = new THREE.TextureLoader().load(`../images/Textures/Default/${name}.png`);
+    }
+
+    const SphereMaterial = new THREE.MeshBasicMaterial({ map: texture });
     const object = new THREE.Mesh(SphereMesh, SphereMaterial);
-    object.position.set(x * 10, z * 10, y * 10);
+    object.position.set(x * distance_multiplier, z * distance_multiplier, y * distance_multiplier);
 
     const entry = document.getElementById(element_id);
     entry.querySelector("i").addEventListener("click", () => {
@@ -153,9 +171,8 @@ function AddObject(x, y, z, element_id) {
         orbit.target = object.position;
     });
 
-    items.push(object);
-    scene.add(object);  
-
+    items[element_id] = object;
+    scene.add(object);
 }
 
 function animate() {
@@ -173,4 +190,63 @@ function render() {
 
 }
 
-export { AddObject, scene, Start }
+function BeginMovement() {
+    setInterval(DisplayFrame, 1000 / 24)
+}
+
+function PassFrames(new_frames) {
+    frames = frames.concat(new_frames);
+}
+
+window.ToggleSim = (element) => {
+    paused = !paused;
+    let icon = element.querySelector("i");
+    if (paused) {
+        icon.classList.remove("fa-pause");
+        icon.classList.add("fa-play");
+    }
+    else {
+        icon.classList.remove("fa-play");
+        icon.classList.add("fa-pause");
+    }
+};
+
+window.ToggleAxes = () => {
+    axes.visible = !axes.visible;
+};
+
+function DisplayFrame() {
+    if (!paused) {
+        let framelist = frames[framenumber];
+        for (let i = 0; i < framelist.length; i++) {
+            items[framelist[i].objectId].position.set(framelist[i].xPos * distance_multiplier / AU, framelist[i].zPos * distance_multiplier / AU, framelist[i].yPos * distance_multiplier / AU);
+        }
+        framenumber++;
+    }
+    if (framenumber + 500 == frames.length) {
+        FetchFrames();   
+    }
+}
+
+async function FetchFrames() {
+    let new_frames = await fetch(`https://localhost:7168/api/Data/GetFrames?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+    PassFrames(JSON.parse(await new_frames.text()));
+}
+
+function GetCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+export { AddObject, scene, Start, PassFrames, BeginMovement, GetCookie }

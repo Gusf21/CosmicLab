@@ -1,4 +1,4 @@
-import { AddObject, scene, Start as StartRender } from "./render";
+import { AddObject, scene, Start as StartRender, PassFrames, BeginMovement, GetCookie } from "./render";
 
 const default_system = [
     {
@@ -13,7 +13,7 @@ const default_system = [
                     id: 2,
                     name: "Mercury",
                     type: "planet",
-                    mass: 0.06,
+                    mass: 0.055,
                     radius: 0.382
                 },
                 orbit: {
@@ -178,8 +178,19 @@ class Vector3 {
 
 // I dont know why, but this is the only way to only create one canvas
 document.addEventListener("DOMContentLoaded", () => {
+    GetCookie("session_id");
     StartRender();
     AddDefaultPlanets();
+});
+
+window.addEventListener("beforeunload", () => {
+    fetch(`https://localhost:7168/api/Data/DeleteSimulation?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    console.log("Deleting");
 });
 
 function AddDefaultPlanets() {
@@ -211,7 +222,7 @@ function AddDefaultPlanets() {
         const satellites = default_system[i].satellites.length;
 
         CreateEntry(default_system[i]);
-        AddObject(center_object.telemetry.position.x / AU, center_object.telemetry.position.y / AU, center_object.telemetry.position.z / AU, center_object.celestial_object.id);
+        AddObject(center_object.telemetry.position.x / AU, center_object.telemetry.position.y / AU, center_object.telemetry.position.z / AU, center_object.celestial_object.radius * 10, center_object.celestial_object.id, center_object.celestial_object.name);
         added_items.push(center_object);
 
         for (let j = 0; j < satellites; j++) {
@@ -240,10 +251,11 @@ function AddDefaultPlanets() {
             SetupOrbit(center_object, orbiting_object, default_system[i].satellites[j].orbit);
 
             CreateEntry(default_system[i].satellites[j].object)
-            AddObject(orbiting_object.telemetry.position.x / AU, orbiting_object.telemetry.position.y / AU, orbiting_object.telemetry.position.z / AU, orbiting_object.celestial_object.id);
+            AddObject(orbiting_object.telemetry.position.x / AU, orbiting_object.telemetry.position.y / AU, orbiting_object.telemetry.position.z / AU, orbiting_object.celestial_object.radius, orbiting_object.celestial_object.id, orbiting_object.celestial_object.name);
             added_items.push(orbiting_object);
         }
     }
+    PassSystemToBackend();
 }
 
 function CreateEntry(object) {
@@ -263,52 +275,63 @@ function CalculateInitialVelocity(E, a, M) {
 }
 
 function SetupOrbit(center_object, orbiting_object, orbit_parameters) {
-    
+
     const seperation = (orbit_parameters.smAxis - (orbit_parameters.eccentricity * orbit_parameters.smAxis)) * AU;
-    
+
     const offset = new Vector3(seperation, 0, 0);
     const center = new Vector3(center_object.telemetry.position.x, center_object.telemetry.position.y, center_object.telemetry.position.z);
-    
+
     const long_of_asc_node_rads = (orbit_parameters.longOfAscNode * Math.PI) / 180;
     const inclination_rads = (orbit_parameters.inclination * Math.PI) / 180;
     const arg_rads = (orbit_parameters.argOfPeri * Math.PI) / 180;
-    
+
     const cosi = Math.cos(inclination_rads);
     const sini = Math.sin(inclination_rads);
     const coso = Math.cos(long_of_asc_node_rads);
     const sino = Math.sin(long_of_asc_node_rads);
-    
+
     // Rotate around the z axis to set the Longitude of the Ascending Node
     offset.rotate(new Vector3(0, 0, 1), long_of_asc_node_rads);
-    
+
     // Rotate around the axis set by the Longitude of the Ascending Node, sets the inclination
     offset.rotate(new Vector3(sino, -1 * coso, 0), inclination_rads);
-    
+
     // Rotate around the axis of tilt of the center object, sets the distance around the center object of ther peripasis
     // Unit vector calculated by multiplying the rotation matrix for inclining the point around the origin in the xz plane by the rotation matrix around the z-axis
     offset.rotate(new Vector3(-1 * sini * coso, -1 * sini * sino, cosi), arg_rads);
-    
+
     orbiting_object.telemetry.position.x = center.x + offset.x;
     orbiting_object.telemetry.position.y = center.y + offset.y;
     orbiting_object.telemetry.position.z = center.z + offset.z;
-    
+
     let velocity = new Vector3(0, 1, 0);
     velocity.rotate(new Vector3(0, 0, 1), long_of_asc_node_rads);
     velocity.rotate(new Vector3(-1 * sini * coso, -1 * sini * sino, cosi), arg_rads);
     velocity.multiply(CalculateInitialVelocity(orbit_parameters.eccentricity, orbit_parameters.smAxis * AU, center_object.celestial_object.mass * (center_object.celestial_object.type == "planet" ? EM : SM)))
-    
+
     orbiting_object.telemetry.velocity.x = velocity.x;
     orbiting_object.telemetry.velocity.y = velocity.y;
     orbiting_object.telemetry.velocity.z = velocity.z;
 }
 
-window.DisplayAdditionalInfo = (element) => {
-    if (element.dataset.rotated == "false") {
-        element.style.transform = "rotate(0deg)";
-        element.dataset.rotated = "true";
-    }
-    else {
-        element.style.transform = "rotate(90deg)";
-        element.dataset.rotated = "false";
-    }
+async function PassSystemToBackend() {
+    let system = {};
+    system.objects = added_items;
+    system.session_id = GetCookie("session_id").replace(/['"]+/g, '').toUpperCase();
+    system.timescale = 3600;
+
+    let frames;
+
+    await fetch(`https://localhost:7168/api/Data/StartSimulation`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(system)
+    }).then(async () => {
+        frames = await fetch(`https://localhost:7168/api/Data/GetFrames?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+    });
+
+    PassFrames(JSON.parse(await frames.text()));
+    BeginMovement();
 }

@@ -282,6 +282,7 @@ async function Save() {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
+                        "id": 0,
                         "name": name,
                         "type": type,
                         "mass": left_displays[0].value,

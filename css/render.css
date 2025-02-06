@@ -68,6 +68,7 @@
     justify-content: center;
     align-items: center;
     border-top: 2px var(--dark-grey) solid;
+    cursor: pointer;
 }
 
 .menu-button span {
@@ -89,4 +90,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
