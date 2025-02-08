@@ -13,6 +13,7 @@ const distance_multiplier = 20;
 let perspectiveCamera, orbit, scene, renderer, stars, axes;
 
 let items = {};
+let camera_item;
 let frames = [];
 let framenumber = 0;
 let paused = true;
@@ -172,6 +173,9 @@ function AddObject(x, y, z, radius, element_id, name) {
     });
 
     items[element_id] = object;
+    if (camera_item == null) {
+        camera_item = element_id;
+    }
     scene.add(object);
 }
 
@@ -220,10 +224,15 @@ function DisplayFrame() {
         let framelist = frames[framenumber];
         for (let i = 0; i < framelist.length; i++) {
             items[framelist[i].objectId].position.set(framelist[i].xPos * distance_multiplier / AU, framelist[i].zPos * distance_multiplier / AU, framelist[i].yPos * distance_multiplier / AU);
+            /*
+            if (framelist[i].objectId == camera_item) {
+                perspectiveCamera.position.add(framelist[i].xPos * distance_multiplier / AU, framelist[i].zPos * distance_multiplier / AU, framelist[i].yPos * distance_multiplier / AU);
+            }
+                */
         }
         framenumber++;
     }
-    if (framenumber + 500 == frames.length) {
+    if (framenumber + 1000 == frames.length) {
         FetchFrames();   
     }
 }
