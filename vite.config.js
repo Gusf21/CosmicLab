@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: "/cosmic-lab/",
+  base: "/CosmicLab/",
   build: {
     outDir: 'dist',
     rollupOptions: {
