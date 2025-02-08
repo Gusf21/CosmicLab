@@ -1,8 +1,10 @@
+import { GetCookie } from "./cookies.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     SetUsername();
 });
 
-function LoginButton() {
+window.LoginButton = () => {
     if (GetCookie("session_id") == "") {
         window.location.href = "login.html";
     }
@@ -29,7 +31,7 @@ async function SetUsername() {
 }
 
 
-function OptionClicked(url) {
+window.OptionClicked = (url) => {
     if (GetCookie("session_id") == "") {
         window.location.href = "login.html"
     }

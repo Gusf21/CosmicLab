@@ -98,7 +98,7 @@ async function CheckLogin(e) {
     }
 }
 
-function RegisterClicked() {
+window.RegisterClicked = () => {
     // Checks that Register is not already selected (avoid unnecessary processing)
     if (state == 1) {
         return
@@ -117,7 +117,7 @@ function RegisterClicked() {
     }
 }
 
-function LoginClicked() {
+window.LoginClicked = () => {
     // Checks that Login is not already selected (avoid unnecessary processing)
     if (state == 0) {
         return
@@ -143,6 +143,6 @@ function FetchChildren() {
     return labels;
 }
 
-function RemoveInvalid(element) {
+window.RemoveInvalid = (element) => {
     element.classList.remove("invalid");
 }

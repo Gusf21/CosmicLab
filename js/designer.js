@@ -1,3 +1,5 @@
+import { GetCookie } from "./cookies.js";
+
 let state = 1;
 let shadow = "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset";
 let adding = false;
@@ -12,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // Displays window to add a new object
-function DisplayAddUI() {
+window.DisplayAddUI = () => {
 
     Clear();
 
@@ -97,7 +99,7 @@ function SetPlanet(element, id, type) {
 }
 
 // When editing or adding, cancels the edit/add and either returns to the viewing window if editing, or removes the viewing window if adding
-function Cancel() {
+window.Cancel = () => {
 
     ResetIntentButtons();
 
@@ -208,7 +210,7 @@ function Cancel() {
 }
 
 // If adding, saves the new object to the user's profile. If editing, saves the changes.
-async function Save() {
+window.Save = async () => {
 
     const left_container = document.getElementById("left-data");
     const right_container = document.getElementById("right-data");
@@ -346,7 +348,7 @@ async function Save() {
 }
 
 // When editing or adding, switches object being edited/added from planet to star or vice versa
-function SwitchType() {
+window.SwitchType = () => {
     const inactive = document.getElementsByClassName("not-selected")[0];
     const activate = document.getElementsByClassName("type-selected")[0];
 
@@ -382,7 +384,7 @@ function SwitchType() {
 }
 
 // Called if user selects no when asked if they meant to press a button, returns button to previous state
-function NoButtonIntent(element) {
+window.NoButtonIntent = (element) => {
     const cancel = element.parentElement.parentElement;
     const button = document.createElement("button");
     button.classList = element.dataset.classes;
@@ -393,7 +395,7 @@ function NoButtonIntent(element) {
 }
 
 // Changes button clicked into a check to ensure user meant to press the button
-function CheckButtonIntent(element) {
+window.CheckButtonIntent = (element) => {
     const container = document.createElement("div");
     const check_text = document.createElement("span");
     const button_container = document.createElement("div");
@@ -424,7 +426,7 @@ function CheckButtonIntent(element) {
 }
 
 // Changes viewing window into edit window to allow user to change properties, or delete the object
-function Edit(element) {
+window.Edit = (element) => {
 
     const left_data = document.getElementById("left-data");
     const right_data = document.getElementById("right-data");
@@ -586,7 +588,7 @@ function Edit(element) {
 }
 
 // Deletes Object or Orbit from the users profile and reloads the data
-async function Delete(element) {
+window.Delete = async (element) => {
     const id = document.getElementById("title-input").dataset.id;
 
     if (state == 0) {
@@ -623,7 +625,7 @@ async function LoadData(type) {
 }
 
 // Loads Objects (Planets and Stars) into the tile window
-function SelectObjects() {
+window.SelectObjects = () => {
     const object_button = document.getElementById("objects");
     const orbit_button = document.getElementById("orbits");
 
@@ -653,7 +655,7 @@ function SelectObjects() {
 }
 
 // Loads Orbits into the tile window
-function SelectOrbits() {
+window.SelectOrbits = () => {
     const object_button = document.getElementById("objects");
     const orbit_button = document.getElementById("orbits");
 
@@ -767,7 +769,7 @@ function ResetIntentButtons() {
 }
 
 // Load the data corresonding to the tile clicked into the viewing window
-function TileClicked(element) {
+window.TileClicked = (element) => {
 
     // Used so that an incorrect id is not used to fetch data
     Clear();
@@ -933,7 +935,7 @@ function ChaoticFunction(x, k, a = 7.5, b = 6, m = 600) {
 }
 
 // Filters tile window into only tiles with substrings of the string in the search bar
-function UpdateDisplay(element) {
+window.UpdateDisplay = (element) => {
     let filter = element.value;
     let remove = []
 

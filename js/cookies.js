@@ -13,3 +13,5 @@ function GetCookie(cname) {
   }
   return "";
 }
+
+export { GetCookie };

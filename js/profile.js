@@ -1,3 +1,5 @@
+import { GetCookie } from "./cookies.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     let session_id = GetCookie("session_id")
@@ -7,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("username-display").innerText = await response.text();
 })
 
-async function LogOut() {
+window.LogOut = async () => {
 
     await fetch(`https://localhost:7168/api/LoginDetails/LogOut?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {method: "POST"});
     document.cookie = "session_id=";
