@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Planet Designer</title>
+<script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
+  <script type="module" crossorigin src="/cosmic-lab/assets/render-C63wSU8H.js"></script>
+  <link rel="modulepreload" crossorigin href="/cosmic-lab/assets/OrbitControls-CRwqTveX.js">
+  <link rel="stylesheet" crossorigin href="/cosmic-lab/assets/render-D_r5eEkE.css">
+  <link rel="stylesheet" crossorigin href="/cosmic-lab/assets/style-DD9uirYI.css">
+</head>
+<body>
+    <div class="event-triggers" >
+        <div id="add-object" >
+
+        </div>
+    </div>
+    <div class="info-panel">
+
+        <template id="info-card-template" >
+            <div class="info-card">
+                <i class="fa-solid fa-video fa-2x"></i>
+                <span class="name"></span>
+            </div>
+        </template>
+
+        <div class="card-container" id="card-container">
+
+        </div>
+        <div class="playback-options">
+            <div class="play-button" onclick="ToggleSim(this)">
+                <i class="fa-solid fa-play fa-2x"></i>
+            </div>
+            <div class="play-button" onclick="ToggleAxes()">
+                <i class="fa-solid fa-x fa-1x"></i>
+                <i class="fa-solid fa-y fa-1x"></i>
+                <i class="fa-solid fa-z fa-1x"></i>
+            </div>
+        </div>
+        <div class="menu-button" onclick="window.location.href='index.html'">
+            <span>Return To Menu</span>
+        </div>
+    </div>
+</body>
+</html>

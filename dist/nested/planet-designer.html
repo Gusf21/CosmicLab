@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Planet Designer</title>
+    <script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
+    <script src="../js/designer.js"></script>
+    <script src="../js/cookies.js"></script>
+  <script type="module" crossorigin src="/cosmic-lab/assets/planetDesigner-Cw24IgHI.js"></script>
+  <link rel="modulepreload" crossorigin href="/cosmic-lab/assets/OrbitControls-CRwqTveX.js">
+  <link rel="stylesheet" crossorigin href="/cosmic-lab/assets/planetDesigner-DzIXpuvn.css">
+  <link rel="stylesheet" crossorigin href="/cosmic-lab/assets/style-DD9uirYI.css">
+</head>
+
+<body>
+    <div id="triggers">
+        <span id="eccentricity-trigger"></span>
+        <span id="inclination-trigger"></span>
+    </div>
+    <div class="design-container">
+        <div class="left-container">
+            <div class="design-panel">
+    
+                <div class="option-container">
+                    <div class="objects option" id="objects" onclick="SelectObjects()">Objects</div>
+                    <div class="orbits option" id="orbits" onclick="SelectOrbits()">Orbits</div>
+                </div>
+    
+                <div class="tile-container" id="tile-container">
+                    <div class="tile add-new" onclick="DisplayAddUI()">
+                        <i class="fa-solid fa-circle-plus fa-4x"></i>
+                        <a class="label" id="text">Add New</a>
+                    </div>
+                </div>
+    
+                <template class="tile-template" id="tile-template">
+                    <div class="tile" data-id="" onclick="TileClicked(this)">
+                        <img class="img" src="/cosmic-lab/assets/planet1-C9QoUGni.gif" width="100" height="100">
+                        <a class="label" id="text">Earth</a>
+                    </div>
+                </template>
+    
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+                    <input type="text" class="searchbar" placeholder="Search" oninput="UpdateDisplay(this)">
+                </div>
+            </div>
+            <div class="links-panel">
+                <div>
+                    <i class="fa-solid fa-circle-arrow-left fa-3x" style="margin-left: 5rem;" onclick="window.location.href='index.html'"></i>
+                    <span>Menu</span>
+                </div>
+                <div>
+                    <span>Simulation</span>
+                    <i class="fa-solid fa-circle-arrow-right fa-3x" style="margin-right: 5rem;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="design-panel black" id="star-container">
+
+            <div class="name-container">
+                <a class="name" id="name-display" data-id=""></a>
+                <i class="fa-regular fa-pen-to-square fa-2xl icon" id="edit-button" onclick="Edit(this)"></i>
+            </div>
+
+            <img class="display-img" id="img-display" src="/cosmic-lab/assets/planet1-C9QoUGni.gif" width="200" height="200">
+            
+            <template class="data-template" id="data-template">
+                <div class="data-container">
+
+                    <span class="data-title"></span>
+                    <div class="underline"></div>
+
+                    <div class="data">
+                        
+                        <div class="data-display-container">
+
+                            <span class="data-display"></span>
+                            
+                        </div>
+                        <span class="unit"></span>
+
+                        <div class="tooltip-container">
+                            <i class="fa-regular fa-circle-question tooltip" style="color: #ffffff;"></i>
+                            <span class="tooltip-text"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </template>
+            
+            <div class="all-data">
+                <div class="left-data" id="left-data">
+                </div>
+    
+                <div class="right-data" id="right-data">
+                </div>
+            </div>
+
+            <div class="button-container" id="button-container">
+                <button class="save-button green" onclick="Save()">Save</button>
+                <button class="cancel-button orange" data-function="Cancel()" onclick="CheckButtonIntent(this)">Cancel</button>
+                <button class="delete-button red" data-function="Delete()" onclick="CheckButtonIntent(this)">Delete</button>
+            </div>
+
+        </div>
+    </div>
+</body> 
+
+</html>
