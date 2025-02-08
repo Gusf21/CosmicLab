@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<title>Cosmic Lab</title>
+<meta name="google-signin-client_id" content="410496656622-4b77r2oc08nht69j5hnva2po3hm70irq.apps.googleusercontent.com">
+<script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
+  <script type="module" crossorigin src="/CosmicLab/assets/login-DU_7znzI.js"></script>
+  <link rel="modulepreload" crossorigin href="/CosmicLab/assets/style-BtMPJYqU.js">
+  <link rel="stylesheet" crossorigin href="/CosmicLab/assets/style-FJ89es9o.css">
+  <link rel="stylesheet" crossorigin href="/CosmicLab/assets/login-azCWCj4_.css">
+</head>
+<body>
+    <div class="title-containe">
+        <h1 class="title" onclick="window.location.href='index.html'">
+            Cosmic Lab
+        </h1>
+    </div>
+    <div class="window-container" id="window-container">
+        <div class="form-container" id="fetchable-1">
+            <div class="toggle-container" id="toggle-container">
+                <h1 onclick="LoginClicked()">Login</h1>
+                <h1 onclick="RegisterClicked()">Register</h1>
+            </div>
+            <div class="login-window" id="login-window">
+                <form action="#" id="login-form">
+
+                    <div class="input-box">
+                        <label for="username"><b>Username</b></label>
+                        <input type="text" oninput="RemoveInvalid(this)" placeholder="Username" id="username" required>
+                    </div>  
+
+                    <div class="input-box">
+                        <label for="password"><b>Password</b></label>
+                        <input type="password" oninput="RemoveInvalid(this)" placeholder="Password" id="password" required>
+                    </div>
+
+                    <button type="submit" id="login-submit-button">Log In</button>
+
+                    <div class="external-options">
+                        <div class="option">
+                            <a href="#" id="google-button">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAA2VJREFUSEvFl19sS3EUx7/n6u3+tHXF1S2C+BNeJvbA1heZh7UPQ0iKLR4887YHWSIUqURJPIgXhIQ3wYpYLJbMWh682FZCCAkJkQlKZq2rrLe7R1pdrb23t3d/wu+t7fmdz+93zvl9zynhPy2yymWA4t5mLwGdADwApPzeJIDHBDq7qGXwLgWhWfFZETzi9ch28H0A66w4BOPVRFVm0+K+J1/M7E3Bn33NPcTYbglYYkTg2+7IsL/cXkMwtzfYv4w6xgDUzAT6dw8p7pZBySj8OnAe+hOAMDsoQOBT7sjwASM/OnDc25yycNPswd6DwSAsA+AodW4GzdoWgSvmlHDEPTAUIoCngnIV72vqIqZTf5yWv+nkvgI46ffIv5L8tUx4E+4xzU2xmGoW/tebV1dJ6YVH6yKDgUppKoDVAfHpeGxRY6p/aemeVF1kSBfKSo4r/Z4DM4MyETH38LWEHYnzDYVgzrMLktz3KCsSc7pyYHXA5gPoXsEzA4lza6Elxd66yNC2OSXmnf0B37P1gEgnFKlnNbK0PzlaDtx6XDk53UNFDzsPFqpaHRA/AagvdSL6VFNlaw0pRdVt5RBVLkd1XyeN50MtGr1dVfSpdjNnMwHbVK7vD7ri/xwMFpZGD9d+mAT/s1CnhczChwcXfDMtrkimXm5rGylfXCFl3CQVNiO9l9c4bOEOmjB8TlkB9o/6ENdqeod235zRc2oNKW8BrCg9WDTgzDF1AvJRq8XOUV9BjOdlqqVHe65MS0A2XGBR+vojbRCN99GAc3lRk8hKZvjXysbTim7QSA3vvjktyWw9oTwHY20pmIjbI4dcN4rA3lt+OZEWyjYJTsju2L6Lpk0i69AbUnoZ2GqU+8kwF4GzH5qu7+oBc9lRh4mPxF42nkAwqBvo1l/d1SIQ99d+7Kq2pYzGMz4WDbiCkwfSKVPTtZ3WBwHkJsolAOZPvaH4fSNq4nunfpWKBpxF6dKBG7rb7bWaNuvRhyYkuN6dyb0oh+pw3AlS9kKFZajFefhcDHvsHLlc96Brvq52TJtApZyb6TgD71YJwupwR3jCyK7iQO+55Ze1tBAF0Gil+xDwjQWhbbgjPGhmXxE8ZTig5u4dXmbqBMgDcP4vDCtgvABwaUz62f1mS5+ZjJrn2MrNZmvzGw5DSC60mbBDAAAAAElFTkSuQmCC" alt="Google">
+                                <span>oogle</span>
+                            </a>
+                        </div>
+                    </div>  
+
+                    <p class="sign-up">Don't have an account? <a onclick="RegisterClicked()">Sign up</a></p>
+                </form>
+            </div>
+            <div class="register-window" id="register-window">
+                <form action="#" id="register-form">
+
+                    <div class="input-box">
+                        <label for="username"><b>Username</b></label>
+                        <input type="text"  placeholder="Username" id="username" required>
+                    </div>  
+
+                    <div class="input-box">
+                        <label for="password"><b>Password</b></label>
+                        <input type="password"  placeholder="Password" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?!=.*\W)[A-Za-z\d]{8,32}$" title="Password must be between 8 and 32 characters long, include at least one number, and have no special characters." required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="password-confirmation"><b>Confirm Password</b></label>
+                        <input type="password"  placeholder="Password" id="password-confirmation" pattern="^(?=.*[A-Za-z])(?!=.*\W)(?=.*\d)[A-Za-z\d]{8,32}$" title="Password must be between 8 and 32 characters long, include at least one number, and have no special characters." required>
+                    </div>
+
+                    <button type="submit" id="register-submit-button">Register</button>
+
+                    <div class="external-options">
+                        <div class="option">
+                            <a href="#" id="google-button">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAA2VJREFUSEvFl19sS3EUx7/n6u3+tHXF1S2C+BNeJvbA1heZh7UPQ0iKLR4887YHWSIUqURJPIgXhIQ3wYpYLJbMWh682FZCCAkJkQlKZq2rrLe7R1pdrb23t3d/wu+t7fmdz+93zvl9zynhPy2yymWA4t5mLwGdADwApPzeJIDHBDq7qGXwLgWhWfFZETzi9ch28H0A66w4BOPVRFVm0+K+J1/M7E3Bn33NPcTYbglYYkTg2+7IsL/cXkMwtzfYv4w6xgDUzAT6dw8p7pZBySj8OnAe+hOAMDsoQOBT7sjwASM/OnDc25yycNPswd6DwSAsA+AodW4GzdoWgSvmlHDEPTAUIoCngnIV72vqIqZTf5yWv+nkvgI46ffIv5L8tUx4E+4xzU2xmGoW/tebV1dJ6YVH6yKDgUppKoDVAfHpeGxRY6p/aemeVF1kSBfKSo4r/Z4DM4MyETH38LWEHYnzDYVgzrMLktz3KCsSc7pyYHXA5gPoXsEzA4lza6Elxd66yNC2OSXmnf0B37P1gEgnFKlnNbK0PzlaDtx6XDk53UNFDzsPFqpaHRA/AagvdSL6VFNlaw0pRdVt5RBVLkd1XyeN50MtGr1dVfSpdjNnMwHbVK7vD7ri/xwMFpZGD9d+mAT/s1CnhczChwcXfDMtrkimXm5rGylfXCFl3CQVNiO9l9c4bOEOmjB8TlkB9o/6ENdqeod235zRc2oNKW8BrCg9WDTgzDF1AvJRq8XOUV9BjOdlqqVHe65MS0A2XGBR+vojbRCN99GAc3lRk8hKZvjXysbTim7QSA3vvjktyWw9oTwHY20pmIjbI4dcN4rA3lt+OZEWyjYJTsju2L6Lpk0i69AbUnoZ2GqU+8kwF4GzH5qu7+oBc9lRh4mPxF42nkAwqBvo1l/d1SIQ99d+7Kq2pYzGMz4WDbiCkwfSKVPTtZ3WBwHkJsolAOZPvaH4fSNq4nunfpWKBpxF6dKBG7rb7bWaNuvRhyYkuN6dyb0oh+pw3AlS9kKFZajFefhcDHvsHLlc96Brvq52TJtApZyb6TgD71YJwupwR3jCyK7iQO+55Ze1tBAF0Gil+xDwjQWhbbgjPGhmXxE8ZTig5u4dXmbqBMgDcP4vDCtgvABwaUz62f1mS5+ZjJrn2MrNZmvzGw5DSC60mbBDAAAAAElFTkSuQmCC" alt="Google">
+                                <span>oogle</span>
+                            </a>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+function l(i){let o=i+"=",n=decodeURIComponent(document.cookie).split(";");for(let t=0;t<n.length;t++){let e=n[t];for(;e.charAt(0)==" ";)e=e.substring(1);if(e.indexOf(o)==0)return e.substring(o.length,e.length)}return""}export{l as G};
