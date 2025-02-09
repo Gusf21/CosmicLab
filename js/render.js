@@ -8,21 +8,21 @@ import { randFloat, randInt } from 'three/src/math/MathUtils.js';
 //import { FetchFrames } from './render-setup';
 
 const AU = 149597870700;
-const distance_multiplier = 20;
+const distanceMultiplier = 20;
 
 let perspectiveCamera, orbit, scene, renderer, stars, axes;
 
 let items = {};
-let camera_item;
+let cameraItem;
 let frames = [];
 let framenumber = 0;
 let paused = true;
 
 function Start() {
-    init();
+    Init();
 }
 
-function init() {
+function Init() {
     const aspect = window.innerWidth * 0.8 / window.innerHeight;
 
     perspectiveCamera = new THREE.PerspectiveCamera(60, aspect, 0.1, 5000);
@@ -164,7 +164,7 @@ function AddObject(x, y, z, radius, element_id, name) {
 
     const SphereMaterial = new THREE.MeshBasicMaterial({ map: texture });
     const object = new THREE.Mesh(SphereMesh, SphereMaterial);
-    object.position.set(x * distance_multiplier, z * distance_multiplier, y * distance_multiplier);
+    object.position.set(x * distanceMultiplier, z * distanceMultiplier, y * distanceMultiplier);
 
     const entry = document.getElementById(element_id);
     entry.querySelector("i").addEventListener("click", () => {
@@ -173,8 +173,8 @@ function AddObject(x, y, z, radius, element_id, name) {
     });
 
     items[element_id] = object;
-    if (camera_item == null) {
-        camera_item = element_id;
+    if (cameraItem == null) {
+        cameraItem = element_id;
     }
     scene.add(object);
 }
@@ -223,7 +223,7 @@ function DisplayFrame() {
     if (!paused) {
         let framelist = frames[framenumber];
         for (let i = 0; i < framelist.length; i++) {
-            items[framelist[i].objectId].position.set(framelist[i].xPos * distance_multiplier / AU, framelist[i].zPos * distance_multiplier / AU, framelist[i].yPos * distance_multiplier / AU);
+            items[framelist[i].objectId].position.set(framelist[i].xPos * distanceMultiplier / AU, framelist[i].zPos * distanceMultiplier / AU, framelist[i].yPos * distanceMultiplier / AU);
             /*
             if (framelist[i].objectId == camera_item) {
                 perspectiveCamera.position.add(framelist[i].xPos * distance_multiplier / AU, framelist[i].zPos * distance_multiplier / AU, framelist[i].yPos * distance_multiplier / AU);
@@ -238,8 +238,8 @@ function DisplayFrame() {
 }
 
 async function FetchFrames() {
-    let new_frames = await fetch(`https://localhost:7168/api/Data/GetFrames?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
-    PassFrames(JSON.parse(await new_frames.text()));
+    let newFrames = await fetch(`https://localhost:7168/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+    PassFrames(JSON.parse(await newFrames.text()));
 }
 
 function GetCookie(cname) {

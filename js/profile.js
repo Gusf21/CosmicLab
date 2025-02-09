@@ -2,16 +2,16 @@ import { GetCookie } from "./cookies.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    let session_id = GetCookie("session_id")
-    session_id = session_id.replace(/['"]+/g, '').toUpperCase();
-    const response = await fetch(`https://localhost:7168/api/LoginDetails/GetUsername?session_id=${session_id}`)
+    let sessionId = GetCookie("sessionId")
+    sessionId = sessionId.replace(/['"]+/g, '').toUpperCase();
+    const response = await fetch(`https://localhost:7168/api/LoginDetails/GetUsername?sessionId=${sessionId}`)
 
     document.getElementById("username-display").innerText = await response.text();
 })
 
 window.LogOut = async () => {
 
-    await fetch(`https://localhost:7168/api/LoginDetails/LogOut?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {method: "POST"});
-    document.cookie = "session_id=";
+    await fetch(`https://localhost:7168/api/LoginDetails/LogOut?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {method: "POST"});
+    document.cookie = "sessionId=";
     window.location.href = "index.html"
 }

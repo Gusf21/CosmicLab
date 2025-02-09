@@ -26,13 +26,13 @@ async function Register(e) {
     }
 
     let username = inputs[0].value;
-    let password_0 = inputs[1].value;
-    let password_1 = inputs[2].value;
+    let password0 = inputs[1].value;
+    let password1 = inputs[2].value;
 
-    console.log(password_0)
-    console.log(password_1)
+    console.log(password0)
+    console.log(password1)
 
-    if (password_0 != password_1) {
+    if (password0 != password1) {
         inputs[2].setCustomValidity("Please ensure both passwords are the same")
         form.reportValidity();
     }
@@ -46,13 +46,13 @@ async function Register(e) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            "username": username,
-            "password": password_0,
+            "Username": username,
+            "Password": password0,
         })
     });
 
     if (response.ok) {
-        document.cookie = `session_id=${(await response.text())}`;
+        document.cookie = `sessionId=${(await response.text())}`;
         window.location.href = "index.html";
     }
     else {
@@ -82,13 +82,13 @@ async function CheckLogin(e) {
             "Content-Type": "application/json",
         },
         "body": JSON.stringify({
-           "username": username,
-           "password": password 
+           "Username": username,
+           "Password": password 
         })
     });
 
     if (response.ok) {
-        document.cookie = `session_id=${(await response.text())}; max-age=${24 * 60 * 60}`;
+        document.cookie = `sessionId=${(await response.text())}; max-age=${24 * 60 * 60}`;
         window.location.href = "index.html";
     }
     else {

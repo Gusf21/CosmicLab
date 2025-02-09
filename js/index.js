@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.LoginButton = () => {
-    if (GetCookie("session_id") == "") {
+    if (GetCookie("sessionId") == "") {
         window.location.href = "login.html";
     }
     else {
@@ -15,24 +15,24 @@ window.LoginButton = () => {
 
 async function SetUsername() {
 
-    if (GetCookie("session_id") == "") {
+    if (GetCookie("sessionId") == "") {
         return;
     }
 
     const label = document.getElementById("username-box");
 
-    let session_id = GetCookie("session_id");
+    let sessionId = GetCookie("sessionId");
 
-    session_id = session_id.replace(/['"]+/g, '').toUpperCase();
+    sessionId = sessionId.replace(/['"]+/g, '').toUpperCase();
 
-    const response = await fetch(`https://localhost:7168/api/LoginDetails/GetUsername?session_id=${session_id}`)
+    const response = await fetch(`https://localhost:7168/api/LoginDetails/GetUsername?sessionId=${sessionId}`)
 
     label.innerText = await response.text();
 }
 
 
 window.OptionClicked = (url) => {
-    if (GetCookie("session_id") == "") {
+    if (GetCookie("sessionId") == "") {
         window.location.href = "login.html"
     }
     else {

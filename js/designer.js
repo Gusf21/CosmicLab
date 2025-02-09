@@ -24,16 +24,16 @@ window.DisplayAddUI = () => {
     title.innerText = "";
     title.dataset.id = Math.round(Math.random() * 10000);
 
-    const left_container = document.getElementById("left-data");
-    const right_container = document.getElementById("right-data");
+    const leftContainer = document.getElementById("left-data");
+    const rightContainer = document.getElementById("right-data");
     const template = document.getElementById("data-template");
 
-    while (left_container.firstChild) {
-        left_container.removeChild(left_container.lastChild);
+    while (leftContainer.firstChild) {
+        leftContainer.removeChild(leftContainer.lastChild);
     }
 
-    while (right_container.firstChild) {
-        right_container.removeChild(right_container.lastChild);
+    while (rightContainer.firstChild) {
+        rightContainer.removeChild(rightContainer.lastChild);
     }
 
     if (state == 0) {
@@ -43,30 +43,30 @@ window.DisplayAddUI = () => {
         SetPlanet(img, title.dataset.id, "planet");
 
         const type = template.content.cloneNode(true);
-        const type_labels = type.querySelectorAll("span");
-        type_labels[0].innerText = "Type";
-        type_labels[1].innerText = "Planet";
-        type_labels[1].classList.add("text-data")
+        const typeLabels = type.querySelectorAll("span");
+        typeLabels[0].innerText = "Type";
+        typeLabels[1].innerText = "Planet";
+        typeLabels[1].classList.add("text-data")
         type.querySelectorAll("div")[4].style.visibility = "hidden";
-        left_container.appendChild(type);
+        leftContainer.appendChild(type);
 
         const mass = template.content.cloneNode(true);
-        const mass_labels = mass.querySelectorAll("span");
-        mass_labels[0].innerText = "Mass";
-        mass_labels[1].classList.add("numerical-data")
-        mass_labels[1].id = "mass";
-        mass_labels[2].innerText = "EM";
-        mass_labels[3].innerText = "1 EM is equal to the mass of Earth"
-        left_container.appendChild(mass);
+        const massLabels = mass.querySelectorAll("span");
+        massLabels[0].innerText = "Mass";
+        massLabels[1].classList.add("numerical-data")
+        massLabels[1].id = "mass";
+        massLabels[2].innerText = "EM";
+        massLabels[3].innerText = "1 EM is equal to the mass of Earth"
+        leftContainer.appendChild(mass);
 
         const radius = template.content.cloneNode(true);
-        const radius_labels = radius.querySelectorAll("span");
-        radius_labels[0].innerText = "Radius";
-        radius_labels[1].classList.add("numerical-data")
-        radius_labels[1].id = "radius";
-        radius_labels[2].innerText = "ER";
-        radius_labels[3].innerText = "1 ER is equal to the radius of Earth"
-        left_container.appendChild(radius);
+        const radiusLabels = radius.querySelectorAll("span");
+        radiusLabels[0].innerText = "Radius";
+        radiusLabels[1].classList.add("numerical-data")
+        radiusLabels[1].id = "radius";
+        radiusLabels[2].innerText = "ER";
+        radiusLabels[3].innerText = "1 ER is equal to the radius of Earth"
+        leftContainer.appendChild(radius);
 
     }
     else if (state == 1) {
@@ -105,8 +105,8 @@ window.Cancel = () => {
 
     if (!adding) {
 
-        const name_input = document.getElementById("title-input");
-        const data = GetData(name_input.dataset.id);
+        const titleInput = document.getElementById("title-input");
+        const data = GetData(titleInput.dataset.id);
 
         if (state == 0) {
             const img = document.getElementById("img-display");
@@ -118,87 +118,87 @@ window.Cancel = () => {
         name.id = "name-display";
         name.dataset.id = state == 0 ? data.objectId : data.orbitId;
         name.innerText = data.name;
-        name_input.replaceWith(name);
+        titleInput.replaceWith(name);
 
-        const left_container = document.getElementById("left-data");
-        const right_container = document.getElementById("right-data");
-        const left_displays = left_container.getElementsByClassName("data-input");
-        const right_displays = right_container.getElementsByClassName("data-input");
+        const leftContainer = document.getElementById("left-data");
+        const rightContainer = document.getElementById("right-data");
+        const leftDisplays = leftContainer.getElementsByClassName("data-input");
+        const rightDisplays = rightContainer.getElementsByClassName("data-input");
 
         if (state == 0) {
             for (let i = 0; i <= 1; i++) {
-                let data_label = document.createElement("span");
-                data_label.classList.add("numerical-data");
-                data_label.classList.add("data-display");
+                let dataLabel = document.createElement("span");
+                dataLabel.classList.add("numerical-data");
+                dataLabel.classList.add("data-display");
 
                 if (i == 0) {
-                    data_label.innerText = data.mass;
-                    data_label.id = "mass";
+                    dataLabel.innerText = data.mass;
+                    dataLabel.id = "mass";
                 }
                 else {
-                    data_label.innerText = data.radius;
-                    data_label.id = "radius";
+                    dataLabel.innerText = data.radius;
+                    dataLabel.id = "radius";
                 }
-                left_displays[0].replaceWith(data_label);
+                leftDisplays[0].replaceWith(dataLabel);
             }
 
-            const type_container = document.getElementsByClassName("data-display-container")[0];
-            const type_labels = type_container.querySelectorAll("span");
+            const typeContainer = document.getElementsByClassName("data-display-container")[0];
+            const typeLabels = typeContainer.querySelectorAll("span");
 
-            type_container.classList.remove("activate-border");
-            type_labels[0].classList.remove("type-selected");
-            type_labels[0].classList.remove("not-selected");
+            typeContainer.classList.remove("activate-border");
+            typeLabels[0].classList.remove("type-selected");
+            typeLabels[0].classList.remove("not-selected");
 
-            type_labels[1].remove();
+            typeLabels[1].remove();
         }
         else if (state == 1) {
 
             for (let i = 0; i <= 2; i++) {
-                let data_label = document.createElement("span");
-                data_label.classList.add("numerical-data");
-                data_label.classList.add("data-display");
+                let dataLabel = document.createElement("span");
+                dataLabel.classList.add("numerical-data");
+                dataLabel.classList.add("data-display");
 
                 switch (i) {
                     case 0:
-                        data_label.innerText = data.smAxis;
-                        data_label.id = "semi-major-axis";
+                        dataLabel.innerText = data.smAxis;
+                        dataLabel.id = "semi-major-axis";
                         break
                     case 1:
-                        data_label.innerText = data.eccentricity;
-                        data_label.id = "eccentricity";
+                        dataLabel.innerText = data.eccentricity;
+                        dataLabel.id = "eccentricity";
                         break
                     case 2:
-                        data_label.innerText = data.inclination;
-                        data_label.id = "inclination";
+                        dataLabel.innerText = data.inclination;
+                        dataLabel.id = "inclination";
                 }
-                left_displays[0].replaceWith(data_label);
+                leftDisplays[0].replaceWith(dataLabel);
             }
 
             for (let i = 0; i <= 1; i++) {
-                let data_label = document.createElement("span");
-                data_label.classList.add("numerical-data");
-                data_label.classList.add("data-display");
+                let dataLabel = document.createElement("span");
+                dataLabel.classList.add("numerical-data");
+                dataLabel.classList.add("data-display");
 
                 switch (i) {
                     case 0:
-                        data_label.innerText = data.longOfAscNode;
-                        data_label.id = "long-of-asc-node";
+                        dataLabel.innerText = data.longOfAscNode;
+                        dataLabel.id = "long-of-asc-node";
                         break
                     case 1:
-                        data_label.innerText = data.argOfPeri;
-                        data_label.id = "arg-of-peri";
+                        dataLabel.innerText = data.argOfPeri;
+                        dataLabel.id = "arg-of-peri";
                 }
-                right_displays[0].replaceWith(data_label);
+                rightDisplays[0].replaceWith(dataLabel);
             }
 
             // Setup eccentricity and inclination to affect render window
-            const eccentricity_trigger = document.getElementById("eccentricity-trigger");
-            eccentricity_trigger.dataset.val = data.eccentricity;
-            eccentricity_trigger.click();
+            const eccentricityTrigger = document.getElementById("eccentricity-trigger");
+            eccentricityTrigger.dataset.val = data.eccentricity;
+            eccentricityTrigger.click();
 
-            const inclination_trigger = document.getElementById("inclination-trigger");
-            inclination_trigger.dataset.val = data.inclination;
-            inclination_trigger.click();
+            const inclinationTrigger = document.getElementById("inclination-trigger");
+            inclinationTrigger.dataset.val = data.inclination;
+            inclinationTrigger.click();
         }
 
         document.getElementById("edit-button").style.visibility = "visible";
@@ -212,83 +212,83 @@ window.Cancel = () => {
 // If adding, saves the new object to the user's profile. If editing, saves the changes.
 window.Save = async () => {
 
-    const left_container = document.getElementById("left-data");
-    const right_container = document.getElementById("right-data");
+    const leftContainer = document.getElementById("left-data");
+    const rightContainer = document.getElementById("right-data");
 
-    const title_input = document.getElementById("title-input")
+    const titleInput = document.getElementById("title-input")
 
     let type;
     if (state == 0) {
-        const selected_type = document.getElementsByClassName("type-selected")[0];
-        type = selected_type.innerText.toLowerCase();
+        const selectedType = document.getElementsByClassName("type-selected")[0];
+        type = selectedType.innerText.toLowerCase();
     }
 
-    const left_displays = left_container.getElementsByClassName("data-input");
-    const right_displays = right_container.getElementsByClassName("data-input");
+    const leftDisplays = leftContainer.getElementsByClassName("data-input");
+    const rightDisplays = rightContainer.getElementsByClassName("data-input");
 
-    const name = title_input.value;
+    const name = titleInput.value;
 
     let valid = true;
 
-    if (title_input.classList.contains("invalid")) {
+    if (titleInput.classList.contains("invalid")) {
         valid = false;
     }
 
-    for (let element of left_displays) {
+    for (let element of leftDisplays) {
         if (element.classList.contains("invalid")) {
             valid = false;
         }
     }
 
-    for (let element of right_displays) {
+    for (let element of rightDisplays) {
         if (element.classList.contains("invalid")) {
             valid = false;
         }
     }
 
-    let updated_data;
+    let updatedData;
 
     if (valid) {
         if (state == 0) {
 
             if (!adding) {
-                const data = GetData(title_input.dataset.id);
+                const data = GetData(titleInput.dataset.id);
 
-                updated_data = data;
-                updated_data.name = name;
-                updated_data.type = type;
-                updated_data.mass = left_displays[0].value;
-                updated_data.radius = left_displays[1].value;
+                updatedData = data;
+                updatedData.name = name;
+                updatedData.type = type;
+                updatedData.mass = leftDisplays[0].value;
+                updatedData.radius = leftDisplays[1].value;
 
-                await fetch(`https://localhost:7168/api/Data/EditObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://localhost:7168/api/Data/EditObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        "objectId": updated_data.objectId,
-                        "username": updated_data.username,
-                        "orbitId": updated_data.orbitId,
-                        "type": updated_data.type,
-                        "name": updated_data.name,
-                        "mass": updated_data.mass,
-                        "radius": updated_data.radius
+                        "ObjectId": updatedData.objectId,
+                        "Username": updatedData.username,
+                        "OrbitId": updatedData.orbitId,
+                        "Type": updatedData.type,
+                        "Name": updatedData.name,
+                        "Mass": updatedData.mass,
+                        "Radius": updatedData.radius
                     })
                 });
             }
             else {
 
-                await fetch(`https://localhost:7168/api/Data/CreateObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://localhost:7168/api/Data/CreateObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        "id": 0,
-                        "name": name,
-                        "type": type,
-                        "mass": left_displays[0].value,
-                        "radius": left_displays[1].value
+                        "Id": 0,
+                        "Name": name,
+                        "Type": type,
+                        "Mass": leftDisplays[0].value,
+                        "Radius": leftDisplays[1].value
                     })
                 });
             }
@@ -297,47 +297,47 @@ window.Save = async () => {
         }
         else if (state == 1) {
             if (!adding) {
-                const data = GetData(title_input.dataset.id);
+                const data = GetData(titleInput.dataset.id);
 
-                updated_data = data;
-                updated_data.name = name;
-                updated_data.smAxis = left_displays[0].value;
-                updated_data.eccentricity = left_displays[1].value;
-                updated_data.inclination = left_displays[2].value;
-                updated_data.longOfAscNode = right_displays[0].value;
-                updated_data.argOfPeri = right_displays[1].value;
+                updatedData = data;
+                updatedData.name = name;
+                updatedData.smAxis = leftDisplays[0].value;
+                updatedData.eccentricity = leftDisplays[1].value;
+                updatedData.inclination = leftDisplays[2].value;
+                updatedData.longOfAscNode = rightDisplays[0].value;
+                updatedData.argOfPeri = rightDisplays[1].value;
 
-                await fetch(`https://localhost:7168/api/Data/EditOrbit?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://localhost:7168/api/Data/EditOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        "orbitId": updated_data.orbitId,
-                        "username": updated_data.username,
-                        "name": updated_data.name,
-                        "smAxis": updated_data.smAxis,
-                        "eccentricity": updated_data.eccentricity,
-                        "inclination": updated_data.inclination,
-                        "longOfAscNode": updated_data.longOfAscNode,
-                        "argOfPeri": updated_data.argOfPeri
+                        "OrbitId": updatedData.orbitId,
+                        "Username": updatedData.username,
+                        "Name": updatedData.name,
+                        "SMAxis": updatedData.smAxis,
+                        "Eccentricity": updatedData.eccentricity,
+                        "Inclination": updatedData.inclination,
+                        "LongOfAscNode": updatedData.longOfAscNode,
+                        "ArgOfPeri": updatedData.argOfPeri
                     })
                 });
             }
             else {
 
-                await fetch(`https://localhost:7168/api/Data/CreateOrbit?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://localhost:7168/api/Data/CreateOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        "name": name,
-                        "smAxis": left_displays[0].value,
-                        "eccentricity": left_displays[1].value,
-                        "inclination": left_displays[2].value,
-                        "longOfAscNode": right_displays[0].value,
-                        "argOfPeri": right_displays[1].value
+                        "Name": name,
+                        "SMAxis": leftDisplays[0].value,
+                        "Eccentricity": leftDisplays[1].value,
+                        "Inclination": leftDisplays[2].value,
+                        "LongOfAscNode": rightDisplays[0].value,
+                        "ArgOfPeri": rightDisplays[1].value
                     })
                 });
             }
@@ -350,15 +350,15 @@ window.Save = async () => {
 // When editing or adding, switches object being edited/added from planet to star or vice versa
 window.SwitchType = () => {
     const inactive = document.getElementsByClassName("not-selected")[0];
-    const activate = document.getElementsByClassName("type-selected")[0];
+    const active = document.getElementsByClassName("type-selected")[0];
 
     inactive.classList.remove("not-selected");
     inactive.classList.add("type-selected");
-    activate.classList.remove("type-selected");
-    activate.classList.add("not-selected");
+    active.classList.remove("type-selected");
+    active.classList.add("not-selected");
 
     inactive.onclick = null;
-    activate.onclick = SwitchType;
+    active.onclick = SwitchType;
 
     const units = document.getElementsByClassName("unit");
     const tooltips = document.getElementsByClassName("tooltip-text")
@@ -397,30 +397,30 @@ window.NoButtonIntent = (element) => {
 // Changes button clicked into a check to ensure user meant to press the button
 window.CheckButtonIntent = (element) => {
     const container = document.createElement("div");
-    const check_text = document.createElement("span");
-    const button_container = document.createElement("div");
-    const yes_button = document.createElement("button");
-    const no_button = document.createElement("button");
+    const checkText = document.createElement("span");
+    const buttonContainer = document.createElement("div");
+    const yesButton = document.createElement("button");
+    const noButton = document.createElement("button");
 
-    yes_button.classList.add("yes");
-    no_button.classList.add("no");
-    yes_button.setAttribute("onclick", element.dataset.function);
+    yesButton.classList.add("yes");
+    noButton.classList.add("no");
+    yesButton.setAttribute("onclick", element.dataset.function);
 
-    no_button.setAttribute("onclick", "NoButtonIntent(this)");
-    no_button.dataset.text = element.innerText;
-    no_button.dataset.classes = element.classList;
-    no_button.dataset.function = element.dataset.function;
+    noButton.setAttribute("onclick", "NoButtonIntent(this)");
+    noButton.dataset.text = element.innerText;
+    noButton.dataset.classes = element.classList;
+    noButton.dataset.function = element.dataset.function;
 
     container.classList.add("check-intent-container");
 
-    container.appendChild(check_text);
-    button_container.appendChild(yes_button);
-    button_container.appendChild(no_button);
-    container.appendChild(button_container);
+    container.appendChild(checkText);
+    buttonContainer.appendChild(yesButton);
+    buttonContainer.appendChild(noButton);
+    container.appendChild(buttonContainer);
 
-    check_text.innerText = "Are you sure?";
-    yes_button.innerText = "Yes";
-    no_button.innerText = "No";
+    checkText.innerText = "Are you sure?";
+    yesButton.innerText = "Yes";
+    noButton.innerText = "No";
 
     element.replaceWith(container);
 }
@@ -428,22 +428,22 @@ window.CheckButtonIntent = (element) => {
 // Changes viewing window into edit window to allow user to change properties, or delete the object
 window.Edit = (element) => {
 
-    const left_data = document.getElementById("left-data");
-    const right_data = document.getElementById("right-data");
+    const leftData = document.getElementById("left-data");
+    const rightData = document.getElementById("right-data");
 
-    const numerical_displays = document.getElementsByClassName("numerical-data");
+    const numericalDisplays = document.getElementsByClassName("numerical-data");
     const title = document.getElementById("name-display");
 
     // Setting up title
-    const title_input = document.createElement("input");
-    title_input.classList.add("data-input-title");
-    if (adding) title_input.classList.add("invalid");
-    title_input.value = title.innerText;
-    title_input.id = "title-input";
-    title_input.dataset.id = title.dataset.id;
-    title.replaceWith(title_input);
+    const titleInput = document.createElement("input");
+    titleInput.classList.add("data-input-title");
+    if (adding) titleInput.classList.add("invalid");
+    titleInput.value = title.innerText;
+    titleInput.id = "title-input";
+    titleInput.dataset.id = title.dataset.id;
+    title.replaceWith(titleInput);
 
-    title_input.addEventListener("input", (event) => {
+    titleInput.addEventListener("input", (event) => {
         const value = event.target.value;
 
         if (value != "") {
@@ -456,41 +456,41 @@ window.Edit = (element) => {
 
     // Setting up type selection for objects
     if (state == 0) {
-        const type = left_data.getElementsByClassName("text-data")[0];
+        const type = leftData.getElementsByClassName("text-data")[0];
         type.parentElement.classList.add("activate-border")
         type.classList.add("type-selected");
 
         if (type.innerText == "Star") {
-            const planet_label = document.createElement("span");
-            planet_label.classList.add("data-display");
-            planet_label.classList.add("not-selected");
-            planet_label.onclick = SwitchType;
-            planet_label.innerText = "Planet";
-            type.insertAdjacentElement("afterend", planet_label);
+            const planetLabel = document.createElement("span");
+            planetLabel.classList.add("data-display");
+            planetLabel.classList.add("not-selected");
+            planetLabel.onclick = SwitchType;
+            planetLabel.innerText = "Planet";
+            type.insertAdjacentElement("afterend", planetLabel);
         }
         else if (type.innerText == "Planet") {
-            const planet_label = document.createElement("span");
-            planet_label.classList.add("data-display");
-            planet_label.classList.add("not-selected");
-            planet_label.onclick = SwitchType;
-            planet_label.innerText = "Star";
-            type.insertAdjacentElement("afterend", planet_label);
+            const planetLabel = document.createElement("span");
+            planetLabel.classList.add("data-display");
+            planetLabel.classList.add("not-selected");
+            planetLabel.onclick = SwitchType;
+            planetLabel.innerText = "Star";
+            type.insertAdjacentElement("afterend", planetLabel);
         }
 
     }
 
-    const repeats = numerical_displays.length;
+    const repeats = numericalDisplays.length;
 
     // Adding input boes
     for (let i = 0; i < repeats; i++) {
-        let input_box = document.createElement("input");
-        input_box.classList.add("data-input");
-        if (adding) input_box.classList.add("invalid");
-        input_box.type = "number";
-        input_box.min = "0";
-        input_box.value = numerical_displays[0].textContent;
-        input_box.id = numerical_displays[0].id;
-        numerical_displays[0].replaceWith(input_box);
+        let inputBox = document.createElement("input");
+        inputBox.classList.add("data-input");
+        if (adding) inputBox.classList.add("invalid");
+        inputBox.type = "number";
+        inputBox.min = "0";
+        inputBox.value = numericalDisplays[0].textContent;
+        inputBox.id = numericalDisplays[0].id;
+        numericalDisplays[0].replaceWith(inputBox);
     }
 
     // Adding events to input boxed to display validity
@@ -592,14 +592,14 @@ window.Delete = async (element) => {
     const id = document.getElementById("title-input").dataset.id;
 
     if (state == 0) {
-        const response = await fetch(`https://localhost:7168/api/Data/DeleteObject?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}&object_id=${id}`, {
+        const response = await fetch(`https://localhost:7168/api/Data/DeleteObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&objectId=${id}`, {
             method: "POST"
         });
         Clear();
         LoadData("objects");
     }
     else {
-        const response = await fetch(`https://localhost:7168/api/Data/DeleteOrbit?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}&orbit_id=${id}`, {
+        const response = await fetch(`https://localhost:7168/api/Data/DeleteOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&orbitId=${id}`, {
             method: "POST"
         });
         Clear();
@@ -609,12 +609,12 @@ window.Delete = async (element) => {
 
 // Fetches data for Objects and Orbits from the backend
 async function LoadData(type) {
-    const response = await fetch(`https://localhost:7168/api/Data/GetUserCreations?session_id=${GetCookie("session_id").replace(/['"]+/g, '').toUpperCase()}`);
+    const response = await fetch(`https://localhost:7168/api/Data/GetUserCreations?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`);
 
     const data = await response.json();
 
-    objects = data.objects.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : 0));
-    orbits = data.orbits;
+    objects = data.Objects.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : 0));
+    orbits = data.Orbits;
 
     if (type == "objects") {
         SelectObjects();
@@ -626,11 +626,11 @@ async function LoadData(type) {
 
 // Loads Objects (Planets and Stars) into the tile window
 window.SelectObjects = () => {
-    const object_button = document.getElementById("objects");
-    const orbit_button = document.getElementById("orbits");
+    const objectButton = document.getElementById("objects");
+    const orbitButton = document.getElementById("orbits");
 
-    object_button.style.boxShadow = shadow;
-    orbit_button.style.boxShadow = "";
+    objectButton.style.boxShadow = shadow;
+    orbitButton.style.boxShadow = "";
 
     const template = document.getElementById("tile-template");
     const container = document.getElementById("tile-container");
@@ -656,11 +656,11 @@ window.SelectObjects = () => {
 
 // Loads Orbits into the tile window
 window.SelectOrbits = () => {
-    const object_button = document.getElementById("objects");
-    const orbit_button = document.getElementById("orbits");
+    const objectButton = document.getElementById("objects");
+    const orbitButton = document.getElementById("orbits");
 
-    object_button.style.boxShadow = "";
-    orbit_button.style.boxShadow = shadow;
+    objectButton.style.boxShadow = "";
+    orbitButton.style.boxShadow = shadow;
 
     const template = document.getElementById("tile-template");
     const container = document.getElementById("tile-container");
@@ -721,24 +721,24 @@ function Clear() {
 
     ResetIntentButtons();
 
-    const left_container = document.getElementById("left-data");
-    const right_container = document.getElementById("right-data");
+    const leftContainer = document.getElementById("left-data");
+    const rightContainer = document.getElementById("right-data");
 
-    while (left_container.firstChild) {
-        left_container.removeChild(left_container.lastChild);
+    while (leftContainer.firstChild) {
+        leftContainer.removeChild(leftContainer.lastChild);
     }
 
-    while (right_container.firstChild) {
-        right_container.removeChild(right_container.lastChild);
+    while (rightContainer.firstChild) {
+        rightContainer.removeChild(rightContainer.lastChild);
     }
 
     try {
-        const name_input = document.getElementById("title-input");
+        const nameInput = document.getElementById("title-input");
 
         const name = document.createElement("a");
         name.classList.add("name");
         name.id = "name-display";
-        name_input.replaceWith(name);
+        nameInput.replaceWith(name);
     }
     catch { }
 
@@ -751,19 +751,19 @@ function Clear() {
 
 // Resets all buttons with intent chcker to normal state
 function ResetIntentButtons() {
-    const intent_containers = document.getElementsByClassName("check-intent-container");
+    const intentContainers = document.getElementsByClassName("check-intent-container");
 
-    if (intent_containers.length != 0) {
+    if (intentContainers.length != 0) {
 
-        for (let i = 0; i <= intent_containers.length; i++) {
-            const no_button = intent_containers[0].getElementsByClassName("no")[0];
+        for (let i = 0; i <= intentContainers.length; i++) {
+            const no_button = intentContainers[0].getElementsByClassName("no")[0];
     
             const button = document.createElement("button");
             button.innerText = no_button.dataset.text;
             button.dataset.function = no_button.dataset.function;
             button.classList = no_button.dataset.classes;
             button.setAttribute("onclick", "CheckButtonIntent(this)");
-            intent_containers[0].replaceWith(button);
+            intentContainers[0].replaceWith(button);
         }
     }
 }
@@ -778,7 +778,7 @@ window.TileClicked = (element) => {
 
     const title = document.getElementById("name-display");
     const img = document.getElementById("img-display");
-    const edit_button = document.getElementById("edit-button");
+    const editButton = document.getElementById("edit-button");
 
     // Hides save and cancel button from edit screen
     // Needed as user could select different object during editing
@@ -786,67 +786,67 @@ window.TileClicked = (element) => {
     document.getElementById("render-window").style.visibility = "hidden";
 
     img.style.display = "block";
-    edit_button.style.visibility = "visible";
+    editButton.style.visibility = "visible";
 
     title.innerText = data.name;
     title.dataset.id = element.dataset.id;
     state == 0 ? SetPlanet(img, element.dataset.id, data.type) : img.style.display = "none";
 
-    const left_container = document.getElementById("left-data");
-    const right_container = document.getElementById("right-data");
+    const leftContainer = document.getElementById("left-data");
+    const rightContainer = document.getElementById("right-data");
     const template = document.getElementById("data-template");
 
     document.getElementById("render-window").style.visibility = "hidden";
 
-    while (left_container.firstChild) {
-        left_container.removeChild(left_container.lastChild);
+    while (leftContainer.firstChild) {
+        leftContainer.removeChild(leftContainer.lastChild);
     }
 
-    while (right_container.firstChild) {
-        right_container.removeChild(right_container.lastChild);
+    while (rightContainer.firstChild) {
+        rightContainer.removeChild(rightContainer.lastChild);
     }
 
     if (state == 0) {
 
         const type = template.content.cloneNode(true);
-        const type_labels = type.querySelectorAll("span");
-        type_labels[0].innerText = "Type";
-        type_labels[1].innerText = data.type.charAt(0).toUpperCase() + data.type.slice(1).toLowerCase();
-        type_labels[1].classList.add("text-data")
+        const typeLabels = type.querySelectorAll("span");
+        typeLabels[0].innerText = "Type";
+        typeLabels[1].innerText = data.type.charAt(0).toUpperCase() + data.type.slice(1).toLowerCase();
+        typeLabels[1].classList.add("text-data")
         type.querySelectorAll("div")[4].style.visibility = "hidden";
-        left_container.appendChild(type);
+        leftContainer.appendChild(type);
 
         const mass = template.content.cloneNode(true);
-        const mass_labels = mass.querySelectorAll("span");
-        mass_labels[0].innerText = "Mass";
-        mass_labels[1].innerText = data.mass;
-        mass_labels[1].id = "mass";
-        mass_labels[1].classList.add("numerical-data")
+        const massLabels = mass.querySelectorAll("span");
+        massLabels[0].innerText = "Mass";
+        massLabels[1].innerText = data.mass;
+        massLabels[1].id = "mass";
+        massLabels[1].classList.add("numerical-data")
         if (data.type == "planet") {
-            mass_labels[2].innerText = "EM";
-            mass_labels[3].innerText = "1 EM is equal to the mass of Earth"
+            massLabels[2].innerText = "EM";
+            massLabels[3].innerText = "1 EM is equal to the mass of Earth"
         }
         else {
-            mass_labels[2].innerText = "SM";
-            mass_labels[3].innerText = "1 SM is equal to the mass of The Sun"
+            massLabels[2].innerText = "SM";
+            massLabels[3].innerText = "1 SM is equal to the mass of The Sun"
         }
-        left_container.appendChild(mass);
+        leftContainer.appendChild(mass);
 
         const radius = template.content.cloneNode(true);
-        const radius_labels = radius.querySelectorAll("span");
-        radius_labels[0].innerText = "Radius";
-        radius_labels[1].innerText = data.radius;
-        radius_labels[1].id = "radius";
-        radius_labels[1].classList.add("numerical-data")
+        const radiusLabels = radius.querySelectorAll("span");
+        radiusLabels[0].innerText = "Radius";
+        radiusLabels[1].innerText = data.radius;
+        radiusLabels[1].id = "radius";
+        radiusLabels[1].classList.add("numerical-data")
         if (data.type == "planet") {
-            radius_labels[2].innerText = "ER";
-            radius_labels[3].innerText = "1 ER is equal to the radius of Earth"
+            radiusLabels[2].innerText = "ER";
+            radiusLabels[3].innerText = "1 ER is equal to the radius of Earth"
         }
         else {
-            radius_labels[2].innerText = "SR";
-            radius_labels[3].innerText = "1 SR is equal to the radius of The Sun"
+            radiusLabels[2].innerText = "SR";
+            radiusLabels[3].innerText = "1 SR is equal to the radius of The Sun"
         }
-        left_container.appendChild(radius);
+        leftContainer.appendChild(radius);
     }
     else if (state == 1) {
 
@@ -855,22 +855,22 @@ window.TileClicked = (element) => {
         document.getElementById("render-window").style.visibility = "visible";
 
         // Triggers event listener to make render update live
-        const eccentricity_trigger = document.getElementById("eccentricity-trigger");
-        eccentricity_trigger.dataset.val = document.getElementById("eccentricity").innerText;
+        const eccentricityTrigger = document.getElementById("eccentricity-trigger");
+        eccentricityTrigger.dataset.val = document.getElementById("eccentricity").innerText;
 
-        const inclination_trigger = document.getElementById("inclination-trigger");
-        inclination_trigger.dataset.val = document.getElementById("inclination").innerText;
+        const inclinationTrigger = document.getElementById("inclination-trigger");
+        inclinationTrigger.dataset.val = document.getElementById("inclination").innerText;
 
-        eccentricity_trigger.click();
-        inclination_trigger.click();
+        eccentricityTrigger.click();
+        inclinationTrigger.click();
     }
 }
 
 // Used for displaying when editing and not editing
 function DisplayOrbitParameters(data) {
 
-    const left_container = document.getElementById("left-data");
-    const right_container = document.getElementById("right-data");
+    const leftContainer = document.getElementById("left-data");
+    const rightContainer = document.getElementById("right-data");
     const template = document.getElementById("data-template");
 
     const displays = [];
@@ -882,47 +882,47 @@ function DisplayOrbitParameters(data) {
 
     for (let i = 0; i < (Math.ceil(displays.length / 2)); i++) {
         let element = template.content.cloneNode(true);
-        let element_labels = element.querySelectorAll("span");
-        element_labels[0].innerText = displays[i][0];
+        let elementLabels = element.querySelectorAll("span");
+        elementLabels[0].innerText = displays[i][0];
 
-        element_labels[1].innerText = displays[i][1];
-        element_labels[1].classList.add("numerical-data");
+        elementLabels[1].innerText = displays[i][1];
+        elementLabels[1].classList.add("numerical-data");
 
-        element_labels[2].innerText = displays[i][2];
-        element_labels[3].innerText = displays[i][3];
+        elementLabels[2].innerText = displays[i][2];
+        elementLabels[3].innerText = displays[i][3];
 
         switch (i) {
             case 0:
-                element_labels[1].id = "semi-major-axis";
+                elementLabels[1].id = "semi-major-axis";
                 break
             case 1:
-                element_labels[1].id = "eccentricity";
+                elementLabels[1].id = "eccentricity";
                 break
             case 2:
-                element_labels[1].id = "inclination";
+                elementLabels[1].id = "inclination";
         }
 
-        left_container.appendChild(element);
+        leftContainer.appendChild(element);
     }
 
     for (let i = Math.ceil(displays.length / 2); i < displays.length; i++) {
         let element = template.content.cloneNode(true);
-        let element_labels = element.querySelectorAll("span");
-        element_labels[0].innerText = displays[i][0];
+        let elementLabels = element.querySelectorAll("span");
+        elementLabels[0].innerText = displays[i][0];
 
-        element_labels[1].innerText = displays[i][1];
-        element_labels[1].classList.add("numerical-data");
+        elementLabels[1].innerText = displays[i][1];
+        elementLabels[1].classList.add("numerical-data");
 
-        element_labels[2].innerText = displays[i][2];
-        element_labels[3].innerText = displays[i][3];
-        right_container.appendChild(element);
+        elementLabels[2].innerText = displays[i][2];
+        elementLabels[3].innerText = displays[i][3];
+        rightContainer.appendChild(element);
 
         switch (i) {
             case Math.ceil(displays.length / 2):
-                element_labels[1].id = "long-of-asc-node";
+                elementLabels[1].id = "long-of-asc-node";
                 break
             case Math.ceil(displays.length / 2) + 1:
-                element_labels[1].id = "arg-of-peri";
+                elementLabels[1].id = "arg-of-peri";
         }
     }
 }
