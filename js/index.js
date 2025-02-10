@@ -25,7 +25,7 @@ async function SetUsername() {
 
     sessionId = sessionId.replace(/['"]+/g, '').toUpperCase();
 
-    const response = await fetch(`https://localhost:7168/api/LoginDetails/GetUsername?sessionId=${sessionId}`)
+    const response = await fetch(`http://94.4.213.191:2030/api/LoginDetails/GetUsername?sessionId=${sessionId}`)
 
     label.innerText = await response.text();
 }

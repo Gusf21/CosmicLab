@@ -238,7 +238,7 @@ function DisplayFrame() {
 }
 
 async function FetchFrames() {
-    let newFrames = await fetch(`https://localhost:7168/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+    let newFrames = await fetch(`http://94.4.213.191:2030/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
     PassFrames(JSON.parse(await newFrames.text()));
 }
 
