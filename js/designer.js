@@ -640,7 +640,9 @@ window.SelectObjects = () => {
         if (container.childElementCount == 1) {
             empty = true;
         }
-        container.removeChild(container.lastChild);
+        else {
+            container.removeChild(container.lastChild);
+        }
     }
 
     objects.forEach(element => {
@@ -670,7 +672,9 @@ window.SelectOrbits = () => {
         if (container.childElementCount == 1) {
             empty = true;
         }
-        container.removeChild(container.lastChild);
+        else {
+            container.removeChild(container.lastChild);
+        }
     }
 
     orbits.forEach(element => {
