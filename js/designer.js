@@ -260,7 +260,7 @@ window.Save = async () => {
                 updatedData.mass = leftDisplays[0].value;
                 updatedData.radius = leftDisplays[1].value;
 
-                await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/EditObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/EditObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -278,7 +278,7 @@ window.Save = async () => {
             }
             else {
 
-                await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/CreateObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/CreateObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -307,7 +307,7 @@ window.Save = async () => {
                 updatedData.longOfAscNode = rightDisplays[0].value;
                 updatedData.argOfPeri = rightDisplays[1].value;
 
-                await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/EditOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/EditOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -326,7 +326,7 @@ window.Save = async () => {
             }
             else {
 
-                await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/CreateOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
+                await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/CreateOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -592,14 +592,14 @@ window.Delete = async (element) => {
     const id = document.getElementById("title-input").dataset.id;
 
     if (state == 0) {
-        const response = await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/DeleteObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&objectId=${id}`, {
+        const response = await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/DeleteObject?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&objectId=${id}`, {
             method: "POST"
         });
         Clear();
         LoadData("objects");
     }
     else {
-        const response = await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/DeleteOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&orbitId=${id}`, {
+        const response = await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/DeleteOrbit?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&orbitId=${id}`, {
             method: "POST"
         });
         Clear();
@@ -609,7 +609,7 @@ window.Delete = async (element) => {
 
 // Fetches data for Objects and Orbits from the backend
 async function LoadData(type) {
-    const response = await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/GetUserCreations?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`);
+    const response = await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/GetUserCreations?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`);
 
     const data = await response.json();
 

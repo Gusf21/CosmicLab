@@ -238,7 +238,7 @@ function DisplayFrame() {
 }
 
 async function FetchFrames() {
-    let newFrames = await fetch(`http://cosmiclabapi.co.uk:2030/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+    let newFrames = await fetch(`https://cosmiclabapi.co.uk:2030/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
     PassFrames(JSON.parse(await newFrames.text()));
 }
 
