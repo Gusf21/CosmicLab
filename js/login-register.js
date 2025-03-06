@@ -25,12 +25,10 @@ async function Register(e) {
         return
     }
 
-    let username = inputs[0].value;
-    let password0 = inputs[1].value;
-    let password1 = inputs[2].value;
-
-    console.log(password0)
-    console.log(password1)
+    let email = inputs[0].value;
+    let username = inputs[1].value;
+    let password0 = inputs[2].value;
+    let password1 = inputs[3].value;
 
     if (password0 != password1) {
         inputs[2].setCustomValidity("Please ensure both passwords are the same")
@@ -40,12 +38,13 @@ async function Register(e) {
         inputs[2].setCustomValidity("");
     }
 
-    const response = await fetch("https://cosmiclabapi.co.uk/api/LoginDetails/AddUser", {
+    const response = await fetch("https://localhost:7168/api/LoginDetails/AddUser", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
+            "Email": email,
             "Username": username,
             "Password": password0,
         })
@@ -56,7 +55,16 @@ async function Register(e) {
         window.location.href = "index.html";
     }
     else {
-        inputs[0].setCustomValidity("Username Already In Use");
+        let validity = await response.text();
+        console.log(validity);
+        if (validity[0] == "1") {
+            inputs[0].setCustomValidity("Email Already In Use");
+        }
+        
+        if (validity[1] == "1") {
+            inputs[1].setCustomValidity("Username Already In Use");
+        }
+        
         form.reportValidity();
     }
 }
@@ -70,20 +78,21 @@ async function CheckLogin(e) {
 
     if (!form.checkValidity()) {
         form.reportValidity();
-        return
+        return;
     }
 
-    let username = inputs[0].value;
+    let email = inputs[0].value;
     let password = inputs[1].value;
 
-    const response = await fetch("https://cosmiclabapi.co.uk/api/LoginDetails/CheckLoginDetails", {
+    const response = await fetch("https://localhost:7168/api/LoginDetails/Login", {
         method: "POST",
-        "headers": {
+        headers: {
             "Content-Type": "application/json",
         },
-        "body": JSON.stringify({
-           "Username": username,
-           "Password": password 
+        body: JSON.stringify({
+           "Email": email,
+           "Username": "",
+           "Password": password
         })
     });
 
@@ -113,7 +122,7 @@ window.RegisterClicked = () => {
         labels[1].style.opacity = 1;
         document.getElementById("login-window").style.display = "none";
         document.getElementById("register-window").style.display = "block";
-        document.getElementById("window-container").style.height = "45rem"
+        document.getElementById("window-container").style.height = "46rem"
     }
 }
 
@@ -132,7 +141,25 @@ window.LoginClicked = () => {
         labels[1].style.opacity = 0.2;
         document.getElementById("register-window").style.display = "none";
         document.getElementById("login-window").style.display = "block";
-        document.getElementById("window-container").style.height = "42rem"
+        document.getElementById("window-container").style.height = "37rem"
+    }
+}
+
+window.ResetPassword = async () => {
+    const email = document.getElementById("email").value;
+
+    console.log(email);
+
+    const response = fetch(`https://localhost:7168/api/LoginDetails/ResetPassword?emailAddress="${email}"`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    });
+
+    if (!response.ok) {
+        let text = (await response).text();
+        alert(text);
     }
 }
 

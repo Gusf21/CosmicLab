@@ -4,10 +4,10 @@
 <title>Cosmic Lab</title>
 <meta name="google-signin-client_id" content="410496656622-4b77r2oc08nht69j5hnva2po3hm70irq.apps.googleusercontent.com">
 <script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
-  <script type="module" crossorigin src="/assets/login-BrXmYllG.js"></script>
+  <script type="module" crossorigin src="/assets/login-DJ897hlE.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/style-BD-upOib.js">
   <link rel="stylesheet" crossorigin href="/assets/style-Cbtvu4pn.css">
-  <link rel="stylesheet" crossorigin href="/assets/login-azCWCj4_.css">
+  <link rel="stylesheet" crossorigin href="/assets/login-D_pqOJND.css">
 </head>
 <body>
     
@@ -26,8 +26,8 @@
                 <form action="#" id="login-form">
 
                     <div class="input-box">
-                        <label for="username"><b>Username</b></label>
-                        <input type="text" oninput="RemoveInvalid(this)" placeholder="Username" id="username" required>
+                        <label for="email"><b>Email</b></label>
+                        <input type="email" oninput="RemoveInvalid(this)" placeholder="johnsmith@gmail.com" id="email" required>
                     </div>  
 
                     <div class="input-box">
@@ -35,16 +35,9 @@
                         <input type="password" oninput="RemoveInvalid(this)" placeholder="Password" id="password" required>
                     </div>
 
-                    <button type="submit" id="login-submit-button">Log In</button>
+                    <p class="reset-password"><a href="resetpassword.html">Forgot your password?</a></p>
 
-                    <div class="external-options">
-                        <div class="option">
-                            <a href="#" id="google-button">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAA2VJREFUSEvFl19sS3EUx7/n6u3+tHXF1S2C+BNeJvbA1heZh7UPQ0iKLR4887YHWSIUqURJPIgXhIQ3wYpYLJbMWh682FZCCAkJkQlKZq2rrLe7R1pdrb23t3d/wu+t7fmdz+93zvl9zynhPy2yymWA4t5mLwGdADwApPzeJIDHBDq7qGXwLgWhWfFZETzi9ch28H0A66w4BOPVRFVm0+K+J1/M7E3Bn33NPcTYbglYYkTg2+7IsL/cXkMwtzfYv4w6xgDUzAT6dw8p7pZBySj8OnAe+hOAMDsoQOBT7sjwASM/OnDc25yycNPswd6DwSAsA+AodW4GzdoWgSvmlHDEPTAUIoCngnIV72vqIqZTf5yWv+nkvgI46ffIv5L8tUx4E+4xzU2xmGoW/tebV1dJ6YVH6yKDgUppKoDVAfHpeGxRY6p/aemeVF1kSBfKSo4r/Z4DM4MyETH38LWEHYnzDYVgzrMLktz3KCsSc7pyYHXA5gPoXsEzA4lza6Elxd66yNC2OSXmnf0B37P1gEgnFKlnNbK0PzlaDtx6XDk53UNFDzsPFqpaHRA/AagvdSL6VFNlaw0pRdVt5RBVLkd1XyeN50MtGr1dVfSpdjNnMwHbVK7vD7ri/xwMFpZGD9d+mAT/s1CnhczChwcXfDMtrkimXm5rGylfXCFl3CQVNiO9l9c4bOEOmjB8TlkB9o/6ENdqeod235zRc2oNKW8BrCg9WDTgzDF1AvJRq8XOUV9BjOdlqqVHe65MS0A2XGBR+vojbRCN99GAc3lRk8hKZvjXysbTim7QSA3vvjktyWw9oTwHY20pmIjbI4dcN4rA3lt+OZEWyjYJTsju2L6Lpk0i69AbUnoZ2GqU+8kwF4GzH5qu7+oBc9lRh4mPxF42nkAwqBvo1l/d1SIQ99d+7Kq2pYzGMz4WDbiCkwfSKVPTtZ3WBwHkJsolAOZPvaH4fSNq4nunfpWKBpxF6dKBG7rb7bWaNuvRhyYkuN6dyb0oh+pw3AlS9kKFZajFefhcDHvsHLlc96Brvq52TJtApZyb6TgD71YJwupwR3jCyK7iQO+55Ze1tBAF0Gil+xDwjQWhbbgjPGhmXxE8ZTig5u4dXmbqBMgDcP4vDCtgvABwaUz62f1mS5+ZjJrn2MrNZmvzGw5DSC60mbBDAAAAAElFTkSuQmCC" alt="Google">
-                                <span>oogle</span>
-                            </a>
-                        </div>
-                    </div>  
+                    <button type="submit" id="login-submit-button">Log In</button>
 
                     <p class="sign-up">Don't have an account? <a onclick="RegisterClicked()">Sign up</a></p>
                 </form>
@@ -53,8 +46,13 @@
                 <form action="#" id="register-form">
 
                     <div class="input-box">
+                        <label for="email"><b>Email</b></label>
+                        <input type="email"  placeholder="johnsmith@gmail.com" id="email" required>
+                    </div>  
+
+                    <div class="input-box">
                         <label for="username"><b>Username</b></label>
-                        <input type="text"  placeholder="Username" id="username" required>
+                        <input type="text"  placeholder="john smith" id="username" required>
                     </div>  
 
                     <div class="input-box">
@@ -68,15 +66,6 @@
                     </div>
 
                     <button type="submit" id="register-submit-button">Register</button>
-
-                    <div class="external-options">
-                        <div class="option">
-                            <a href="#" id="google-button">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAA2VJREFUSEvFl19sS3EUx7/n6u3+tHXF1S2C+BNeJvbA1heZh7UPQ0iKLR4887YHWSIUqURJPIgXhIQ3wYpYLJbMWh682FZCCAkJkQlKZq2rrLe7R1pdrb23t3d/wu+t7fmdz+93zvl9zynhPy2yymWA4t5mLwGdADwApPzeJIDHBDq7qGXwLgWhWfFZETzi9ch28H0A66w4BOPVRFVm0+K+J1/M7E3Bn33NPcTYbglYYkTg2+7IsL/cXkMwtzfYv4w6xgDUzAT6dw8p7pZBySj8OnAe+hOAMDsoQOBT7sjwASM/OnDc25yycNPswd6DwSAsA+AodW4GzdoWgSvmlHDEPTAUIoCngnIV72vqIqZTf5yWv+nkvgI46ffIv5L8tUx4E+4xzU2xmGoW/tebV1dJ6YVH6yKDgUppKoDVAfHpeGxRY6p/aemeVF1kSBfKSo4r/Z4DM4MyETH38LWEHYnzDYVgzrMLktz3KCsSc7pyYHXA5gPoXsEzA4lza6Elxd66yNC2OSXmnf0B37P1gEgnFKlnNbK0PzlaDtx6XDk53UNFDzsPFqpaHRA/AagvdSL6VFNlaw0pRdVt5RBVLkd1XyeN50MtGr1dVfSpdjNnMwHbVK7vD7ri/xwMFpZGD9d+mAT/s1CnhczChwcXfDMtrkimXm5rGylfXCFl3CQVNiO9l9c4bOEOmjB8TlkB9o/6ENdqeod235zRc2oNKW8BrCg9WDTgzDF1AvJRq8XOUV9BjOdlqqVHe65MS0A2XGBR+vojbRCN99GAc3lRk8hKZvjXysbTim7QSA3vvjktyWw9oTwHY20pmIjbI4dcN4rA3lt+OZEWyjYJTsju2L6Lpk0i69AbUnoZ2GqU+8kwF4GzH5qu7+oBc9lRh4mPxF42nkAwqBvo1l/d1SIQ99d+7Kq2pYzGMz4WDbiCkwfSKVPTtZ3WBwHkJsolAOZPvaH4fSNq4nunfpWKBpxF6dKBG7rb7bWaNuvRhyYkuN6dyb0oh+pw3AlS9kKFZajFefhcDHvsHLlc96Brvq52TJtApZyb6TgD71YJwupwR3jCyK7iQO+55Ze1tBAF0Gil+xDwjQWhbbgjPGhmXxE8ZTig5u4dXmbqBMgDcP4vDCtgvABwaUz62f1mS5+ZjJrn2MrNZmvzGw5DSC60mbBDAAAAAElFTkSuQmCC" alt="Google">
-                                <span>oogle</span>
-                            </a>
-                        </div>
-                    </div>  
                 </form>
             </div>
         </div>

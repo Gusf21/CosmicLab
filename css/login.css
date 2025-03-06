@@ -35,7 +35,7 @@
     margin-left: 2%;
     width: 40%;
     margin: auto;
-    height: 42rem;
+    height: 38rem;
     padding-top: 5rem;
     gap: 3%;
 }
@@ -103,7 +103,6 @@ form {
     left: 50%;
     transform: translate(-50%, 0);
     margin-top: 1rem;
-    margin-bottom: 1rem;
 }
 
 .input-box label {
@@ -153,7 +152,8 @@ form button {
 }
 
 form button:hover {
-    border: solid white 4px;
+    box-shadow: 0 0 2rem 0 var(--purple);
+    transform: scale(0.98) translate(-51%, 0);
 }
 
 .sign-up,
@@ -163,7 +163,6 @@ form button:hover {
     font-size: 2rem;
     color: var(--white);
     position: relative;
-
 }
 
 .sign-up a {
@@ -172,7 +171,8 @@ form button:hover {
 }
 
 .sign-up a::after,
-.form-container h1::after {
+.form-container h1::after,
+.reset-password a::after {
     content: '';
     position: absolute;
     width: 0;
@@ -195,8 +195,28 @@ form button:hover {
     background: var(--purple);
 }
 
-.sign-up a:hover::after {
+.sign-up a:hover::after,
+.reset-password a:hover::after {
     width: 100%;
     left: 0;
     background: #fff;
+}
+
+.reset-password {
+    position: relative;
+    width: 60%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    text-align: end;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    font-size: 1.2rem;
+    margin-top: 0.3rem;
+}
+
+.reset-password a { 
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    color: var(--purple);
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
 }

@@ -25,8 +25,8 @@
                 <form action="#" id="login-form">
 
                     <div class="input-box">
-                        <label for="username"><b>Username</b></label>
-                        <input type="text" oninput="RemoveInvalid(this)" placeholder="Username" id="username" required>
+                        <label for="email"><b>Email</b></label>
+                        <input type="email" oninput="RemoveInvalid(this)" placeholder="johnsmith@gmail.com" id="email" required>
                     </div>  
 
                     <div class="input-box">
@@ -34,16 +34,9 @@
                         <input type="password" oninput="RemoveInvalid(this)" placeholder="Password" id="password" required>
                     </div>
 
-                    <button type="submit" id="login-submit-button">Log In</button>
+                    <p class="reset-password"><a href="resetpassword.html">Forgot your password?</a></p>
 
-                    <div class="external-options">
-                        <div class="option">
-                            <a href="#" id="google-button">
-                                <img src="../images/google.png" alt="Google">
-                                <span>oogle</span>
-                            </a>
-                        </div>
-                    </div>  
+                    <button type="submit" id="login-submit-button">Log In</button>
 
                     <p class="sign-up">Don't have an account? <a onclick="RegisterClicked()">Sign up</a></p>
                 </form>
@@ -52,8 +45,13 @@
                 <form action="#" id="register-form">
 
                     <div class="input-box">
+                        <label for="email"><b>Email</b></label>
+                        <input type="email"  placeholder="johnsmith@gmail.com" id="email" required>
+                    </div>  
+
+                    <div class="input-box">
                         <label for="username"><b>Username</b></label>
-                        <input type="text"  placeholder="Username" id="username" required>
+                        <input type="text"  placeholder="john smith" id="username" required>
                     </div>  
 
                     <div class="input-box">
@@ -67,15 +65,6 @@
                     </div>
 
                     <button type="submit" id="register-submit-button">Register</button>
-
-                    <div class="external-options">
-                        <div class="option">
-                            <a href="#" id="google-button">
-                                <img src="../images/google.png" alt="Google">
-                                <span>oogle</span>
-                            </a>
-                        </div>
-                    </div>  
                 </form>
             </div>
         </div>
