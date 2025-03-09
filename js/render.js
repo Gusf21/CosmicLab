@@ -16,51 +16,6 @@ const tropicalTextures = import.meta.glob('../images/Textures/Tropical/*.png');
 const venusianTextures = import.meta.glob('../images/Textures/Venusian/*.png');
 const volcanicTextures = import.meta.glob('../images/Textures/Volcanic/*.png');
 
-// Paths for all textures in the respective folders
-const defaultTexturePaths = [];
-const gasGiantTexturePaths = [];
-const iceTexturePaths = [];
-const oceanicTexturePaths = [];
-const swampTexturePaths = [];
-const tropicalTexturePaths = [];
-const venusianTexturePaths = [];
-const volcanicTexturePaths = [];
-
-// Adds all paths to the respective arrays
-for (const path in defualtTextures) {
-    defaultTexturePaths.push(path);
-}
-
-for (const path in gasGiantTextures) {
-    gasGiantTexturePaths.push(path);
-}
-
-for (const path in iceTextures) {
-    iceTexturePaths.push(path);
-}
-
-for (const path in oceanicTextures) {
-    oceanicTexturePaths.push(path);
-}
-
-for (const path in swampTextures) {
-    swampTexturePaths.push(path);
-}
-
-for (const path in tropicalTextures) {
-    tropicalTexturePaths.push(path);
-}
-
-for (const path in venusianTextures) {
-    venusianTexturePaths.push(path);
-}
-
-for (const path in volcanicTextures) {
-    volcanicTexturePaths.push(path);
-}
-
-const texturePaths = [gasGiantTexturePaths, iceTexturePaths, oceanicTexturePaths, swampTexturePaths, tropicalTexturePaths, venusianTexturePaths, volcanicTexturePaths];
-
 
 const AU = 149597870700;
 const distanceMultiplier = 20;
@@ -200,7 +155,7 @@ function onWindowResize() {
 
 }
 
-function AddObject(x, y, z, radius, element_id, name) {
+async function AddObject(x, y, z, radius, element_id, name) {
 
     //console.log(`${x}, ${y}, ${z}`);
     const type = Math.floor(Math.random() * texturePaths.length);
@@ -209,11 +164,11 @@ function AddObject(x, y, z, radius, element_id, name) {
 
     let texture;
     if (name == null) {
-        texture = new THREE.TextureLoader().load(texturePaths[type][num]());
+        texture = new THREE.TextureLoader().load(texture);
     }
     else {
         console.log(name);
-        texture = new THREE.TextureLoader().load(`../images/Textures/Default/${name}.png`);
+        texture = new THREE.TextureLoader().load((await defualtTextures[`../images/Textures/Default/${name}.png`]()).default);
     }
 
     const SphereMaterial = new THREE.MeshBasicMaterial({ map: texture });
