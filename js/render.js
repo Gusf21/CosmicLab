@@ -209,7 +209,7 @@ function AddObject(x, y, z, radius, element_id, name) {
 
     let texture;
     if (name == null) {
-        texture = new THREE.TextureLoader().load(texturePaths[type][num]);
+        texture = new THREE.TextureLoader().load(texturePaths[type][num]());
     }
     else {
         console.log(name);

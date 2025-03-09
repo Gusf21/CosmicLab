@@ -102,11 +102,11 @@ function SetPlanet(element, id, type) {
 
     if (type == "planet") {
         let index = ChaoticFunction(parseInt(id), 17);
-        file = planets[planetPaths[index]];
+        file = planets[planetPaths[index]]();
     }
     else if (type == "star") {
         let img = ChaoticFunction(parseInt(id), 1);
-        file = stars[starPaths[img]];
+        file = stars[starPaths[img]]();
     }
     else {
         return;
