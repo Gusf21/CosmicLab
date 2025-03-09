@@ -1,8 +1,8 @@
 import { GetCookie } from "./cookies.js";
 
 // Glob imports for all images in the planets and stars folders
-const planets = import.meta.glob('../images/planets/*.gif');
-const stars = import.meta.glob('../images/stars/*.gif');
+const planets = import.meta.glob('../images/planets/*.gif', { eager: true});
+const stars = import.meta.glob('../images/stars/*.gif', { eager: true});
 
 // Paths for all images in the planets and stars folders
 const planetPaths = [];
