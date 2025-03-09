@@ -1,4 +1,4 @@
-import { AddObject, scene, Start as StartRender, PassFrames, BeginMovement, GetCookie } from "./render";
+import { AddObject, Start as StartRender, PassFrames, BeginMovement, GetCookie } from "./render";
 
 const defaultSystem = [
     {
@@ -147,6 +147,8 @@ const AU = 149597870700;
 const SM = 1.9884 * (10 ** 30);
 const EM = 5.972 * (10 ** 24);
 
+var loading;
+
 class Vector3 {
     constructor(x, y, z) {
         this.x = x;
@@ -184,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("beforeunload", () => {
-    fetch(`https://localhost:7168/api/Data/DeleteSimulation?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
+    fetch(`https://cosmiclabapi.co.uk/api/Data/DeleteSimulation?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -321,16 +323,39 @@ async function PassSystemToBackend() {
 
     let frames;
 
-    const response = await fetch(`https://localhost:7168/api/Data/StartSimulation`, {
+    StartLoading();
+
+    const response = await fetch(`https://cosmiclabapi.co.uk/api/Data/StartSimulation`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(system)
-    }).then(async () => {
-        frames = await fetch(`https://localhost:7168/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+    })
+    .then(async () => {
+        frames = await fetch(`https://cosmiclabapi.co.uk/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+        StopLoading();
     });
 
     PassFrames(JSON.parse(await frames.text()));
     BeginMovement();
+}
+
+function StartLoading() {    
+    const loadingText = document.getElementById("loading-text");
+
+    loading = setInterval(() => {
+        if (loadingText.innerText.length > 9) {
+            loadingText.innerText = "Loading";
+        }
+        else {
+            loadingText.innerText += ".";
+        }
+    }, 1000);
+}
+
+function StopLoading() {
+    clearInterval(loading);
+    const loadingText = document.getElementById("loading-text");
+    loadingText.innerText = "Ready!";
 }

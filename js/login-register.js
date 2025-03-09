@@ -38,7 +38,7 @@ async function Register(e) {
         inputs[2].setCustomValidity("");
     }
 
-    const response = await fetch("https://localhost:7168/api/LoginDetails/AddUser", {
+    const response = await fetch("https://cosmiclabapi.co.uk/api/LoginDetails/AddUser", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -84,7 +84,7 @@ async function CheckLogin(e) {
     let email = inputs[0].value;
     let password = inputs[1].value;
 
-    const response = await fetch("https://localhost:7168/api/LoginDetails/Login", {
+    const response = await fetch("https://cosmiclabapi.co.uk/api/LoginDetails/Login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -150,7 +150,7 @@ window.ResetPassword = async () => {
 
     console.log(email);
 
-    const response = fetch(`https://localhost:7168/api/LoginDetails/ResetPassword?emailAddress="${email}"`, {
+    const response = fetch(`https://cosmiclabapi.co.uk/api/LoginDetails/ResetPassword?emailAddress="${email}"`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

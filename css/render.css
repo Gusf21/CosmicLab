@@ -85,10 +85,23 @@
 }
 
 .playback-options div {
-    width: 25%;
     border-right: 2px solid var(--dark-grey);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+.playback-options div.quarter {
+    width: 25%;
+}
+
+.playback-options div.half {
+    width: 50%;
+    cursor: auto;
+}
+
+.loading-indicator a {
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
 }

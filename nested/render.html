@@ -27,13 +27,16 @@
 
         </div>
         <div class="playback-options">
-            <div class="play-button" onclick="ToggleSim(this)">
+            <div class="quarter" onclick="ToggleSim(this)">
                 <i class="fa-solid fa-play fa-2x"></i>
             </div>
-            <div class="play-button" onclick="ToggleAxes()">
+            <div class="quarter" onclick="ToggleAxes()">
                 <i class="fa-solid fa-x fa-1x"></i>
                 <i class="fa-solid fa-y fa-1x"></i>
                 <i class="fa-solid fa-z fa-1x"></i>
+            </div>
+            <div class="loading-indicator half">
+                <a id="loading-text">Loading</a>
             </div>
         </div>
         <div class="menu-button" onclick="window.location.href='index.html'">

@@ -24,7 +24,7 @@ async function SendResetEmail(e) {
         return;
     }
 
-    const response = fetch(`https://localhost:7168/api/LoginDetails/GenerateResetCode?emailAddress="${email}"`, {
+    const response = fetch(`https://cosmiclabapi.co.uk/api/LoginDetails/GenerateResetCode?emailAddress="${email}"`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -57,7 +57,7 @@ async function ResetPassword(e) {
         return;
     }
 
-    let response = fetch("https://localhost:7168/api/LoginDetails/ResetPassword", {
+    let response = fetch("https://cosmiclabapi.co.uk/api/LoginDetails/ResetPassword", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
