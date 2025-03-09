@@ -1,8 +1,8 @@
 import { GetCookie } from "./cookies.js";
 
 // Glob imports for all images in the planets and stars folders
-const planets = import.meta.glob('../images/planets/*.gif', { eager: true});
-const stars = import.meta.glob('../images/stars/*.gif', { eager: true});
+const planets = import.meta.glob('../images/planets/*.gif');
+const stars = import.meta.glob('../images/stars/*.gif');
 
 // Paths for all images in the planets and stars folders
 const planetPaths = [];
@@ -96,17 +96,17 @@ window.DisplayAddUI = () => {
 }
 
 // Sets the object display gif based on whether the object is a star or planet. Gif is chosen based on objectID
-function SetPlanet(element, id, type) {
+async function SetPlanet(element, id, type) {
 
     let file;
 
     if (type == "planet") {
         let index = ChaoticFunction(parseInt(id), 17);
-        file = planets[planetPaths[index]]();
+        file = await planets[planetPaths[index]]();
     }
     else if (type == "star") {
         let img = ChaoticFunction(parseInt(id), 1);
-        file = stars[starPaths[img]]();
+        file = await stars[starPaths[img]]();
     }
     else {
         return;
