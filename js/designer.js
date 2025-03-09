@@ -1,7 +1,21 @@
 import { GetCookie } from "./cookies.js";
 
+// Glob imports for all images in the planets and stars folders
 const planets = import.meta.glob('../images/planets/*.gif');
 const stars = import.meta.glob('../images/stars/*.gif');
+
+// Paths for all images in the planets and stars folders
+const planetPaths = [];
+const starPaths = [];
+
+// Adds all paths to the respective arrays
+for (const path in planets) {
+    planetPaths.push(path);
+}
+
+for (const path in stars) {
+    starPaths.push(path);
+}
 
 let state = 1;
 let shadow = "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset";
@@ -87,12 +101,12 @@ function SetPlanet(element, id, type) {
     let file;
 
     if (type == "planet") {
-        let img = ChaoticFunction(parseInt(id), 18);
-        file = `../images/planets/planet${img}.gif`;
+        let index = ChaoticFunction(parseInt(id), 17);
+        file = planetPaths[index];
     }
     else if (type == "star") {
         let img = ChaoticFunction(parseInt(id), 1);
-        file = `../images/stars/star${img}.gif`;
+        file = starPaths[img];
     }
     else {
         return;
@@ -937,7 +951,7 @@ function DisplayOrbitParameters(data) {
 // Used to assign an icon to planets and stars based on their unchanging ID
 function ChaoticFunction(x, k, a = 7.5, b = 6, m = 600) {
 
-    const result = Math.round((Math.pow(Math.sin(a * x + b), 2) * m) % k) + 1;
+    const result = Math.round((Math.pow(Math.sin(a * x + b), 2) * m) % k);
     return result;
 }
 
