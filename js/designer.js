@@ -112,7 +112,7 @@ async function SetPlanet(element, id, type) {
         return;
     }
 
-    element.setAttribute("src", file);
+    element.setAttribute("src", file.default);
 }
 
 // When editing or adding, cancels the edit/add and either returns to the viewing window if editing, or removes the viewing window if adding
