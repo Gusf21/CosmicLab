@@ -16,6 +16,8 @@ const tropicalTextures = import.meta.glob('../images/Textures/Tropical/*.png');
 const venusianTextures = import.meta.glob('../images/Textures/Venusian/*.png');
 const volcanicTextures = import.meta.glob('../images/Textures/Volcanic/*.png');
 
+const textures = [gasGiantTextures, iceTextures, oceanicTextures, swampTextures, tropicalTextures, venusianTextures, volcanicTextures];
+
 
 const AU = 149597870700;
 const distanceMultiplier = 20;
@@ -158,7 +160,7 @@ function onWindowResize() {
 async function AddObject(x, y, z, radius, element_id, name) {
 
     //console.log(`${x}, ${y}, ${z}`);
-    const type = Math.floor(Math.random() * texturePaths.length);
+    const type = Math.floor(Math.random() * textures.length);
     const num = randInt(1, 10);
     const SphereMesh = new THREE.SphereGeometry(0.2 * radius, 32, 32);
 
