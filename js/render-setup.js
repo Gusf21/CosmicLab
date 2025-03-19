@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("beforeunload", () => {
-    fetch(`https://cosmiclabapi.co.uk/api/Data/DeleteSimulation?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
+    fetch(`https://localhost:7168/api/Data/DeleteSimulation?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -325,7 +325,7 @@ async function PassSystemToBackend() {
 
     StartLoading();
 
-    const response = await fetch(`https://cosmiclabapi.co.uk/api/Data/StartSimulation`, {
+    const response = await fetch(`https://localhost:7168/api/Data/StartSimulation`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -333,7 +333,7 @@ async function PassSystemToBackend() {
         body: JSON.stringify(system)
     })
     .then(async () => {
-        frames = await fetch(`https://cosmiclabapi.co.uk/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+        frames = await fetch(`https://localhost:7168/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
         StopLoading();
     });
 

@@ -3,10 +3,170 @@
 <head>
 <title>Simulation Designer</title>
 <script src="https://kit.fontawesome.com/28af39e512.js" crossorigin="anonymous"></script>
+<script src="../js/simulation-designer.js" type="module"></script>
+<script src="../js/cookies.js" type="module"></script>
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 <link rel="stylesheet" type="text/css" href="../css/simulation-designer.css">
 </head>
 <body>
+    <div class="storage" id="storage">
 
+    </div>
+    <div class="container">
+        <div class="panel left">
+            <div class="render-container" id="render-container">
+
+            </div>
+            <div class="store">
+                <div class="tab-container">
+                    <div class="tab">Planets</div>
+                    <div class="tab">Stars</div>
+                    <div class="tab">Orbits</div>
+                </div>
+
+                <template id="object-template">
+                    <div class="tile" draggable="true">
+                        <span id="name"></span>
+                        <span id="mass"></span>
+                        <span id="radius"></span>
+                    </div>
+                </template>
+
+                <template id="orbit-template">
+                    <div class="tile" draggable="true">
+                        <span id="name"></span>
+                        <span id="eccentricity"></span>
+                        <span id="sm-axis"></span>
+                    </div>
+                </template>
+
+                <div class="tile-container" id="tile-container">
+
+                </div>
+
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+                    <input type="text" class="searchbar" placeholder="Search" oninput="UpdateDisplay(this)">
+                </div>
+
+            </div>
+        </div>
+
+        <template>
+
+        </template>
+
+        <div class="panel right">
+            <span class="right-header" id="hierachy-header">
+                Hierachy
+            </span>
+
+            <template id="hierachy-object-template">
+                <div class="hierachy-item">
+                    <div class="name-object-container">
+                        <input type="text" id="name-input" class="name empty" placeholder="Name" oninput="CheckContent(this)">
+                        <div class="dropable-point" id="dropable-point" data-type="objects">
+                            <span> Drop an Object Template Here! </span>
+                            <span class="name"></span>
+                            <span class="mass"></span>
+                            <span class="radius"></span>
+                        </div>
+                    </div>
+                    <div class="info-view" id="telemetry">
+                        <div class="position-data">
+                            <span>Position</span>
+                            <div>
+                                <span>X</span>
+                                <input type="number" class="x-position">
+                            </div>
+                            <div>
+                                <span>Y</span>
+                                <input type="number" class="y-position">
+                            </div>
+                            <div>
+                                <span>Z</span>
+                                <input type="number" class="z-position">
+                            </div>
+                        </div>
+                        <div class="velocity-data">
+                            <span>Velocity</span>
+                            <div>
+                                <span>X</span>
+                                <input type="number" class="x-position">
+                            </div>
+                            <div>
+                                <span>Y</span>
+                                <input type="number" class="y-position">
+                            </div>
+                            <div>
+                                <span>Z</span>
+                                <input type="number" class="z-position">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-container">
+
+                        <div class="add-satellite" onclick="AddSatellites(this)">
+                            <span>Add Satellites</span>
+                        </div>
+
+                        <div class="delete-item" onclick="DeleteHierachyItem(this)">
+                            <i class="fa-solid fa-trash fa-lg"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </template>
+
+            <template id="hierachy-satellite-template">
+                <div class="hierachy-item">
+                    <div class="name-object-container">
+                        <input type="text" id="name-input" class="name empty" placeholder="Name" oninput="CheckContent(this)">
+                        <div class="dropable-point" id="dropable-point" data-type="objects">
+                            <span> Drop an Object Template Here! </span>
+                            <span class="name"></span>
+                            <span class="mass"></span>
+                            <span class="radius"></span>
+                        </div>
+                    </div>
+
+                    <div class="orbit-container">
+                        <div class="dropable-point" id="dropable-point" data-type="orbits">
+                            <span> Drop an Orbit Template Here! </span>
+                            <span class="name"></span>
+                            <span class="eccentricity"></span>
+                            <span class="sm-axis"></span>
+                        </div>
+                    </div>
+
+                    <div class="action-container">
+
+                        <div class="delete-item" onclick="DeleteHierachyItem(this)">
+                            <i class="fa-solid fa-trash fa-lg"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </template>
+
+            <div class="hierachy-container" id="hierachy-container">
+
+            </div>
+
+            <div class="right-footer">
+                <div class="dynamic-button" id="dynamic-button">
+                    <span></span>
+                </div>
+                <div class="add-new" onclick="AddHierachyItem()">
+                    <i class="fa-solid fa-plus fa-lg"></i>
+                    <span>Add New</span>
+                </div>
+                <div class="begin-simulation">
+                    <i class="fa-solid fa-play fa-lg"></i>
+                    <span>Begin Simulation</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
