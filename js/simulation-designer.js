@@ -122,7 +122,7 @@ function GetData(id, type) {
 
     id = parseInt(id);
 
-    if (type != "orbit") {
+    if (type != "orbits") {
         while (!data) {
             if (search[index].objectId == id) {
                 data = search[index];
@@ -173,10 +173,10 @@ function DisplayObjects(type) {
 // Display orbits when the tab is clicked
 function DisplayOrbits() {
     ClearStore();
-    
+
     let container = document.getElementById("tile-container");
     let template = document.getElementById("orbit-template");
-    
+
     orbits.forEach(element => {
         const clone = template.content.cloneNode(true);
         clone.getElementById("name").innerText = element.name.charAt(0).toUpperCase() + element.name.substring(1);
@@ -191,169 +191,249 @@ function DisplayOrbits() {
 
 function ClearStore() {
     let container = document.getElementById("tile-container");
-    
+
     while (container.childElementCount > 0) {
         container.removeChild(container.lastChild);
     }
 }
 
 window.AddHierachyItem = () => {
-    
-    const container = document.getElementById("hierachy-container");
+
     const header = document.getElementById("hierachy-header");
-    let template = header.innerText == "Hierachy" ? document.getElementById("hierachy-object-template") : document.getElementById("hierachy-satellite-template");
-    
+    let currentName;
+    let root = header.innerText == "Hierachy";
+
+    let container;
+    let template;
+
+    if (root) {
+        container = document.getElementById("root-hierachy-container");
+        template = document.getElementById("hierachy-object-template");
+    }
+    else {
+        let id = header.dataset.id;
+        container = document.getElementById(id + "-hierachy-container");
+        template = document.getElementById("hierachy-satellite-template");
+    }
+
     const clone = template.content.cloneNode(true);
     let dropables = clone.querySelectorAll(".dropable-point");
     let nameInput = clone.getElementById("name-input");
     nameInput.dataset.id = currentId;
-    
+
     // Set up drag and drop
     for (let dropable of dropables) {
-    
+
         dropable.addEventListener("dragenter", () => {
             dropable.classList.add("active");
         });
-        
+
         dropable.addEventListener("dragleave", () => {
             dropable.classList.remove("active");
         });
-        
+
         dropable.addEventListener("dragover", (event) => {
             event.preventDefault();
         });
-        
+
         dropable.addEventListener("drop", (event) => {
             event.preventDefault();
             dropable.classList.remove("active");
-            
+
             let currentType = document.getElementsByClassName("tab active")[0].innerText.toLowerCase();
             let root = document.getElementById("hierachy-header").innerText == "Hierachy";
-            
+            let header = document.getElementById("hierachy-header");
+
             if (dropable.dataset.type == "objects" && currentType != "orbits") {
-                
+
                 let objectData = GetData(event.dataTransfer.getData("id"), currentType);
-                
+
                 let spans = dropable.querySelectorAll("span");
                 spans[0].innerText = "";
                 spans[1].innerText = objectData.name.charAt(0).toUpperCase() + objectData.name.substring(1);
                 spans[2].innerText = (objectData.mass).toPrecision(2) + " EM";
                 spans[3].innerText = (objectData.radius).toPrecision(2) + " ER";
-                
+
                 let id = nameInput.dataset.id;
-                let data = currentSystem.find(element => element.id == id);
-                data.type = currentType.substring(0, currentType.length - 1);
-                
+                if (!root) {
+                    for (let item of currentSystem) {
+                        if (item.id == header.dataset.id) {
+                            let satellite = item.satellites.find(element => element.object.id == id);
+                            satellite.object.name = objectData.name;
+                            satellite.object.mass = objectData.mass;
+                            satellite.object.radius = objectData.radius;
+                        }
+                    }
+                }
+                else {
+                    let data = currentSystem.find(element => element.id == id);
+                    data.type = currentType.substring(0, currentType.length - 1);
+                }
+
                 if (root) {
                     nameInput.value = objectData.name.charAt(0).toUpperCase() + objectData.name.substring(1);
                     nameInput.classList.remove("empty");
                 }
-                
+
             }
             else if (dropable.dataset.type == "orbits" && currentType == "orbits") {
-                
+
                 let orbitData = GetData(event.dataTransfer.getData("id"), currentType);
-                
+
                 let spans = dropable.querySelectorAll("span");
                 spans[0].innerText = "";
                 spans[1].innerText = orbitData.name.charAt(0).toUpperCase() + orbitData.name.substring(1);
                 spans[2].innerText = orbitData.eccentricity;
                 spans[3].innerText = orbitData.smAxis;
-                
+
                 let id = nameInput.dataset.id;
-                let data = currentSystem.find(element => element.id == id);
-                data.type = "orbit";
+                for (let item of currentSystem) {
+                    if (item.id == header.dataset.id) {
+                        console.log(item);
+                        let satellite = item.satellites.find(element => element.object.id == id);
+                        console.log(satellite);
+                        satellite.orbit.eccentricity = orbitData.eccentricity;
+                        satellite.orbit.smAxis = orbitData.smAxis;
+                        satellite.orbit.inclination = orbitData.inclination;
+                        satellite.orbit.longOfAscNode = orbitData.longOfAscNode;
+                        satellite.orbit.argOfPeri = orbitData.argOfPeri;
+                    }
+                }
             }
-            
-            
+
+
         });
     }
-    
+
 
     // Set up telemetry input
-    let telemetry = clone.getElementById("telemetry");
-    let inputs = telemetry.querySelectorAll("input");
-    
-    inputs[0].addEventListener("input", () => {
-        let id = inputs[0].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
-        console.log(id);
-        let value = inputs[0].value;
-        let data = currentSystem.find(element => element.id == id);
-        
-        data.telemetry.position.x = value;
-    });
-    
-    inputs[1].addEventListener("input", () => {
-        let id = inputs[1].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
-        let value = inputs[1].value;
-        let data = currentSystem.find(element => element.id == id);
-        
-        data.telemetry.position.y = value;
-    });
-    
-    inputs[2].addEventListener("input", () => {
-        let id = inputs[2].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
-        let value = inputs[2].value;
-        let data = currentSystem.find(element => element.id == id);
-        
-        data.telemetry.position.z = value;
-    });
-    
-    inputs[3].addEventListener("input", () => {
-        let id = inputs[3].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
-        let value = inputs[3].value;
-        let data = currentSystem.find(element => element.id == id);
-        
-        data.telemetry.velocity.x = value;
-    });
-    
-    inputs[4].addEventListener("input", () => {
-        let id = inputs[4].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
-        let value = inputs[4].value;
-        let data = currentSystem.find(element => element.id == id);
-        
-        data.telemetry.velocity.y = value;
-    });
-    
-    inputs[5].addEventListener("input", () => {
-        let id = inputs[5].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
-        let value = inputs[5].value;
-        let data = currentSystem.find(element => element.id == id);
-        
-        data.telemetry.velocity.z = value;
-    });
-    
-    
-    currentSystem.push({
-        id: currentId,
-        name: nameInput.value,
-        type: "planet",
-        mass: 1,
-        radius: 1,
-        telemetry: {
-            position: {
-                x: 0,
-                y: 0,
-                z: 0
+    if (root) {
+        let telemetry = clone.getElementById("telemetry");
+        let inputs = telemetry.querySelectorAll("input");
+
+        inputs[0].addEventListener("input", () => {
+            let id = inputs[0].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
+            console.log(id);
+            let value = inputs[0].value;
+            let data = currentSystem.find(element => element.id == id);
+
+            data.telemetry.position.x = value;
+        });
+
+        inputs[1].addEventListener("input", () => {
+            let id = inputs[1].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
+            let value = inputs[1].value;
+            let data = currentSystem.find(element => element.id == id);
+
+            data.telemetry.position.y = value;
+        });
+
+        inputs[2].addEventListener("input", () => {
+            let id = inputs[2].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
+            let value = inputs[2].value;
+            let data = currentSystem.find(element => element.id == id);
+
+            data.telemetry.position.z = value;
+        });
+
+        inputs[3].addEventListener("input", () => {
+            let id = inputs[3].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
+            let value = inputs[3].value;
+            let data = currentSystem.find(element => element.id == id);
+
+            data.telemetry.velocity.x = value;
+        });
+
+        inputs[4].addEventListener("input", () => {
+            let id = inputs[4].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
+            let value = inputs[4].value;
+            let data = currentSystem.find(element => element.id == id);
+
+            data.telemetry.velocity.y = value;
+        });
+
+        inputs[5].addEventListener("input", () => {
+            let id = inputs[5].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
+            let value = inputs[5].value;
+            let data = currentSystem.find(element => element.id == id);
+
+            data.telemetry.velocity.z = value;
+        });
+    }
+
+    if (root) {
+        currentSystem.push({
+            id: currentId,
+            name: nameInput.value,
+            type: "planet",
+            mass: 1,
+            radius: 1,
+            telemetry: {
+                position: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                },
+                velocity: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                }
             },
-            velocity: {
-                x: 0,
-                y: 0,
-                z: 0
+            satellites: [],
+        });
+    }
+    else {
+        for (let item of currentSystem) {
+            if (item.id == header.dataset.id) {
+                item.satellites.push({
+                    object: {
+                        id: currentId,
+                        name: nameInput.value,
+                        type: "planet",
+                        mass: 1,
+                        radius: 1,
+                    },
+                    orbit: {
+                        smAxis: 1,
+                        eccentricity: 0,
+                        inclination: 0,
+                        longOfAscNode: 0,
+                        argOfPeri:0
+                    }
+                });
             }
-        },
-        satellites: [],
-    });
-    
+        }
+    }
+
     currentId++;
-    
+
     container.appendChild(clone);
 }
 
 window.DeleteHierachyItem = (element) => {
+    let header = document.getElementById("hierachy-header");
+    let root = header.innerText == "Hierachy";
     let id = element.parentElement.parentElement.querySelector(".name").dataset.id;
-    currentSystem = currentSystem.filter(item => item.id != id);
-    element.parentElement.parentElement.style.display = "none";
+    if (!root) {
+        let parentId = header.dataset.id;
+        for (let item of currentSystem) {
+            if (item.id == parentId) {
+                item.satellites = item.satellites.filter(item => item.id != id);
+            }
+        }
+    }
+    else {
+        let data = currentSystem.find(item => item.id == id);
+        if (data.satellites.length > 0) {
+            let storage = document.getElementById("storage");
+            let dataStorage = document.getElementById(data.id + "-hierachy-container");
+            storage.removeChild(dataStorage);
+        }
+        currentSystem = currentSystem.filter(item => item.id != id);
+        
+    }
+    element.parentElement.parentElement.remove(element);
 }
 
 window.AddSatellites = (element) => {
@@ -362,74 +442,78 @@ window.AddSatellites = (element) => {
         alert("Please enter a name");
     }
     else {
-        const hierachyContainer = document.getElementById("hierachy-container");
+        const name = element.parentElement.parentElement.querySelector(".name").value
+        const hierachyContainer = document.getElementById("root-hierachy-container");
         const header = document.getElementById("hierachy-header");
         const storage = document.getElementById("storage");
+        const id = element.parentElement.parentElement.querySelector(".name").dataset.id;
 
-        let newDiv = document.createElement("div");
-        newDiv.id = "root-storage";
-        
-        for (let child of hierachyContainer.children) {
-            newDiv.appendChild(child);
-        }
+        storage.appendChild(hierachyContainer);
 
-        storage.appendChild(newDiv);
-
-        let button = document.getElementById("dynamic-button");
-        button.addEventListener("click", ReturnToRoot);
-        button.querySelector("span").innerText = "Go Back";
-
-        let satelliteStorage;
-
+        let found = false;
         for (let child of storage.children) {
-            if (child.id == element.parentElement.parentElement.querySelector(".name").value + "-storage") {
-                satelliteStorage = child;
+            if (child.id == id + "-hierachy-container") { 
+                header.after(child);
+                found = true;
             }
         }
 
-        for (let child of satelliteStorage.children) {
-            hierachyContainer.appendChild(child);
+        if (!found) {
+            let newDiv = document.createElement("div");
+            newDiv.classList.add("hierachy-container");
+            newDiv.id = id + "-hierachy-container";
+            header.after(newDiv);
         }
         
-        header.innerText += " - " + element.parentElement.parentElement.querySelector(".name").value + " Satellites";
+        let button = document.getElementById("dynamic-button");
+        button.addEventListener("click", ReturnToRoot);
+        button.querySelector("span").innerText = "Go Back";
+        
+        header.innerText += " - " + name + " Satellites";
+        header.dataset.id = id
     }
 }
 
 window.ReturnToRoot = () => {
-    const hierachyContainer = document.getElementById("hierachy-container");
-    const storage = document.getElementById("storage");
     const header = document.getElementById("hierachy-header");
-    const rootStorage = document.getElementById("root-storage");
+    const id = header.dataset.id;
+    const currentHierachyContainer = document.getElementById(id + "-hierachy-container");
+    const storage = document.getElementById("storage");
+    const rootHierachyContainer = document.getElementById("root-hierachy-container");
+    const button = document.getElementById("dynamic-button");
 
-    let name = header.innerText.split(" - ")[1].substring(0, header.innerText.split(" - ")[1].length - 11); 
-    let newDiv = document.createElement("div");
-    newDiv.id = name + "-storage";
+    storage.appendChild(currentHierachyContainer)
+    header.after(rootHierachyContainer);
 
-    for (let child of hierachyContainer.children) {
-        newDiv.appendChild(child);
-    }
-
-    storage.appendChild(newDiv);
-
-    for (let child of rootStorage.children) {
-        hierachyContainer.appendChild(child);
-    }
-
-    rootStorage.remove();
+    button.querySelector("span").innerText = "";
+    button.removeEventListener("click", ReturnToRoot);
 
     header.innerText = "Hierachy";
 }
 
 // Checks if name input is empty
 window.CheckContent = (element) => {
+    let header = document.getElementById("hierachy-header");
+    let root = header.innerText == "Hierachy";
     let input = element.value;
+
     if (input.length > 0) {
         element.classList.remove("empty");
-        
+
         let id = element.parentElement.parentElement.querySelector(".name").dataset.id;
-        let data = currentSystem.find(element => element.id == id);
-        data.name = input;
-        console.log(data);
+        if (root) {
+            let data = currentSystem.find(element => element.id == id);
+            data.name = input;
+        }
+        else {
+            let parentId = header.dataset.id;
+            for (let item of currentSystem) {
+                if (item.id == parentId) {
+                    let satellite = item.satellites.find(element => element.object.id == id);
+                    satellite.object.name = input;
+                }
+            }
+        }
     }
     else {
         element.classList.add("empty");
