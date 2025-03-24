@@ -74,7 +74,16 @@
                     </div>
                     <div class="info-view" id="telemetry">
                         <div class="position-data">
-                            <span>Position</span>
+                            <div class="position-container">
+                                <span class="position">
+                                    Position
+                                </span>
+
+                                <div class="tooltip-container">
+                                    <i class="fa-regular fa-circle-question tooltip fa-xs" style="margin-left: 0.2rem;"></i>
+                                    <span class="tooltip-text">All distance are measured in AU (Astronomical Units)</span>
+                                </div>
+                            </div>
                             <div>
                                 <span>X</span>
                                 <input type="number" class="x-position">
@@ -161,7 +170,7 @@
                     <i class="fa-solid fa-plus fa-lg"></i>
                     <span>Add New</span>
                 </div>
-                <div class="begin-simulation">
+                <div class="begin-simulation" onclick="StartSimulation()">
                     <i class="fa-solid fa-play fa-lg"></i>
                     <span>Begin Simulation</span>
                 </div>

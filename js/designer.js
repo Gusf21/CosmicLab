@@ -109,6 +109,8 @@ async function SetPlanet(element, id, type) {
         file = await stars[starPaths[img]]();
     }
     else {
+        file = "../images/orbit-icon.png";
+        element.setAttribute("src", file);
         return;
     }
 
@@ -149,11 +151,11 @@ window.Cancel = () => {
                 dataLabel.classList.add("data-display");
 
                 if (i == 0) {
-                    dataLabel.innerText = data.mass;
+                    dataLabel.innerText = data.mass.toPrecision(2);
                     dataLabel.id = "mass";
                 }
                 else {
-                    dataLabel.innerText = data.radius;
+                    dataLabel.innerText = data.radius.toPrecision(2);
                     dataLabel.id = "radius";
                 }
                 leftDisplays[0].replaceWith(dataLabel);
@@ -840,7 +842,7 @@ window.TileClicked = (element) => {
         const mass = template.content.cloneNode(true);
         const massLabels = mass.querySelectorAll("span");
         massLabels[0].innerText = "Mass";
-        massLabels[1].innerText = data.mass;
+        massLabels[1].innerText = data.mass.toPrecision(2);
         massLabels[1].id = "mass";
         massLabels[1].classList.add("numerical-data")
         if (data.type == "planet") {
@@ -856,7 +858,7 @@ window.TileClicked = (element) => {
         const radius = template.content.cloneNode(true);
         const radiusLabels = radius.querySelectorAll("span");
         radiusLabels[0].innerText = "Radius";
-        radiusLabels[1].innerText = data.radius;
+        radiusLabels[1].innerText = data.radius.toPrecision(2);
         radiusLabels[1].id = "radius";
         radiusLabels[1].classList.add("numerical-data")
         if (data.type == "planet") {

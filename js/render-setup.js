@@ -182,7 +182,21 @@ class Vector3 {
 document.addEventListener("DOMContentLoaded", () => {
     GetCookie("sessionId");
     StartRender();
-    AddDefaultPlanets();
+
+    const queryString = window.location.search;
+    const searchParams = new URLSearchParams(queryString);
+    const defaultSim = searchParams.get("default") == "true";
+
+    console.log(defaultSim);
+
+    if (defaultSim) {
+        AddDefaultObjects();
+    }
+    else {
+        const data = JSON.parse(sessionStorage.getItem("system"));
+        console.log(data);
+        AddCustomObjects(data);
+    }
 });
 
 window.addEventListener("beforeunload", () => {
@@ -194,7 +208,7 @@ window.addEventListener("beforeunload", () => {
     });
 });
 
-function AddDefaultPlanets() {
+function AddDefaultObjects() {
     const length = defaultSystem.length;
 
     for (let i = 0; i < length; i++) {
@@ -223,7 +237,7 @@ function AddDefaultPlanets() {
         const satellites = defaultSystem[i].satellites.length;
 
         CreateEntry(defaultSystem[i]);
-        AddObject(centerObject.telemetry.position.x / AU, centerObject.telemetry.position.y / AU, centerObject.telemetry.position.z / AU, centerObject.CelestialObject.radius * 10, centerObject.CelestialObject.id, centerObject.CelestialObject.name);
+        AddObject(centerObject.telemetry.position.x / AU, centerObject.telemetry.position.y / AU, centerObject.telemetry.position.z / AU, centerObject.CelestialObject.radius * 10, centerObject.CelestialObject.id, centerObject.CelestialObject.type, centerObject.CelestialObject.name);
         addedItems.push(centerObject);
 
         for (let j = 0; j < satellites; j++) {
@@ -252,6 +266,61 @@ function AddDefaultPlanets() {
             SetupOrbit(centerObject, orbitingObject, defaultSystem[i].satellites[j].orbit);
 
             CreateEntry(defaultSystem[i].satellites[j].object)
+            AddObject(orbitingObject.telemetry.position.x / AU, orbitingObject.telemetry.position.y / AU, orbitingObject.telemetry.position.z / AU, orbitingObject.CelestialObject.radius, orbitingObject.CelestialObject.id, orbitingObject.CelestialObject.type, orbitingObject.CelestialObject.name);
+            addedItems.push(orbitingObject);
+        }
+    }
+    PassSystemToBackend();
+}
+
+function AddCustomObjects(data) {
+    const length = data.length;
+
+    for (let i = 0; i < length; i++) {
+
+        const centerObject = {
+            CelestialObject: {
+                id: data[i].id,
+                name: data[i].name,
+                type: data[i].type,
+                mass: data[i].mass,
+                radius: data[i].radius,
+            },
+            telemetry: data[i].telemetry
+        }
+        console.log(centerObject);
+        const satellites = data[i].satellites.length;
+
+        CreateEntry(data[i]);
+        AddObject(centerObject.telemetry.position.x / AU, centerObject.telemetry.position.y / AU, centerObject.telemetry.position.z / AU, centerObject.CelestialObject.radius * 10, centerObject.CelestialObject.id, centerObject.CelestialObject.type);
+        addedItems.push(centerObject);
+
+        for (let j = 0; j < satellites; j++) {
+            let orbitingObject = {
+                CelestialObject: {
+                    id: data[i].satellites[j].object.id,
+                    name: data[i].satellites[j].object.name,
+                    type: data[i].satellites[j].object.type,
+                    mass: data[i].satellites[j].object.mass,
+                    radius: data[i].satellites[j].object.radius,
+                },
+                telemetry: {
+                    position: {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    },
+                    velocity: {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    }
+                }
+            }
+
+            SetupOrbit(centerObject, orbitingObject, data[i].satellites[j].orbit);
+
+            CreateEntry(data[i].satellites[j].object)
             AddObject(orbitingObject.telemetry.position.x / AU, orbitingObject.telemetry.position.y / AU, orbitingObject.telemetry.position.z / AU, orbitingObject.CelestialObject.radius, orbitingObject.CelestialObject.id, orbitingObject.CelestialObject.name);
             addedItems.push(orbitingObject);
         }
@@ -332,16 +401,16 @@ async function PassSystemToBackend() {
         },
         body: JSON.stringify(system)
     })
-    .then(async () => {
-        frames = await fetch(`https://localhost:7168/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
-        StopLoading();
-    });
+        .then(async () => {
+            frames = await fetch(`https://localhost:7168/api/Data/GetFrames?sessionId=${GetCookie("sessionId").replace(/['"]+/g, '').toUpperCase()}&timescale=3600&num=2000`);
+            StopLoading();
+        });
 
     PassFrames(JSON.parse(await frames.text()));
     BeginMovement();
 }
 
-function StartLoading() {    
+function StartLoading() {
     const loadingText = document.getElementById("loading-text");
 
     loading = setInterval(() => {

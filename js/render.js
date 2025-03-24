@@ -7,7 +7,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { randFloat, randInt } from 'three/src/math/MathUtils.js';
 //import { FetchFrames } from './render-setup';
 
-const defualtTextures = import.meta.glob('../images/Textures/Default/*.png');
+const defaultTextures = import.meta.glob('../images/Textures/Default/*.png');
 const gasGiantTextures = import.meta.glob('../images/Textures/Gas Giant/*.png');
 const iceTextures = import.meta.glob('../images/Textures/Ice/*.png');
 const oceanicTextures = import.meta.glob('../images/Textures/Oceanic/*.png');
@@ -15,6 +15,7 @@ const swampTextures = import.meta.glob('../images/Textures/Swamp/*.png');
 const tropicalTextures = import.meta.glob('../images/Textures/Tropical/*.png');
 const venusianTextures = import.meta.glob('../images/Textures/Venusian/*.png');
 const volcanicTextures = import.meta.glob('../images/Textures/Volcanic/*.png');
+const starTextures = import.meta.glob('../images/Textures/Stars/*.png');
 
 const textures = [gasGiantTextures, iceTextures, oceanicTextures, swampTextures, tropicalTextures, venusianTextures, volcanicTextures];
 
@@ -42,8 +43,11 @@ function Init() {
 
     // world
 
+    const fin_rob = new THREE.TextureLoader().load('../images/Textures/Default/fin.png');
+
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
+    //scene.background = fin_rob;
     // renderer
     AddStars();
     //AddObject();
@@ -157,20 +161,27 @@ function onWindowResize() {
 
 }
 
-async function AddObject(x, y, z, radius, element_id, name) {
+async function AddObject(x, y, z, radius, element_id, type, name) {
 
     //console.log(`${x}, ${y}, ${z}`);
-    const type = Math.floor(Math.random() * textures.length);
+    const names = ["Gas Giant", "Ice", "Oceanic", "Swamp", "Tropical", "Venusian", "Volcanic"];
+    const textureIndex = Math.floor(Math.random() * textures.length);
     const num = randInt(1, 10);
     const SphereMesh = new THREE.SphereGeometry(0.2 * radius, 32, 32);
 
     let texture;
     if (name == null) {
-        texture = new THREE.TextureLoader().load(texture);
+        if (type == "star") {
+            texture = new THREE.TextureLoader().load((await starTextures[`../images/Textures/Stars/${num}.png`]()).default);
+        }
+        else {
+            let typeList = textures[textureIndex];
+            let name = names[textureIndex];
+            texture = new THREE.TextureLoader().load((await typeList[`../images/Textures/${name}/${name}-EQUIRECTANGULAR-${num}-1024x512.png`]()).default);
+        }
     }
     else {
-        console.log(name);
-        texture = new THREE.TextureLoader().load((await defualtTextures[`../images/Textures/Default/${name}.png`]()).default);
+        texture = new THREE.TextureLoader().load((await defaultTextures[`../images/Textures/Default/${name}.png`]()).default);
     }
 
     const SphereMaterial = new THREE.MeshBasicMaterial({ map: texture });
@@ -178,6 +189,7 @@ async function AddObject(x, y, z, radius, element_id, name) {
     object.position.set(x * distanceMultiplier, z * distanceMultiplier, y * distanceMultiplier);
 
     const entry = document.getElementById(element_id);
+    console.log(entry);
     entry.querySelector("i").addEventListener("click", () => {
         perspectiveCamera.position.set(object.position.x, object.position.y, object.position.z > 0 ? object.position.z + 10 : object.position.z - 10);
         orbit.target = object.position;

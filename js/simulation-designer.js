@@ -10,6 +10,8 @@ let currentId = 0;
 let currentSystem = [];
 let renderList = {};
 
+const AU = 149597870700;
+
 window.addEventListener("DOMContentLoaded", () => {
 
     FetchData();
@@ -270,9 +272,18 @@ window.AddHierachyItem = () => {
                     data.type = currentType.substring(0, currentType.length - 1);
                 }
 
+                nameInput.value = objectData.name.charAt(0).toUpperCase() + objectData.name.substring(1);
+                nameInput.classList.remove("empty");
                 if (root) {
-                    nameInput.value = objectData.name.charAt(0).toUpperCase() + objectData.name.substring(1);
-                    nameInput.classList.remove("empty");
+                    currentSystem.find(element => element.id == nameInput.dataset.id).name = objectData.name.charAt(0).toUpperCase() + objectData.name.substring(1);
+                }
+                else {
+                    for (let item of currentSystem) {
+                        if (item.id == header.dataset.id) {
+                            let satellite = item.satellites.find(element => element.object.id == id);
+                            satellite.object.name = objectData.name;
+                        }
+                    }
                 }
 
             }
@@ -311,13 +322,17 @@ window.AddHierachyItem = () => {
         let telemetry = clone.getElementById("telemetry");
         let inputs = telemetry.querySelectorAll("input");
 
+        for (let input of inputs) {
+            input.value = 0;
+        }
+
         inputs[0].addEventListener("input", () => {
             let id = inputs[0].parentElement.parentElement.parentElement.parentElement.querySelector(".name").dataset.id;
             console.log(id);
             let value = inputs[0].value;
             let data = currentSystem.find(element => element.id == id);
 
-            data.telemetry.position.x = value;
+            data.telemetry.position.x = value * AU;
         });
 
         inputs[1].addEventListener("input", () => {
@@ -325,7 +340,7 @@ window.AddHierachyItem = () => {
             let value = inputs[1].value;
             let data = currentSystem.find(element => element.id == id);
 
-            data.telemetry.position.y = value;
+            data.telemetry.position.y = value * AU;
         });
 
         inputs[2].addEventListener("input", () => {
@@ -333,7 +348,7 @@ window.AddHierachyItem = () => {
             let value = inputs[2].value;
             let data = currentSystem.find(element => element.id == id);
 
-            data.telemetry.position.z = value;
+            data.telemetry.position.z = value * AU;
         });
 
         inputs[3].addEventListener("input", () => {
@@ -518,6 +533,11 @@ window.CheckContent = (element) => {
     else {
         element.classList.add("empty");
     }
+}
+
+window.StartSimulation = () => {
+    sessionStorage.setItem("system", JSON.stringify(currentSystem));
+    window.location.href = "render?default=false";
 }
 
 function Disappear(e) {

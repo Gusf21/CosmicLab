@@ -212,6 +212,10 @@
     transition: all 200ms ease-in-out;
 }
 
+.right-footer i {
+    margin-right: 0.5rem;
+}
+
 .right-footer div:hover {
     background-color: var(--dark-grey);
     color: var(--white);
@@ -269,6 +273,29 @@
     column-gap: 2rem;
     align-items: center;
     margin-left: 2rem;
+}
+
+.info-view .position-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.info-view .position-container .tooltip-text {
+    position: absolute;
+    font-size: 0.8rem;
+    color: var(--white);
+    text-align: center;
+    padding: 5px 5px;
+    background-color: var(--dark-grey);
+    border-radius: 6px;
+    width: 7rem;
+    opacity: 0.8;
+    font-family: "Sk-Modernist Regular", Arial, Helvetica, sans-serif;
+    visibility: hidden;
+}
+
+.info-view .position-container .tooltip-container:hover .tooltip-text {
+    visibility: visible;
 }
 
 .info-view input {
